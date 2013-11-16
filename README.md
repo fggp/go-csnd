@@ -11,3 +11,4 @@ You can install this package with `go get`:
 
 
 
+Go 1.2 (release candidate) is needed for the C++ support of go build
