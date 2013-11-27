@@ -24,6 +24,31 @@ func (pt CsoundPerformanceThread) Delete() {
 	pt.cpt = nil
 }
 
+////////////////////////////////////////////////////////////////
+
+type PTprocessHandler func(cbData unsafe.Pointer)
+
+var ptProcess PTprocessHandler
+
+func (pt CsoundPerformanceThread) GetProcessCallback() PTprocessHandler {
+	return ptProcess
+}
+
+//export goPTprocessCB
+func goPTprocessCB(cbData unsafe.Pointer) {
+	if ptProcess == nil {
+		return
+	}
+	ptProcess(cbData)
+}
+
+func (pt CsoundPerformanceThread) SetProcessCallback(f PTprocessHandler, cbData unsafe.Pointer) {
+	ptProcess = f
+	C.CsoundPTsetProcessCB(pt.cpt, cbData)
+}
+
+////////////////////////////////////////////////////////////////
+
 func (pt CsoundPerformanceThread) IsRunning() bool {
 	return C.CsoundPTisRunning(pt.cpt) != 0
 }

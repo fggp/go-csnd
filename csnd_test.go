@@ -33,22 +33,24 @@ func TestHostData(t *testing.T) {
 		t.Errorf("Hostdata should be nil when instance created with nil arg")
 	}
 
-	var i interface{} = 1956
-	cs.SetHostData(&i)
+	i := 1956
+	cs.SetHostData(unsafe.Pointer(&i))
 	ht = cs.GetHostData()
-	if ht != &i {
+	pi := (*int)(ht)
+	if pi != &i {
 		t.Errorf("Int hostdata read is different of hostdata written")
 	} else {
-		fmt.Println("\n", *ht, "\n")
+		fmt.Println("\n", *pi, "\n")
 	}
 
-	var s interface{} = "Une chaîne de caractères"
-	cs.SetHostData(&s)
+	s := "Une chaîne de caractères"
+	cs.SetHostData(unsafe.Pointer(&s))
 	ht = cs.GetHostData()
-	if ht != &s {
+	ps := (*string)(ht)
+	if ps != &s {
 		t.Errorf("String hostdata read is different of hostdata written")
 	} else {
-		fmt.Println("\n", *ht, "\n")
+		fmt.Println("\n", *ps, "\n")
 	}
 
 	cs.SetHostData(nil)
@@ -62,7 +64,7 @@ func TestHostData(t *testing.T) {
 	triangle[&Point{1, 2, 3}] = "α"
 	triangle[&Point{4, 5, 6}] = "β"
 	triangle[&Point{7, 8, 9}] = "γ"
-	cs = Create((*interface{})(unsafe.Pointer(&triangle)))
+	cs = Create(unsafe.Pointer(&triangle))
 	ht = cs.GetHostData()
 	pt := (*Triangle)(unsafe.Pointer(ht))
 	if pt != &triangle {

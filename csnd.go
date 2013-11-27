@@ -335,10 +335,10 @@ func Initialize(flags int) int {
 	return int(C.csoundInitialize(C.int(flags)))
 }
 
-func Create(hostData *interface{}) CSOUND {
+func Create(hostData unsafe.Pointer) CSOUND {
 	var cs (*C.CSOUND)
 	if hostData != nil {
-		cs = C.csoundCreate(unsafe.Pointer(hostData))
+		cs = C.csoundCreate(hostData)
 	} else {
 		cs = C.csoundCreate(nil)
 	}
@@ -482,13 +482,12 @@ func (csound CSOUND) GetSizeOfMYFLT() int {
 	return int(C.csoundGetSizeOfMYFLT())
 }
 
-func (csound CSOUND) GetHostData() *interface{} {
-	hostData := C.csoundGetHostData(csound.cs)
-	return (*interface{})(hostData)
+func (csound CSOUND) GetHostData() unsafe.Pointer {
+	return C.csoundGetHostData(csound.cs)
 }
 
-func (csound CSOUND) SetHostData(hostData *interface{}) {
-	C.csoundSetHostData(csound.cs, unsafe.Pointer(hostData))
+func (csound CSOUND) SetHostData(hostData unsafe.Pointer) {
+	C.csoundSetHostData(csound.cs, hostData)
 }
 
 func (csound CSOUND) SetOption(option string) int {

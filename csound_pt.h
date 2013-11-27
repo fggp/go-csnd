@@ -10,6 +10,7 @@ typedef void* Cpt;
 Cpt NewCsoundPT(CSOUND *);
 void DeleteCsoundPT(Cpt pt);
 int CsoundPTisRunning(Cpt pt);
+void CsoundPTsetProcessCB(Cpt pt, void *cbData);
 CSOUND *CsoundPTgetCsound(Cpt pt);
 int CsoundPTgetStatus(Cpt pt);
 void CsoundPTplay(Cpt pt);

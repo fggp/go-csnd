@@ -3,6 +3,8 @@
 #include "csound_pt.h"
 
 extern "C" {
+
+//#include "_cgo_export.h"
   
 Cpt NewCsoundPT(CSOUND *csound)
 {
@@ -21,6 +23,23 @@ int CsoundPTisRunning(Cpt pt)
   CsoundPerformanceThread *cpt = (CsoundPerformanceThread *)pt;
   return cpt->isRunning();
 }
+
+/*////////////////////////////////////////////////////////////*/
+
+extern void goPTprocessCB(void *);
+
+void CsoundPTProcessCB(void *cbData)
+{
+  goPTprocessCB(cbData);
+}
+
+void CsoundPTsetProcessCB(Cpt pt, void *cbData)
+{
+  CsoundPerformanceThread *cpt = (CsoundPerformanceThread *)pt;
+  cpt->SetProcessCallback(CsoundPTProcessCB, cbData);
+}
+
+/*////////////////////////////////////////////////////////////*/
 
 CSOUND *CsoundPTgetCsound(Cpt pt)
 {
