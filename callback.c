@@ -85,6 +85,104 @@ void csoundSetRtCloseCB(CSOUND *csound)
 
 /*////////////////////////////////////////////////////////////*/
 
+extern int goExternalMidiInOpenCB(void *, void *, char *);
+
+int csoundExternalMidiInOpenCB(CSOUND *csound, void **userData, const char *devName)
+{
+  return goExternalMidiInOpenCB((void *)csound, (void *)userData, (char *)devName);
+}
+
+void csoundSetExternalMidiInOpenCB(CSOUND *csound)
+{
+  csoundSetExternalMidiInOpenCallback(csound, csoundExternalMidiInOpenCB);
+}
+
+/*////////////////////////////////////////////////////////////*/
+
+extern int goExternalMidiReadCB(void *, void *, unsigned char *, int);
+
+int csoundExternalMidiReadCB(CSOUND *csound, void *userData, unsigned char *buf, int nBytes)
+{
+  return goExternalMidiReadCB((void *)csound, userData, buf, nBytes);
+}
+
+void csoundSetExternalMidiReadCB(CSOUND *csound)
+{
+  csoundSetExternalMidiReadCallback(csound, csoundExternalMidiReadCB);
+}
+
+/*////////////////////////////////////////////////////////////*/
+
+extern int goExternalMidiInCloseCB(void *, void *);
+
+int csoundExternalMidiInCloseCB(CSOUND *csound, void *userData)
+{
+  return goExternalMidiInCloseCB((void *)csound, userData);
+}
+
+void csoundSetExternalMidiInCloseCB(CSOUND *csound)
+{
+  csoundSetExternalMidiInCloseCallback(csound, csoundExternalMidiInCloseCB);
+}
+
+/*////////////////////////////////////////////////////////////*/
+
+extern int goExternalMidiOutOpenCB(void *, void *, char *);
+
+int csoundExternalMidiOutOpenCB(CSOUND *csound, void **userData, const char *devName)
+{
+  return goExternalMidiOutOpenCB((void *)csound, (void *)userData, (char *)devName);
+}
+
+void csoundSetExternalMidiOutOpenCB(CSOUND *csound)
+{
+  csoundSetExternalMidiOutOpenCallback(csound, csoundExternalMidiOutOpenCB);
+}
+
+/*////////////////////////////////////////////////////////////*/
+
+extern int goExternalMidiWriteCB(void *, void *, unsigned char *, int);
+
+int csoundExternalMidiWriteCB(CSOUND *csound, void *userData, const unsigned char *buf, int nBytes)
+{
+  return goExternalMidiWriteCB((void *)csound, userData, (unsigned char *)buf, nBytes);
+}
+
+void csoundSetExternalMidiWriteCB(CSOUND *csound)
+{
+  csoundSetExternalMidiWriteCallback(csound, csoundExternalMidiWriteCB);
+}
+
+/*////////////////////////////////////////////////////////////*/
+
+extern int goExternalMidiOutCloseCB(void *, void *);
+
+int csoundExternalMidiOutCloseCB(CSOUND *csound, void *userData)
+{
+  return goExternalMidiOutCloseCB((void *)csound, userData);
+}
+
+void csoundSetExternalMidiOutCloseCB(CSOUND *csound)
+{
+  csoundSetExternalMidiOutCloseCallback(csound, csoundExternalMidiOutCloseCB);
+}
+
+/*////////////////////////////////////////////////////////////*/
+
+extern char *goExternalMidiErrorStringCB(int);
+
+const char *csoundExternalMidiErrorStringCB(int err)
+{
+  return goExternalMidiErrorStringCB(err);
+}
+
+void csoundSetExternalMidiErrorStringCB(CSOUND *csound)
+{
+  csoundSetExternalMidiErrorStringCallback(csound, csoundExternalMidiErrorStringCB);
+}
+
+/*////////////////////////////////////////////////////////////*/
+
 extern void goCscore(void *);
 
 void csoundCscoreCB(CSOUND *csound)

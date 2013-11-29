@@ -9,6 +9,12 @@ You can install this package with `go get`:
 
   `go get github.com/fggp/go-csnd6`
 
+Or you can download a zip archive of the project using the 'Download ZIP' button on the right.
+You'll get a zip file named 'go-csnd6-master.zip'. Decompressing it you'll get a directory named 'go-csnd6-master'.
+Rename this directory to 'go-csnd6' and move it to '$GOPATH/src/github/fggp'. Enter into
+the '$GOPATH/src/github/fggp/go-csnd6' directory. You can eventually adapt the #cgo directives
+in csnd.go to your system. Finally install the package with `go install`.
 
+This wrapper is intended to be used with a double build of csound6.
 
 Go 1.2 (release candidate) is needed for the C++ support of go build

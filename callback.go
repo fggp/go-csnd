@@ -9,6 +9,13 @@ void csoundSetRtPlayCB(CSOUND *csound);
 void csoundSetRecOpenCB(CSOUND *csound);
 void csoundSetRtRecordCB(CSOUND *csound);
 void csoundSetRtCloseCB(CSOUND *csound);
+void csoundSetExternalMidiInOpenCB(CSOUND *csound);
+void csoundSetExternalMidiReadCB(CSOUND *csound);
+void csoundSetExternalMidiInCloseCB(CSOUND *csound);
+void csoundSetExternalMidiOutOpenCB(CSOUND *csound);
+void csoundSetExternalMidiWriteCB(CSOUND *csound);
+void csoundSetExternalMidiOutCloseCB(CSOUND *csound);
+void csoundSetExternalMidiErrorStringCB(CSOUND *csound);
 void csoundSetCscoreCB(CSOUND *csound);
 */
 import "C"
@@ -174,6 +181,156 @@ func goRtCloseCB(csound unsafe.Pointer) {
 func (csound *CSOUND) SetRtCloseCallback(f RtCloseHandler) {
 	rtClose = f
 	C.csoundSetRtCloseCB(csound.cs)
+}
+
+////////////////////////////////////////////////////////////////
+
+type ExternalMidiInOpenHandler func(csound *CSOUND, userData unsafe.Pointer, devName string) int32
+
+var externalMidiInOpen ExternalMidiInOpenHandler
+
+//export goExternalMidiInOpenCB
+func goExternalMidiInOpenCB(csound unsafe.Pointer, userData unsafe.Pointer, devName *C.char) int32 {
+	if externalMidiInOpen == nil {
+		return -1
+	}
+	cs := CSOUND{(*C.CSOUND)(csound)}
+	return externalMidiInOpen(&cs, userData, C.GoString(devName))
+}
+
+func (csound *CSOUND) SetExternalMidiInOpenCallback(f ExternalMidiInOpenHandler) {
+	externalMidiInOpen = f
+	C.csoundSetExternalMidiInOpenCB(csound.cs)
+}
+
+////////////////////////////////////////////////////////////////
+
+type ExternalMidiReadHandler func(csound *CSOUND, userData unsafe.Pointer, buf []uint8) int32
+
+var externalMidiRead ExternalMidiReadHandler
+
+//export goExternalMidiReadCB
+func goExternalMidiReadCB(csound unsafe.Pointer, userData unsafe.Pointer, buf *C.uchar, nBytes int32) int32 {
+	if externalMidiRead == nil {
+		return -1
+	}
+	cs := CSOUND{(*C.CSOUND)(csound)}
+	var slice []uint8
+	sliceHeader := (*reflect.SliceHeader)(unsafe.Pointer(&slice))
+	sliceHeader.Cap = int(nBytes)
+	sliceHeader.Len = int(nBytes)
+	sliceHeader.Data = uintptr(unsafe.Pointer(buf))
+	return externalMidiRead(&cs, userData, slice)
+}
+
+func (csound *CSOUND) SetExternalMidiReadCallback(f ExternalMidiReadHandler) {
+	externalMidiRead = f
+	C.csoundSetExternalMidiReadCB(csound.cs)
+}
+
+////////////////////////////////////////////////////////////////
+
+type ExternalMidiInCloseHandler func(csound *CSOUND, userData unsafe.Pointer) int32
+
+var externalMidiInClose ExternalMidiInCloseHandler
+
+//export goExternalMidiInCloseCB
+func goExternalMidiInCloseCB(csound unsafe.Pointer, userData unsafe.Pointer) int32 {
+	if externalMidiInClose == nil {
+		return -1
+	}
+	cs := CSOUND{(*C.CSOUND)(csound)}
+	return externalMidiInClose(&cs, userData)
+}
+
+func (csound *CSOUND) SetExternalMidiInCloseCallback(f ExternalMidiInCloseHandler) {
+	externalMidiInClose = f
+	C.csoundSetExternalMidiInCloseCB(csound.cs)
+}
+
+////////////////////////////////////////////////////////////////
+
+type ExternalMidiOutOpenHandler func(csound *CSOUND, userData unsafe.Pointer, devName string) int32
+
+var externalMidiOutOpen ExternalMidiOutOpenHandler
+
+//export goExternalMidiOutOpenCB
+func goExternalMidiOutOpenCB(csound unsafe.Pointer, userData unsafe.Pointer, devName *C.char) int32 {
+	if externalMidiOutOpen == nil {
+		return -1
+	}
+	cs := CSOUND{(*C.CSOUND)(csound)}
+	return externalMidiOutOpen(&cs, userData, C.GoString(devName))
+}
+
+func (csound *CSOUND) SetExternalMidiOutOpenCallback(f ExternalMidiOutOpenHandler) {
+	externalMidiOutOpen = f
+	C.csoundSetExternalMidiOutOpenCB(csound.cs)
+}
+
+////////////////////////////////////////////////////////////////
+
+type ExternalMidiWriteHandler func(csound *CSOUND, userData unsafe.Pointer, buf []uint8) int32
+
+var externalMidiWrite ExternalMidiWriteHandler
+
+//export goExternalMidiWriteCB
+func goExternalMidiWriteCB(csound unsafe.Pointer, userData unsafe.Pointer, buf *C.uchar, nBytes int32) int32 {
+	if externalMidiWrite == nil {
+		return -1
+	}
+	cs := CSOUND{(*C.CSOUND)(csound)}
+	var slice []uint8
+	sliceHeader := (*reflect.SliceHeader)(unsafe.Pointer(&slice))
+	sliceHeader.Cap = int(nBytes)
+	sliceHeader.Len = int(nBytes)
+	sliceHeader.Data = uintptr(unsafe.Pointer(buf))
+	return externalMidiWrite(&cs, userData, slice)
+}
+
+func (csound *CSOUND) SetExternalMidiWriteCallback(f ExternalMidiWriteHandler) {
+	externalMidiWrite = f
+	C.csoundSetExternalMidiWriteCB(csound.cs)
+}
+
+////////////////////////////////////////////////////////////////
+
+type ExternalMidiOutCloseHandler func(csound *CSOUND, userData unsafe.Pointer) int32
+
+var externalMidiOutClose ExternalMidiOutCloseHandler
+
+//export goExternalMidiOutCloseCB
+func goExternalMidiOutCloseCB(csound unsafe.Pointer, userData unsafe.Pointer) int32 {
+	if externalMidiOutClose == nil {
+		return -1
+	}
+	cs := CSOUND{(*C.CSOUND)(csound)}
+	return externalMidiOutClose(&cs, userData)
+}
+
+func (csound *CSOUND) SetExternalMidiOutCloseCallback(f ExternalMidiOutCloseHandler) {
+	externalMidiOutClose = f
+	C.csoundSetExternalMidiOutCloseCB(csound.cs)
+}
+
+////////////////////////////////////////////////////////////////
+
+type ExternalMidiErrorStringHandler func(err int) string
+
+var externalMidiErrorString ExternalMidiErrorStringHandler
+
+//export goExternalMidiErrorStringCB
+func goExternalMidiErrorStringCB(err int32) *C.char {
+	if externalMidiErrorString == nil {
+		return nil
+	}
+	s := externalMidiErrorString(int(err))
+	return C.CString(s)
+}
+
+func (csound *CSOUND) SetExternalMidiErrorStringCallback(f ExternalMidiErrorStringHandler) {
+	externalMidiErrorString = f
+	C.csoundSetExternalMidiErrorStringCB(csound.cs)
 }
 
 ////////////////////////////////////////////////////////////////

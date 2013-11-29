@@ -648,6 +648,14 @@ func (csound CSOUND) GetSpoutSample(frame, channel int) MYFLT {
 	return MYFLT(C.csoundGetSpoutSample(csound.cs, C.int(frame), C.int(channel)))
 }
 
+func (csound CSOUND) GetRtRecordUserData() unsafe.Pointer {
+	return unsafe.Pointer(C.csoundGetRtRecordUserData(csound.cs))
+}
+
+func (csound CSOUND) GetRtPlaydUserData() unsafe.Pointer {
+	return unsafe.Pointer(C.csoundGetRtPlayUserData(csound.cs))
+}
+
 func (csound CSOUND) SetHostImplementedAudioIO(state, bufSize int) {
 	C.csoundSetHostImplementedAudioIO(csound.cs, C.int(state), C.int(bufSize))
 }
