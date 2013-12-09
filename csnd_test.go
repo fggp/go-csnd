@@ -87,9 +87,9 @@ func TestCsoundParams(t *testing.T) {
 	fmt.Println(p)
 	cs.GetParams(&p)
 	fmt.Println(p)
-	p.ring_bell = 1
+	p.RingBell = 1
 	cs.SetParams(&p)
-	p.ring_bell = 0
+	p.RingBell = 0
 	fmt.Println(p)
 	cs.GetParams(&p)
 	fmt.Println(p)
@@ -97,8 +97,8 @@ func TestCsoundParams(t *testing.T) {
 	cs.GetParams(&p)
 	fmt.Println(p)
 	fmt.Println(cs.GetDebug())
-	p.ring_bell = 0
-	p.debug_mode = 0
+	p.RingBell = 0
+	p.DebugMode = 0
 	cs.SetParams(&p)
 	fmt.Println(cs.GetDebug())
 	cs.Destroy()
@@ -128,7 +128,6 @@ func TestRTAudioIO(t *testing.T) {
 		fmt.Println(list[i])
 	}
 	fmt.Println()
-
 	cs.Destroy()
 }
 
@@ -146,7 +145,6 @@ func TestMidiIO(t *testing.T) {
 		fmt.Println(list[i])
 	}
 	fmt.Println()
-
 	cs.Destroy()
 }
 
@@ -163,4 +161,11 @@ func TestChannels(t *testing.T) {
 	} else {
 		fmt.Println(len(lst))
 	}
+}
+
+func TestNamedGens(t *testing.T) {
+	cs := Create(nil)
+	namedGens := cs.GetNamedGens()
+	fmt.Println(namedGens)
+	cs.Destroy()
 }

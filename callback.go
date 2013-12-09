@@ -2,6 +2,7 @@ package csnd6
 
 /*
 #include <csound/csound.h>
+#include <csound/csound_standard_types.h>
 
 void csoundSetFileOpenCB(CSOUND *csound);
 void csoundSetPlayOpenCB(CSOUND *csound);
@@ -17,10 +18,14 @@ void csoundSetExternalMidiWriteCB(CSOUND *csound);
 void csoundSetExternalMidiOutCloseCB(CSOUND *csound);
 void csoundSetExternalMidiErrorStringCB(CSOUND *csound);
 void csoundSetCscoreCB(CSOUND *csound);
+void csoundSetInputChannelCB(CSOUND *csound);
+void csoundSetOutputChannelCB(CSOUND *csound);
+int csoundRegisterSenseEventCB(CSOUND *csound, void *userData, int);
 */
 import "C"
 
 import (
+	"fmt"
 	"reflect"
 	"unsafe"
 )
@@ -348,9 +353,119 @@ func goCscoreCB(csound unsafe.Pointer) {
 	cscore(&cs)
 }
 
-func (csound *CSOUND) SetCscoreCallbak(f CscoreHandler) {
+func (csound *CSOUND) SetCscoreCallback(f CscoreHandler) {
 	cscore = f
 	C.csoundSetCscoreCB(csound.cs)
+}
+
+////////////////////////////////////////////////////////////////
+
+type ChannelHandler func(csound *CSOUND, channelName string,
+	channelValue []MYFLT, channelType int)
+
+var inputChannel ChannelHandler
+
+//export goInputChannelCB
+func goInputChannelCB(csound unsafe.Pointer, channelName *C.char,
+	channelValuePtr unsafe.Pointer, channelType unsafe.Pointer) {
+	if inputChannel == nil {
+		return
+	}
+	cs := CSOUND{(*C.CSOUND)(csound)}
+	var length, chnType int
+	if channelType == unsafe.Pointer(&C.CS_VAR_TYPE_K) {
+		length = 1
+		chnType = CSOUND_CONTROL_CHANNEL
+	} else if channelType == unsafe.Pointer(&C.CS_VAR_TYPE_A) {
+		length = int(C.csoundGetKsmps(cs.cs))
+		chnType = CSOUND_AUDIO_CHANNEL
+	} else if channelType == unsafe.Pointer(&C.CS_VAR_TYPE_S) {
+		length = int(C.csoundGetChannelDatasize(cs.cs, channelName))
+		chnType = CSOUND_STRING_CHANNEL
+	} else {
+		return
+	}
+	var slice []MYFLT
+	sliceHeader := (*reflect.SliceHeader)(unsafe.Pointer(&slice))
+	sliceHeader.Cap = length
+	sliceHeader.Len = length
+	sliceHeader.Data = uintptr(channelValuePtr)
+	inputChannel(&cs, C.GoString(channelName), slice, chnType)
+}
+
+func (csound *CSOUND) SetInputChannelCallback(f ChannelHandler) {
+	inputChannel = f
+	C.csoundSetInputChannelCB(csound.cs)
+}
+
+var outputChannel ChannelHandler
+
+//export goOutputChannelCB
+func goOutputChannelCB(csound unsafe.Pointer, channelName *C.char,
+	channelValuePtr unsafe.Pointer, channelType unsafe.Pointer) {
+	if outputChannel == nil {
+		return
+	}
+	cs := CSOUND{(*C.CSOUND)(csound)}
+	var length, chnType int
+	if channelType == unsafe.Pointer(&C.CS_VAR_TYPE_K) {
+		length = 1
+		chnType = CSOUND_CONTROL_CHANNEL
+	} else if channelType == unsafe.Pointer(&C.CS_VAR_TYPE_A) {
+		length = int(C.csoundGetKsmps(cs.cs))
+		chnType = CSOUND_AUDIO_CHANNEL
+	} else if channelType == unsafe.Pointer(&C.CS_VAR_TYPE_S) {
+		length = int(C.csoundGetChannelDatasize(cs.cs, channelName))
+		chnType = CSOUND_STRING_CHANNEL
+	} else {
+		return
+	}
+	var slice []MYFLT
+	sliceHeader := (*reflect.SliceHeader)(unsafe.Pointer(&slice))
+	sliceHeader.Cap = length
+	sliceHeader.Len = length
+	sliceHeader.Data = uintptr(channelValuePtr)
+	outputChannel(&cs, C.GoString(channelName), slice, chnType)
+}
+
+func (csound *CSOUND) SetOutputChannelCallback(f ChannelHandler) {
+	outputChannel = f
+	C.csoundSetOutputChannelCB(csound.cs)
+}
+
+////////////////////////////////////////////////////////////////
+
+type SenseEventHandler func(csound *CSOUND, userData unsafe.Pointer)
+
+const maxNumSenseEvent = 10
+
+var senseEvent []SenseEventHandler = make([]SenseEventHandler, maxNumSenseEvent)
+var numSenseEvent int
+
+//export goSenseEventCB
+func goSenseEventCB(csound, userData unsafe.Pointer, numFun int32) {
+	if senseEvent[numFun] == nil {
+		return
+	}
+	cs := CSOUND{(*C.CSOUND)(csound)}
+	senseEvent[numFun](&cs, userData)
+}
+
+func (csound *CSOUND) RegisterSenseEventCallback(f SenseEventHandler,
+	userData unsafe.Pointer) (ret int, err error) {
+	if numSenseEvent < maxNumSenseEvent {
+		ret = int(C.csoundRegisterSenseEventCB(csound.cs, userData, C.int(numSenseEvent)))
+		if ret != 0 {
+			err = fmt.Errorf("Csound could not register SenseEvent callback %d", numSenseEvent)
+		} else {
+			senseEvent[numSenseEvent] = f
+			numSenseEvent++
+		}
+		return
+	}
+	ret = -1
+	err = fmt.Errorf("%d SenseEvent callbacks already registered! Max value reached", numSenseEvent)
+	return
 }
 
 ////////////////////////////////////////////////////////////////

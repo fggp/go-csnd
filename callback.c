@@ -183,7 +183,7 @@ void csoundSetExternalMidiErrorStringCB(CSOUND *csound)
 
 /*////////////////////////////////////////////////////////////*/
 
-extern void goCscore(void *);
+extern void goCscoreCB(void *);
 
 void csoundCscoreCB(CSOUND *csound)
 {
@@ -197,4 +197,107 @@ void csoundSetCscoreCB(CSOUND *csound)
 
 /*////////////////////////////////////////////////////////////*/
 
+extern void goInputChannelCB(void *, char *, void *, void *);
+
+void csoundInputChannelCB(CSOUND *csound, const char *channelName,
+                          void *channelValuePtr, const void *channelType)
+{
+  goInputChannelCB((void *)csound, (char *)channelName,
+                   channelValuePtr, (void *)channelType);
+}
+
+void csoundSetInputChannelCB(CSOUND *csound)
+{
+  csoundSetInputChannelCallback(csound, csoundInputChannelCB);
+}
+
+extern void goOutputChannelCB(void *, char *, void *, void *);
+
+void csoundOutputChannelCB(CSOUND *csound, const char *channelName,
+                           void *channelValuePtr, const void *channelType)
+{
+  goOutputChannelCB((void *)csound, (char *)channelName,
+                    channelValuePtr, (void *)channelType);
+}
+
+void csoundSetOutputChannelCB(CSOUND *csound)
+{
+  csoundSetOutputChannelCallback(csound, csoundOutputChannelCB);
+}
+
+/*////////////////////////////////////////////////////////////*/
+
+extern void goSenseEventCB(void *, void *, int);
+
+void csoundSenseEventCB0(CSOUND *csound, void *userData)
+{
+  goSenseEventCB((void *)csound, userData, 0);
+}
+
+void csoundSenseEventCB1(CSOUND *csound, void *userData)
+{
+  goSenseEventCB((void *)csound, userData, 1);
+}
+
+void csoundSenseEventCB2(CSOUND *csound, void *userData)
+{
+  goSenseEventCB((void *)csound, userData, 2);
+}
+
+void csoundSenseEventCB3(CSOUND *csound, void *userData)
+{
+  goSenseEventCB((void *)csound, userData, 3);
+}
+
+void csoundSenseEventCB4(CSOUND *csound, void *userData)
+{
+  goSenseEventCB((void *)csound, userData, 4);
+}
+
+void csoundSenseEventCB5(CSOUND *csound, void *userData)
+{
+  goSenseEventCB((void *)csound, userData, 5);
+}
+
+void csoundSenseEventCB6(CSOUND *csound, void *userData)
+{
+  goSenseEventCB((void *)csound, userData, 6);
+}
+
+void csoundSenseEventCB7(CSOUND *csound, void *userData)
+{
+  goSenseEventCB((void *)csound, userData, 7);
+}
+
+void csoundSenseEventCB8(CSOUND *csound, void *userData)
+{
+  goSenseEventCB((void *)csound, userData, 8);
+}
+
+void csoundSenseEventCB9(CSOUND *csound, void *userData)
+{
+  goSenseEventCB((void *)csound, userData, 9);
+}
+
+int csoundRegisterSenseEventCB(CSOUND *csound, void *userData, int numFun)
+{
+  int ret;
+  
+  switch (numFun) {
+    case 0: ret = csoundRegisterSenseEventCallback(csound, csoundSenseEventCB0, userData); break;
+    case 1: ret = csoundRegisterSenseEventCallback(csound, csoundSenseEventCB1, userData); break;
+    case 2: ret = csoundRegisterSenseEventCallback(csound, csoundSenseEventCB2, userData); break;
+    case 3: ret = csoundRegisterSenseEventCallback(csound, csoundSenseEventCB3, userData); break;
+    case 4: ret = csoundRegisterSenseEventCallback(csound, csoundSenseEventCB4, userData); break;
+    case 5: ret = csoundRegisterSenseEventCallback(csound, csoundSenseEventCB5, userData); break;
+    case 6: ret = csoundRegisterSenseEventCallback(csound, csoundSenseEventCB6, userData); break;
+    case 7: ret = csoundRegisterSenseEventCallback(csound, csoundSenseEventCB7, userData); break;
+    case 8: ret = csoundRegisterSenseEventCallback(csound, csoundSenseEventCB8, userData); break;
+    case 9: ret = csoundRegisterSenseEventCallback(csound, csoundSenseEventCB9, userData); break;
+    default: ret = -1;
+  }
+  return ret;
+}
+
+/*////////////////////////////////////////////////////////////*/
 

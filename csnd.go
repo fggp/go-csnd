@@ -7,7 +7,6 @@ package csnd6
 #cgo LDFLAGS: -lcsound64 -lcsnd6
 
 #include <csound/csound.h>
-#include <csound/cscore.h>
 
 CS_AUDIODEVICE *getAudioDevList(CSOUND *csound, int n, int isOutput)
 {
@@ -60,6 +59,45 @@ controlChannelHints_t *getControlChannelInfo(controlChannelInfo_t *list, int i,
   *name = list[i].name;
   *type = list[i].type;
   return &list[i].hints;
+}
+
+PVSDATEXT *newPvsData()
+{
+  return (PVSDATEXT *)calloc(sizeof(PVSDATEXT), 1);
+}
+
+void freePvsData(PVSDATEXT *p)
+{
+  if (p)
+    free(p);
+}
+
+typedef struct namedgen {
+  char *name;
+  int  gennum;
+  struct namedgen *next;
+} NAMEDGEN;
+
+int getNumNamedGens(CSOUND *csound)
+{
+  NAMEDGEN *p;
+  int n;
+
+  n = 0;
+  p = (NAMEDGEN *)csoundGetNamedGens(csound);
+  while (p) {
+    n++;
+    p = p->next;
+  }
+  return n;
+}
+
+void *getNamedGen(CSOUND *csound, void *currentGen, char **pname, int *num)
+{
+  NAMEDGEN *p = (NAMEDGEN *)currentGen;
+  *pname = p->name;
+  *num = p->gennum;
+  return p->next;
 }
 */
 import "C"
@@ -212,80 +250,69 @@ type CSOUND struct {
 type MYFLT float64
 
 type CsoundParams struct {
-	debug_mode             int32 // debug mode, 0 or 1
-	buffer_frames          int32 // number of frames in in/out buffers
-	hardware_buffer_frames int32 // ibid. hardware
-	displays               int32 // graph displays, 0 or 1
-	ascii_graphs           int32 // use ASCII graphs, 0 or 1
-	postscript_graphs      int32 // use postscript graphs, 0 or 1
-	message_level          int32 // message printout control
-	tempo                  int32 // tempo (sets Beatmode)
-	ring_bell              int32 // bell, 0 or 1
-	use_cscore             int32 // use cscore for processing
-	terminate_on_midi      int32 // terminate performance at the end of midifile, 0 or 1
-	heartbeat              int32 // print heart beat, 0 or 1
-	defer_gen01_load       int32 // defer GEN01 load, 0 or 1
-	midi_key               int32 // pfield to map midi key no
-	midi_key_cps           int32 // pfield to map midi key no as cps
-	midi_key_oct           int32 // pfield to map midi key no as oct
-	midi_key_pch           int32 // pfield to map midi key no as pch
-	midi_velocity          int32 // pfield to map midi velocity
-	midi_velocity_amp      int32 // pfield to map midi velocity as amplitude
-	no_default_paths       int32 // disable relative paths from files, 0 or 1
-	number_of_threads      int32 // number of threads for multicore performance
-	syntax_check_only      int32 // do not compile, only check syntax
-	csd_line_counts        int32 // csd line error reporting
-	compute_weights        int32 // use calculated opcode weights for multicore, 0 or 1
-	realtime_mode          int32 // use realtime priority mode, 0 or 1
-	sample_accurate        int32 // use sample-level score event accuracy
-	sample_rate_override   MYFLT // overriding sample rate
-	control_rate_override  MYFLT // overriding control rate
-	nchnls_override        int32 // overriding number of out channels
-	nchnls_i_override      int32 // overriding number of in channels
-	e0dbfs_override        MYFLT // overriding 0dbfs
+	DebugMode            int32 // debug mode, 0 or 1
+	BufferFrames         int32 // number of frames in in/out buffers
+	HardwareBufferFrames int32 // ibid. hardware
+	Displays             int32 // graph displays, 0 or 1
+	AsciiGraphs          int32 // use ASCII graphs, 0 or 1
+	PostscriptGraphs     int32 // use postscript graphs, 0 or 1
+	MessageLevel         int32 // message printout control
+	Tempo                int32 // tempo (sets Beatmode)
+	RingBell             int32 // bell, 0 or 1
+	UseCscore            int32 // use cscore for processing
+	TerminateOnMidi      int32 // terminate performance at the end of midifile, 0 or 1
+	HeartBeat            int32 // print heart beat, 0 or 1
+	DeferGen01Load       int32 // defer GEN01 load, 0 or 1
+	MidiKey              int32 // pfield to map midi key no
+	MidiKeyCps           int32 // pfield to map midi key no as cps
+	MidiKeyOct           int32 // pfield to map midi key no as oct
+	MidiKeyPch           int32 // pfield to map midi key no as pch
+	MidiVelocity         int32 // pfield to map midi velocity
+	MidiVelocityAmp      int32 // pfield to map midi velocity as amplitude
+	NoDefaultPaths       int32 // disable relative paths from files, 0 or 1
+	NumberOfThreads      int32 // number of threads for multicore performance
+	SyntaxCheckOnly      int32 // do not compile, only check syntax
+	CsdLineCounts        int32 // csd line error reporting
+	ComputeWeights       int32 // use calculated opcode weights for multicore, 0 or 1
+	RealtimeMode         int32 // use realtime priority mode, 0 or 1
+	SampleAccurate       int32 // use sample-level score event accuracy
+	SampleRateOverride   MYFLT // overriding sample rate
+	ControlRateOverride  MYFLT // overriding control rate
+	NchnlsOverride       int32 // overriding number of out channels
+	NchnlsIoverride      int32 // overriding number of in channels
+	E0dbfsOverride       MYFLT // overriding 0dbfs
 }
 
 type CsoundAudioDevice struct {
-	device_name string
-	device_id   string
-	rt_module   string
-	max_nchnls  int
-	isOutput    bool
+	DeviceName string
+	DeviceId   string
+	RtModule   string
+	MaxNchnls  int
+	IsOutput   bool
 }
 
 func (dev CsoundAudioDevice) String() string {
-	return fmt.Sprintf("(%s, %s, %s, %d, %t)", dev.device_name, dev.device_id,
-		dev.rt_module, dev.max_nchnls, dev.isOutput)
+	return fmt.Sprintf("(%s, %s, %s, %d, %t)", dev.DeviceName, dev.DeviceId,
+		dev.RtModule, dev.MaxNchnls, dev.IsOutput)
 }
 
 type CsoundMidiDevice struct {
-	device_name    string
-	interface_name string
-	device_id      string
-	midi_module    string
-	isOutput       bool
+	DeviceName    string
+	InterfaceName string
+	DeviceId      string
+	MidiModule    string
+	IsOutput      bool
 }
 
 func (dev CsoundMidiDevice) String() string {
-	return fmt.Sprintf("(%s, %s, %s, %s, %t)", dev.device_name,
-		dev.interface_name, dev.device_id, dev.midi_module, dev.isOutput)
+	return fmt.Sprintf("(%s, %s, %s, %s, %t)", dev.DeviceName,
+		dev.InterfaceName, dev.DeviceId, dev.MidiModule, dev.IsOutput)
 }
 
 type OpcodeListEntry struct {
 	Opname  string
 	Outypes string
 	Intypes string
-}
-
-type PVSDATEXT struct {
-	N       int32
-	sliding int
-	NB      int32
-	overlap int32
-	winsize int32
-	wintype int
-	format  int32
-	frames  []float32
 }
 
 type TREE struct {
@@ -311,21 +338,21 @@ const (
 )
 
 type ControlChannelHints struct {
-	behav      int
-	dflt       MYFLT
-	min        MYFLT
-	max        MYFLT
-	x          int
-	y          int
-	width      int
-	height     int
-	attributes string // This member must be set explicitly to NULL if not used
+	Behav      int
+	Dflt       MYFLT
+	Min        MYFLT
+	Max        MYFLT
+	X          int
+	Y          int
+	Width      int
+	Height     int
+	Attributes string // This member must be set explicitly to NULL if not used
 }
 
 type ControlChannelInfo struct {
-	name  string
-	ctype int
-	hints ControlChannelHints
+	Name  string
+	Type  int
+	Hints ControlChannelHints
 }
 
 /*
@@ -440,6 +467,7 @@ func (csound CSOUND) Stop() {
 }
 
 func (csound CSOUND) Cleanup() int {
+	numSenseEvent = 0
 	return int(C.csoundCleanup(csound.cs))
 }
 
@@ -497,12 +525,12 @@ func (csound CSOUND) SetOption(option string) int {
 }
 
 func (csound CSOUND) SetParams(p *CsoundParams) {
-	pp := &p.debug_mode
+	pp := &p.DebugMode
 	C.csoundSetParams(csound.cs, (*C.CSOUND_PARAMS)(unsafe.Pointer(pp)))
 }
 
 func (csound CSOUND) GetParams(p *CsoundParams) {
-	pp := &p.debug_mode
+	pp := &p.DebugMode
 	C.csoundGetParams(csound.cs, (*C.CSOUND_PARAMS)(unsafe.Pointer(pp)))
 }
 
@@ -671,11 +699,11 @@ func (csound CSOUND) GetAudioDevList(isOutput bool) []CsoundAudioDevice {
 	var nchnls C.int
 	for i := range list {
 		C.getAudioDev(devs, C.int(i), &name, &id, &module, &nchnls, &cflag)
-		list[i].device_name = C.GoString(name)
-		list[i].device_id = C.GoString(id)
-		list[i].rt_module = C.GoString(module)
-		list[i].max_nchnls = int(nchnls)
-		list[i].isOutput = (cflag == 1)
+		list[i].DeviceName = C.GoString(name)
+		list[i].DeviceId = C.GoString(id)
+		list[i].RtModule = C.GoString(module)
+		list[i].MaxNchnls = int(nchnls)
+		list[i].IsOutput = (cflag == 1)
 	}
 	return list
 }
@@ -703,11 +731,11 @@ func (csound CSOUND) GetMidiDevList(isOutput bool) []CsoundMidiDevice {
 	var name, iname, id, module *C.char
 	for i := range list {
 		C.getMidiDev(devs, C.int(i), &name, &iname, &id, &module, &cflag)
-		list[i].device_name = C.GoString(name)
-		list[i].interface_name = C.GoString(iname)
-		list[i].device_id = C.GoString(id)
-		list[i].midi_module = C.GoString(module)
-		list[i].isOutput = (cflag == 1)
+		list[i].DeviceName = C.GoString(name)
+		list[i].InterfaceName = C.GoString(iname)
+		list[i].DeviceId = C.GoString(id)
+		list[i].MidiModule = C.GoString(module)
+		list[i].IsOutput = (cflag == 1)
 	}
 	return list
 }
@@ -838,17 +866,17 @@ func (csound CSOUND) ListChannels() ([]ControlChannelInfo, error) {
 		var ctype C.int
 		for i := range list {
 			hints := C.getControlChannelInfo(lst, C.int(i), &name, &ctype)
-			list[i].name = C.GoString(name)
-			list[i].ctype = int(ctype)
-			list[i].hints.behav = int(hints.behav)
-			list[i].hints.dflt = MYFLT(hints.dflt)
-			list[i].hints.min = MYFLT(hints.min)
-			list[i].hints.max = MYFLT(hints.max)
-			list[i].hints.x = int(hints.x)
-			list[i].hints.y = int(hints.y)
-			list[i].hints.width = int(hints.width)
-			list[i].hints.height = int(hints.height)
-			list[i].hints.attributes = C.GoString(hints.attributes)
+			list[i].Name = C.GoString(name)
+			list[i].Type = int(ctype)
+			list[i].Hints.Behav = int(hints.behav)
+			list[i].Hints.Dflt = MYFLT(hints.dflt)
+			list[i].Hints.Min = MYFLT(hints.min)
+			list[i].Hints.Max = MYFLT(hints.max)
+			list[i].Hints.X = int(hints.x)
+			list[i].Hints.Y = int(hints.y)
+			list[i].Hints.Width = int(hints.width)
+			list[i].Hints.Height = int(hints.height)
+			list[i].Hints.Attributes = C.GoString(hints.attributes)
 		}
 		C.csoundDeleteChannelList(csound.cs, lst)
 		return list, nil
@@ -859,15 +887,15 @@ func (csound CSOUND) SetControlChannelHints(name string, hints ControlChannelHin
 	cname := C.CString(name)
 	defer C.free(unsafe.Pointer(cname))
 	var chints C.controlChannelHints_t
-	chints.behav = C.controlChannelBehavior(hints.behav)
-	chints.dflt = cMYFLT(hints.dflt)
-	chints.min = cMYFLT(hints.min)
-	chints.max = cMYFLT(hints.max)
-	chints.x = C.int(hints.x)
-	chints.y = C.int(hints.y)
-	chints.width = C.int(hints.width)
-	chints.height = C.int(hints.height)
-	if len(hints.attributes) > 0 {
+	chints.behav = C.controlChannelBehavior(hints.Behav)
+	chints.dflt = cMYFLT(hints.Dflt)
+	chints.min = cMYFLT(hints.Min)
+	chints.max = cMYFLT(hints.Max)
+	chints.x = C.int(hints.X)
+	chints.y = C.int(hints.Y)
+	chints.width = C.int(hints.Width)
+	chints.height = C.int(hints.Height)
+	if len(hints.Attributes) > 0 {
 		chints.attributes = C.CString(name)
 		defer C.free(unsafe.Pointer(chints.attributes))
 	}
@@ -881,15 +909,15 @@ func (csound CSOUND) GetControlChannelHints(name string) (ControlChannelHints, i
 	ret := C.csoundGetControlChannelHints(csound.cs, cname, &chints)
 	var hints ControlChannelHints
 	if ret == 0 {
-		hints.behav = int(chints.behav)
-		hints.dflt = MYFLT(chints.dflt)
-		hints.min = MYFLT(chints.min)
-		hints.max = MYFLT(chints.max)
-		hints.x = int(chints.x)
-		hints.y = int(chints.y)
-		hints.width = int(chints.width)
-		hints.height = int(chints.height)
-		hints.attributes = C.GoString(chints.attributes)
+		hints.Behav = int(chints.behav)
+		hints.Dflt = MYFLT(chints.dflt)
+		hints.Min = MYFLT(chints.min)
+		hints.Max = MYFLT(chints.max)
+		hints.X = int(chints.x)
+		hints.Y = int(chints.y)
+		hints.Width = int(chints.width)
+		hints.Height = int(chints.height)
+		hints.Attributes = C.GoString(chints.attributes)
 		if chints.attributes != nil {
 			defer C.free(unsafe.Pointer(chints.attributes))
 		}
@@ -951,6 +979,39 @@ func (csound CSOUND) GetChannelDatasize(name string) int {
 	cname := C.CString(name)
 	defer C.free(unsafe.Pointer(cname))
 	return int(C.csoundGetChannelDatasize(csound.cs, cname))
+}
+
+type PVSDATEXT struct {
+	Frame   []float32
+	CStruct *C.PVSDATEXT
+}
+
+func NewPvsData(N, format, overlap, winsize int32) *PVSDATEXT {
+	p := PVSDATEXT{Frame: make([]float32, N+2)}
+	cp := C.newPvsData()
+	cp.N = C.int32(N)
+	cp.format = C.int32(format)
+	cp.overlap = C.int32(overlap)
+	cp.winsize = C.int32(winsize)
+	cp.frame = (*C.float)(&p.Frame[0])
+	p.CStruct = cp
+	return &p
+}
+
+func FreeCPvsData(p *PVSDATEXT) {
+	C.freePvsData(p.CStruct)
+}
+
+func (csound CSOUND) SetPvsChannel(fin *PVSDATEXT, name string) int {
+	cname := C.CString(name)
+	defer C.free(unsafe.Pointer(cname))
+	return int(C.csoundSetPvsChannel(csound.cs, fin.CStruct, cname))
+}
+
+func (csound CSOUND) GetPvsChannel(fout *PVSDATEXT, name string) int {
+	cname := C.CString(name)
+	defer C.free(unsafe.Pointer(cname))
+	return int(C.csoundGetPvsChannel(csound.cs, fout.CStruct, cname))
 }
 
 func (csound CSOUND) ScoreEvent(eventType byte, pFields []MYFLT) int {
@@ -1037,6 +1098,28 @@ func (csound CSOUND) SetIsGraphable(isGraphable int) int {
 /*
  * Opcodes
  */
+type NamedGen struct {
+	Name string
+	Num  int
+}
+
+func (csound CSOUND) GetNamedGens() []NamedGen {
+	n := int(C.getNumNamedGens(csound.cs))
+	if n == 0 {
+		return nil
+	}
+	namedGens := make([]NamedGen, n)
+	p := C.csoundGetNamedGens(csound.cs)
+	var name *C.char
+	var num C.int
+	for i := range namedGens {
+		p = C.getNamedGen(csound.cs, p, &name, &num)
+		namedGens[i].Name = C.GoString(name)
+		namedGens[i].Num = int(num)
+	}
+	return namedGens
+}
+
 func (csound CSOUND) OpcodeList() []OpcodeListEntry {
 	var opcodeList *C.struct_opcodeListEntry
 	length := int(C.csoundNewOpcodeList(csound.cs,
