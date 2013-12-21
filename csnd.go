@@ -1141,25 +1141,97 @@ func (csound CSOUND) OpcodeList() []OpcodeListEntry {
 /*
  * Threading and concurrency
  */
+func (csound *CSOUND) GetCurrentThreadId() unsafe.Pointer {
+	return unsafe.Pointer(C.csoundGetCurrentThreadId())
+}
+
+func (csound *CSOUND) JoinThread(thread unsafe.Pointer) uintptr {
+	return uintptr(C.csoundJoinThread(thread))
+}
+
+func (csound *CSOUND) CreateThreadLock() unsafe.Pointer {
+	return unsafe.Pointer(C.csoundCreateThreadLock())
+}
+
+func (csound *CSOUND) WaitThreadLock(lock unsafe.Pointer, ms uint) int {
+	return int(C.csoundWaitThreadLock(lock, C.size_t(ms)))
+}
+
+func (csound *CSOUND) WaitThreadLockNoTimeout(lock unsafe.Pointer) {
+	C.csoundWaitThreadLockNoTimeout(lock)
+}
+
+func (csound *CSOUND) NotifyThreadLock(lock unsafe.Pointer) {
+	C.csoundNotifyThreadLock(lock)
+}
+
+func (csound *CSOUND) DestroyThreadLock(lock unsafe.Pointer) {
+	C.csoundDestroyThreadLock(lock)
+}
+
+func (csound *CSOUND) CreateMutex(isRecursive bool) unsafe.Pointer {
+	return C.csoundCreateMutex(cbool(isRecursive))
+}
+
+func (csound *CSOUND) LockMutex(mutex unsafe.Pointer) {
+	C.csoundLockMutex(mutex)
+}
+
+func (csound *CSOUND) LockMutexNoWait(mutex unsafe.Pointer) int {
+	return int(C.csoundLockMutexNoWait(mutex))
+}
+
+func (csound *CSOUND) UnlockMutex(mutex unsafe.Pointer) {
+	C.csoundUnlockMutex(mutex)
+}
+
+func (csound *CSOUND) DestroyMutex(mutex unsafe.Pointer) {
+	C.csoundDestroyMutex(mutex)
+}
+
+func (csound *CSOUND) CreateBarrier(max uint) unsafe.Pointer {
+	return C.csoundCreateBarrier(C.uint(max))
+}
+
+func (csound *CSOUND) DestroyBarrier(barrier unsafe.Pointer) int {
+	return int(C.csoundDestroyBarrier(barrier))
+}
+
+func (csound *CSOUND) WaitBarrier(barrier unsafe.Pointer) int {
+	return int(C.csoundWaitBarrier(barrier))
+}
+
+func (csound *CSOUND) Sleep(ms uint) {
+	C.csoundSleep(C.size_t(ms))
+}
 
 /*
  * Miscellaneous functions
  */
-func (csound CSOUND) InitTimerStruct() C.RTCLOCK {
+func (csound *CSOUND) RunCommand(args []string, noWait bool) int {
+	argv := make([]*C.char, len(args)+1)
+	for i, arg := range args {
+		argv[i] = C.CString(arg)
+		defer C.free(unsafe.Pointer(argv[i]))
+	}
+	return int(C.csoundRunCommand(&argv[0], cbool(noWait)))
+}
+
+func (csound *CSOUND) InitTimerStruct() C.RTCLOCK {
 	var rtc C.RTCLOCK
 	C.csoundInitTimerStruct(&rtc)
 	return rtc
 }
 
-func (csound CSOUND) GetRealTime(rtc *C.RTCLOCK) float64 {
+func (csound *CSOUND) GetRealTime(rtc *C.RTCLOCK) float64 {
 	return float64(C.csoundGetRealTime(rtc))
 }
 
-func (csound CSOUND) GetCPUTime(rtc *C.RTCLOCK) float64 {
+func (csound *CSOUND) GetCPUTime(rtc *C.RTCLOCK) float64 {
 	return float64(C.csoundGetCPUTime(rtc))
 }
 
-func (csound CSOUND) GetRandomSeedFromTime() uint32 {
+func (csound *CSOUND) GetRandomSeedFromTime() uint32 {
 	return uint32(C.csoundGetRandomSeedFromTime())
 }
 

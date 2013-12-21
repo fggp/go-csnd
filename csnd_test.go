@@ -169,3 +169,9 @@ func TestNamedGens(t *testing.T) {
 	fmt.Println(namedGens)
 	cs.Destroy()
 }
+
+func TestRunCommand(t *testing.T) {
+	cs := Create(nil)
+	cs.RunCommand([]string{"ls", "-a"}, false)
+	cs.Destroy()
+}
