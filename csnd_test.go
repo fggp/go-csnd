@@ -175,3 +175,33 @@ func TestRunCommand(t *testing.T) {
 	cs.RunCommand([]string{"ls", "-a"}, false)
 	cs.Destroy()
 }
+
+func TestUtilities(t *testing.T) {
+	cs := Create(nil)
+	if list, err := cs.ListUtilities(); err == nil {
+		for _, name := range list {
+			fmt.Printf("%s: %s\n", name, cs.GetUtilityDescription(name))
+		}
+	}
+	cs.Destroy()
+}
+
+func TestRand31(t *testing.T) {
+	cs := Create(nil)
+	seed := int32(1956)
+	for i := 0; i < 1000; i++ {
+		n := cs.Rand31(&seed)
+		fmt.Printf("%d ", n)
+	}
+	fmt.Println()
+}
+
+func TestRandMT(t *testing.T) {
+	cs := Create(nil)
+	p := cs.SeedRandMT([]uint32{1956})
+	for i := 0; i < 1000; i++ {
+		n := cs.RandMT(p)
+		fmt.Printf("%d ", n)
+	}
+	fmt.Println()
+}

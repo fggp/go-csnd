@@ -99,6 +99,33 @@ void *getNamedGen(CSOUND *csound, void *currentGen, char **pname, int *num)
   *num = p->gennum;
   return p->next;
 }
+
+int utilityListLength(char **list)
+{
+  int n;
+
+  n = 0;
+  while (*list++) {
+    n++;
+  }
+  return n;
+}
+
+char *utilityName(char **list, int i)
+{
+  return *(list+i);
+}
+
+CsoundRandMTState *newRandMTState()
+{
+  return (CsoundRandMTState *)malloc(sizeof(CsoundRandMTState));
+}
+
+void freeRandMTState(CsoundRandMTState *p)
+{
+  if (p)
+    free(p);
+}
 */
 import "C"
 
@@ -358,6 +385,12 @@ type ControlChannelInfo struct {
 /*
  * Instantiation
  */
+// Initialize Csound library with specific flags. This function is called
+// internally by csoundCreate(), so there is generally no need to use it
+// explicitly unless you need to avoid default initilization that sets
+// signal handlers and atexit() callbacks.
+// Return value is zero on success, positive if initialisation was
+// done already, and negative on error.
 func Initialize(flags int) int {
 	return int(C.csoundInitialize(C.int(flags)))
 }
@@ -1317,6 +1350,25 @@ func (csound CSOUND) SetLanguage(langCode Cslanguage_t) {
 	C.csoundSetLanguage(C.cslanguage_t(langCode))
 }
 
+func (csound CSOUND) GetEnv(name string) string {
+	var cname *C.char = C.CString(name)
+	defer C.free(unsafe.Pointer(cname))
+	return C.GoString(C.csoundGetEnv(csound.cs, cname))
+}
+
+func (csound CSOUND) SetGlobalEnv(name, value string) int {
+	var cname *C.char = C.CString(name)
+	defer C.free(unsafe.Pointer(cname))
+	var cvalue *C.char
+	if len(value) == 0 {
+		cvalue = nil
+	} else {
+		cvalue = C.CString(value)
+		defer C.free(unsafe.Pointer(cvalue))
+	}
+	return int(C.csoundSetGlobalEnv(cname, cvalue))
+}
+
 func (csound CSOUND) CreateGlobalVariable(name string, nbytes uint) int {
 	var cname *C.char = C.CString(name)
 	defer C.free(unsafe.Pointer(cname))
@@ -1339,4 +1391,121 @@ func (csound CSOUND) DestroyGlobalVariable(name string) int {
 	var cname *C.char = C.CString(name)
 	defer C.free(unsafe.Pointer(cname))
 	return int(C.csoundDestroyGlobalVariable(csound.cs, cname))
+}
+
+func (csound CSOUND) RunUtility(name string, args []string) int {
+	var cname *C.char = C.CString(name)
+	defer C.free(unsafe.Pointer(cname))
+	argc := C.int(len(args))
+	argv := make([]*C.char, argc)
+	for i, arg := range args {
+		argv[i] = C.CString(arg)
+	}
+	result := C.csoundRunUtility(csound.cs, cname, argc, &argv[0])
+	for _, arg := range argv {
+		C.free(unsafe.Pointer(arg))
+	}
+	return int(result)
+}
+
+func (csound CSOUND) ListUtilities() ([]string, error) {
+	clist := C.csoundListUtilities(csound.cs)
+	if clist == nil {
+		return nil, fmt.Errorf("ListUtilities error")
+	}
+	n := int(C.utilityListLength(clist))
+	var list = make([]string, n)
+	for i := range list {
+		list[i] = C.GoString(C.utilityName(clist, C.int(i)))
+	}
+	C.csoundDeleteUtilityList(csound.cs, clist)
+	return list, nil
+}
+
+func (csound CSOUND) GetUtilityDescription(utilName string) string {
+	var cname *C.char = C.CString(utilName)
+	defer C.free(unsafe.Pointer(cname))
+	return C.GoString(C.csoundGetUtilityDescription(csound.cs, cname))
+}
+
+func (csound CSOUND) Rand31(seedVal *int32) int32 {
+	return int32(C.csoundRand31((*C.int)(seedVal)))
+}
+
+func (csound CSOUND) SeedRandMT(initKey []uint32) *C.CsoundRandMTState {
+	p := C.newRandMTState()
+	if len(initKey) > 1 {
+		C.csoundSeedRandMT(p, (*C.uint32_t)(&initKey[0]), C.uint32_t(len(initKey)))
+	} else {
+		C.csoundSeedRandMT(p, nil, C.uint32_t(initKey[0]))
+	}
+	return p
+}
+
+func (csound CSOUND) RandMT(p *C.CsoundRandMTState) uint32 {
+	return uint32(C.csoundRandMT(p))
+}
+
+func (csound CSOUND) FreeRandMTState(p *C.CsoundRandMTState) {
+	C.freeRandMTState(p)
+}
+
+func (csound CSOUND) CreateCircularBuffer(numelem int) unsafe.Pointer {
+	var sample MYFLT
+	return unsafe.Pointer(C.csoundCreateCircularBuffer(csound.cs, C.int(numelem),
+		C.int(unsafe.Sizeof(sample))))
+}
+
+func (csound CSOUND) ReadCircularBuffer(circularBuffer unsafe.Pointer, out []MYFLT,
+	items int) int {
+	if len(out) < items {
+		return 0
+	}
+	return int(C.csoundReadCircularBuffer(csound.cs, circularBuffer,
+		unsafe.Pointer(&out[0]), C.int(items)))
+}
+
+func (csound CSOUND) PeekCircularBuffer(circularBuffer unsafe.Pointer, out []MYFLT,
+	items int) int {
+	if len(out) < items {
+		return 0
+	}
+	return int(C.csoundPeekCircularBuffer(csound.cs, circularBuffer,
+		unsafe.Pointer(&out[0]), C.int(items)))
+}
+
+func (csound CSOUND) WriteCircularBuffer(circularBuffer unsafe.Pointer, inp []MYFLT,
+	items int) int {
+	if len(inp) < items {
+		return 0
+	}
+	return int(C.csoundWriteCircularBuffer(csound.cs, circularBuffer,
+		unsafe.Pointer(&inp[0]), C.int(items)))
+}
+
+func (csound CSOUND) FlushCircularBuffer(circularBuffer unsafe.Pointer) {
+	C.csoundFlushCircularBuffer(csound.cs, circularBuffer)
+}
+
+func (csound CSOUND) DestroyCircularBuffer(circularBuffer unsafe.Pointer) {
+	C.csoundDestroyCircularBuffer(csound.cs, circularBuffer)
+}
+
+func (csound CSOUND) OpenLibrary(libraryPath string) (int, unsafe.Pointer) {
+	var cpath *C.char = C.CString(libraryPath)
+	defer C.free(unsafe.Pointer(cpath))
+	var library unsafe.Pointer
+	ret := C.csoundOpenLibrary((*unsafe.Pointer)(&library), cpath)
+	return int(ret), library
+}
+
+func (csound CSOUND) CloseLibrary(library unsafe.Pointer) int {
+	return int(C.csoundCloseLibrary(library))
+}
+
+func (csound CSOUND) GetLibrarySymbol(library unsafe.Pointer,
+	symbolName string) unsafe.Pointer {
+	var cname *C.char = C.CString(symbolName)
+	defer C.free(unsafe.Pointer(cname))
+	return C.csoundGetLibrarySymbol(library, cname)
 }
