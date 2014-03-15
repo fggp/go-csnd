@@ -11,7 +11,7 @@ func TestInstantiation(t *testing.T) {
 	if cs.cs == nil {
 		t.Errorf("Could not create Csound instance")
 	}
-	fmt.Println("\n", cs.GetVersion(), cs.GetAPIVersion(), "\n")
+	fmt.Println("\n", cs.Version(), cs.APIVersion(), "\n")
 	cs.Destroy()
 	if cs.cs != nil {
 		t.Errorf("Csound was destroyed and opaque pointer is not cleared!")
@@ -28,14 +28,14 @@ type Triangle map[*Point]string
 
 func TestHostData(t *testing.T) {
 	cs := Create(nil)
-	ht := cs.GetHostData()
+	ht := cs.HostData()
 	if ht != nil {
 		t.Errorf("Hostdata should be nil when instance created with nil arg")
 	}
 
 	i := 1956
 	cs.SetHostData(unsafe.Pointer(&i))
-	ht = cs.GetHostData()
+	ht = cs.HostData()
 	pi := (*int)(ht)
 	if pi != &i {
 		t.Errorf("Int hostdata read is different of hostdata written")
@@ -45,7 +45,7 @@ func TestHostData(t *testing.T) {
 
 	s := "Une chaîne de caractères"
 	cs.SetHostData(unsafe.Pointer(&s))
-	ht = cs.GetHostData()
+	ht = cs.HostData()
 	ps := (*string)(ht)
 	if ps != &s {
 		t.Errorf("String hostdata read is different of hostdata written")
@@ -54,7 +54,7 @@ func TestHostData(t *testing.T) {
 	}
 
 	cs.SetHostData(nil)
-	ht = cs.GetHostData()
+	ht = cs.HostData()
 	if ht != nil {
 		t.Errorf("Hostdata should have been cleared")
 	}
@@ -65,7 +65,7 @@ func TestHostData(t *testing.T) {
 	triangle[&Point{4, 5, 6}] = "β"
 	triangle[&Point{7, 8, 9}] = "γ"
 	cs = Create(unsafe.Pointer(&triangle))
-	ht = cs.GetHostData()
+	ht = cs.HostData()
 	pt := (*Triangle)(unsafe.Pointer(ht))
 	if pt != &triangle {
 		t.Errorf("String hostdata read is different of hostdata written")
@@ -74,7 +74,7 @@ func TestHostData(t *testing.T) {
 	}
 
 	cs.SetHostData(nil)
-	ht = cs.GetHostData()
+	ht = cs.HostData()
 	if ht != nil {
 		t.Errorf("Hostdata should have been cleared")
 	}
@@ -85,47 +85,48 @@ func TestCsoundParams(t *testing.T) {
 	cs := Create(nil)
 	var p CsoundParams
 	fmt.Println(p)
-	cs.GetParams(&p)
+	cs.Params(&p)
 	fmt.Println(p)
 	p.RingBell = 1
 	cs.SetParams(&p)
 	p.RingBell = 0
 	fmt.Println(p)
-	cs.GetParams(&p)
+	cs.Params(&p)
 	fmt.Println(p)
 	cs.SetDebug(true)
-	cs.GetParams(&p)
+	cs.Params(&p)
 	fmt.Println(p)
-	fmt.Println(cs.GetDebug())
+	fmt.Println(cs.Debug())
 	p.RingBell = 0
 	p.DebugMode = 0
 	cs.SetParams(&p)
-	fmt.Println(cs.GetDebug())
+	fmt.Println(cs.Debug())
 	cs.Destroy()
 }
 
 func TestRTAudioIO(t *testing.T) {
 	cs := Create(nil)
-	var n int
-	for {
-		if name, mtype, err := cs.GetModule(n); err == CSOUND_SUCCESS {
-			fmt.Printf("%2d: %s\t%s\n", n, name, mtype)
-			n++
-		} else {
-			break
-		}
+	var name, mtype string
+	err := CSOUND_SUCCESS
+	n := 0
+	for err != CSOUND_ERROR {
+		name, mtype, err = cs.Module(n)
+		n++
+		fmt.Printf("Module %d:  %s (%s)\n", n, name, mtype)
 	}
 
 	cs.Compile([]string{"dummy", "simple.csd"})
-	list := cs.GetAudioDevList(true)
-	fmt.Println("\nGetAudioDevList(true)")
+	list := cs.AudioDevList(true)
+	fmt.Println("\nAudioDevList(true)")
 	for i := range list {
-		fmt.Println(list[i])
+		fmt.Printf("%d: %s (%s), %d chan\n",
+			i, list[i].DeviceId, list[i].DeviceName, list[i].MaxNchnls)
 	}
-	list = cs.GetAudioDevList(false)
-	fmt.Println("\nGetAudioDevList(false)")
+	list = cs.AudioDevList(false)
+	fmt.Println("\nAudioDevList(false)")
 	for i := range list {
-		fmt.Println(list[i])
+		fmt.Printf("%d: %s (%s), %d chan\n",
+			i, list[i].DeviceId, list[i].DeviceName, list[i].MaxNchnls)
 	}
 	fmt.Println()
 	cs.Destroy()
@@ -134,12 +135,12 @@ func TestRTAudioIO(t *testing.T) {
 func TestMidiIO(t *testing.T) {
 	cs := Create(nil)
 	cs.Compile([]string{"dummy", "simple.csd"})
-	list := cs.GetMidiDevList(true)
+	list := cs.MidiDevList(true)
 	fmt.Println()
 	for i := range list {
 		fmt.Println(list[i])
 	}
-	list = cs.GetMidiDevList(false)
+	list = cs.MidiDevList(false)
 	fmt.Println()
 	for i := range list {
 		fmt.Println(list[i])
@@ -152,7 +153,7 @@ func TestChannels(t *testing.T) {
 	cs := Create(nil)
 	cs.Compile([]string{"dummy", "simple.csd"})
 	cs.Start()
-	cs.GetChannelPtr("Zobie", CSOUND_CONTROL_CHANNEL)
+	cs.ChannelPtr("Zobie", CSOUND_CONTROL_CHANNEL)
 	lst, err := cs.ListChannels()
 	if err != nil {
 		fmt.Println(err)
@@ -165,7 +166,7 @@ func TestChannels(t *testing.T) {
 
 func TestNamedGens(t *testing.T) {
 	cs := Create(nil)
-	namedGens := cs.GetNamedGens()
+	namedGens := cs.NamedGens()
 	fmt.Println(namedGens)
 	cs.Destroy()
 }
@@ -180,7 +181,7 @@ func TestUtilities(t *testing.T) {
 	cs := Create(nil)
 	if list, err := cs.ListUtilities(); err == nil {
 		for _, name := range list {
-			fmt.Printf("%s: %s\n", name, cs.GetUtilityDescription(name))
+			fmt.Printf("%s: %s\n", name, cs.UtilityDescription(name))
 		}
 	}
 	cs.Destroy()
@@ -194,6 +195,7 @@ func TestRand31(t *testing.T) {
 		fmt.Printf("%d ", n)
 	}
 	fmt.Println()
+	cs.Destroy()
 }
 
 func TestRandMT(t *testing.T) {
@@ -204,4 +206,5 @@ func TestRandMT(t *testing.T) {
 		fmt.Printf("%d ", n)
 	}
 	fmt.Println()
+	cs.Destroy()
 }

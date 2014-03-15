@@ -20,7 +20,7 @@ void CsoundPTstop(Cpt pt);
 void CsoundPTscoreEvent(Cpt pt, int absp2mode, char opcod, int pcnt, MYFLT *p);
 void CsoundPTinputMessage(Cpt pt, const char *s);
 void CsoundPTsetScoreOffsetSeconds(Cpt pt, double timeVal);
-void CsoundPTjoin(Cpt pt);
+int CsoundPTjoin(Cpt pt);
 void CsoundPTflushMessageQueue(Cpt pt);
 
 #ifdef __cplusplus

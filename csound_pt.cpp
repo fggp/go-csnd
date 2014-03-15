@@ -95,10 +95,10 @@ void CsoundPTsetScoreOffsetSeconds(Cpt pt, double timeVal)
   cpt->SetScoreOffsetSeconds(timeVal);
 }
 
-void CsoundPTjoin(Cpt pt)
+int CsoundPTjoin(Cpt pt)
 {
   CsoundPerformanceThread *cpt = (CsoundPerformanceThread *)pt;
-  cpt->Join();
+  return cpt->Join();
 }
 
 void CsoundPTflushMessageQueue(Cpt pt)
