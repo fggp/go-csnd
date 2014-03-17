@@ -3958,6 +3958,21 @@ it is continued.
 			<pre>type TREE struct {
     <span class="comment">// contains filtered or unexported fields</span>
 }</pre>
+
+<script type="text/javascript">
+  var toggleButtons = document.getElementsByClassName("toggleButton");
+  for (var i = 0; i < toggleButtons.length; i++) {
+    toggleButtons[i].addEventListener("click", function() {
+        var elems = this.parentNode.parentNode.children;
+        for (var j = 0; j < elems.length; j++) {
+          if (elems[j].className == "collapsed")
+            elems[j].className = "expanded";
+          else if (elems[j].className == "expanded")
+            elems[j].className = "collapsed";
+        }
+    }, false);
+  }
+</script>
 	</body>
 	</html>
 	
