@@ -301,7 +301,7 @@ type CsoundParams struct {
 	NumberOfThreads      int32 // number of threads for multicore performance
 	SyntaxCheckOnly      int32 // do not compile, only check syntax
 	CsdLineCounts        int32 // csd line error reporting
-	ComputeWeights       int32 // use calculated opcode weights for multicore, 0 or 1
+	ComputeWeights       int32 // deprecated, kept for backwards comp.
 	RealtimeMode         int32 // use realtime priority mode, 0 or 1
 	SampleAccurate       int32 // use sample-level score event accuracy
 	SampleRateOverride   MYFLT // overriding sample rate
@@ -309,6 +309,7 @@ type CsoundParams struct {
 	NchnlsOverride       int32 // overriding number of out channels
 	NchnlsIoverride      int32 // overriding number of in channels
 	E0dbfsOverride       MYFLT // overriding 0dbfs
+	Daemon               int   // daemon mode
 }
 
 type CsoundAudioDevice struct {
@@ -516,6 +517,9 @@ func (csound CSOUND) CompileArgs(args []string) int {
 
 // Prepare Csound for performance after compilation
 // using one or more of the compile/eval functions.
+// NB: this is called internally by csoundCompile(), therefore
+// it is only required if performance is started without
+// call to that function
 func (csound CSOUND) Start() int {
 	return int(C.csoundStart(csound.cs))
 }
@@ -543,6 +547,23 @@ func (csound CSOUND) Compile(args []string) int {
 		C.free(unsafe.Pointer(arg))
 	}
 	return int(result)
+}
+
+// Compiles a Csound input file (.csd file)
+// which includes command-line arguments,
+// but does not perform the file. Returns a non-zero error code on failure.
+// In this (host-driven) mode, the sequence of calls should be as follows:
+//       csound.CompileCsd(fileName);
+//       for csound.PerformBuffer() == 0 {
+//       }
+//       csound.Cleanup()
+//       csound.Reset()
+// NB: this function can be called during performance to
+// replace or add new instruments and events.
+func (csound CSOUND) CompileCsd(fileName string) int {
+	var cfileName *C.char = C.CString(fileName)
+	defer C.free(unsafe.Pointer(cfileName))
+	return int(C.csoundCompileCsd(csound.cs, cfileName))
 }
 
 // Senses input events and performs audio output until the end of score
@@ -2011,7 +2032,7 @@ func (csound CSOUND) CreateCircularBuffer(numelem int) unsafe.Pointer {
 //   out - preallocated buffer with at least items number of elements, where
 //         buffer contents will be read into
 //   items - number of samples to be read
-// Return the actual number of samples read (0 <= n <= items)
+// Return the actual number of items read (0 <= n <= items)
 func (csound CSOUND) ReadCircularBuffer(circularBuffer unsafe.Pointer, out []MYFLT,
 	items int) int {
 	if len(out) < items {
@@ -2026,7 +2047,7 @@ func (csound CSOUND) ReadCircularBuffer(circularBuffer unsafe.Pointer, out []MYF
 //   out - preallocated buffer with at least items number of elements, where
 //         buffer contents will be read into
 // items - number of samples to be read
-// Return the actual number of samples read (0 <= n <= items)
+// Return the actual number of items read (0 <= n <= items)
 func (csound CSOUND) PeekCircularBuffer(circularBuffer unsafe.Pointer, out []MYFLT,
 	items int) int {
 	if len(out) < items {
