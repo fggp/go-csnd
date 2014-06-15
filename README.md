@@ -3,7 +3,7 @@ GO Bindings for Csound6
 
 This wrapper is still very experimental. It has been tested only on Linux.
 It needs a proper installation of Csound6 with header files in the include path in the csound directory
-(e.g. csound/csound.h). libcsound64 and libcsnd6 have to be in the PATH.
+(e.g. csound/csound.h). libcsound64 have to be in the PATH.
 
 You can install this package with `go get`:
 
@@ -17,4 +17,3 @@ in csnd.go to your system. Finally install the package with `go install`.
 
 This wrapper is intended to be used with a double build of csound6.
 
-Go 1.2 is needed for the C++ support of go build
