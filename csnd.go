@@ -4,7 +4,7 @@ package csnd6
 #cgo CFLAGS: -DUSE_DOUBLE=1
 #cgo CFLAGS: -I /usr/local/include
 #cgo linux CFLAGS: -DLINUX=1
-#cgo LDFLAGS: -lcsound64 -lcsnd6
+#cgo LDFLAGS: -lcsound64
 
 #include <csound/csound.h>
 
@@ -272,7 +272,7 @@ const (
 
 // Encapsulates an opaque pointer to a Csound instance
 type CSOUND struct {
-	cs (*C.CSOUND)
+	Cs (*C.CSOUND)
 }
 
 type MYFLT float64
@@ -415,8 +415,8 @@ func Create(hostData unsafe.Pointer) CSOUND {
 
 // Destroy an instance of Csound.
 func (csound *CSOUND) Destroy() {
-	C.csoundDestroy(csound.cs)
-	csound.cs = nil
+	C.csoundDestroy(csound.Cs)
+	csound.Cs = nil
 }
 
 // Return the version number
@@ -443,14 +443,14 @@ func (csound CSOUND) APIVersion() string {
 func (csound CSOUND) ParseOrc(str string) TREE {
 	var cstr *C.char = C.CString(str)
 	defer C.free(unsafe.Pointer(cstr))
-	t := C.csoundParseOrc(csound.cs, cstr)
+	t := C.csoundParseOrc(csound.Cs, cstr)
 	return TREE{t}
 }
 
 // Compile the given TREE node into structs for Csound to use.
 // This can be called during performance to compile a new TREE
 func (csound CSOUND) CompileTree(root TREE) int {
-	result := C.csoundCompileTree(csound.cs, root.t)
+	result := C.csoundCompileTree(csound.Cs, root.t)
 	return int(result)
 }
 
@@ -458,7 +458,7 @@ func (csound CSOUND) CompileTree(root TREE) int {
 // This function should be called whenever the TREE was
 // created with ParseOrc and memory can be deallocated.
 func (csound CSOUND) DeleteTree(tree TREE) {
-	C.csoundDeleteTree(csound.cs, tree.t)
+	C.csoundDeleteTree(csound.Cs, tree.t)
 }
 
 // Parse, and compile the given orchestra from an ASCII string,
@@ -469,7 +469,7 @@ func (csound CSOUND) DeleteTree(tree TREE) {
 func (csound CSOUND) CompileOrc(str string) int {
 	var cstr *C.char = C.CString(str)
 	defer C.free(unsafe.Pointer(cstr))
-	return int(C.csoundCompileOrc(csound.cs, cstr))
+	return int(C.csoundCompileOrc(csound.Cs, cstr))
 }
 
 //   Parse and compile an orchestra given on a string,
@@ -481,7 +481,7 @@ func (csound CSOUND) CompileOrc(str string) int {
 func (csound CSOUND) EvalCode(str string) MYFLT {
 	var cstr *C.char = C.CString(str)
 	defer C.free(unsafe.Pointer(cstr))
-	return MYFLT(C.csoundEvalCode(csound.cs, cstr))
+	return MYFLT(C.csoundEvalCode(csound.Cs, cstr))
 }
 
 // Prepare an instance of Csound for Cscore
@@ -497,7 +497,7 @@ func (csound CSOUND) EvalCode(str string) MYFLT {
 // It returns CSOUND_SUCCESS on success and CSOUND_INITIALIZATION or other
 // error code if it fails.
 func (csound CSOUND) InitializeCscore(insco, outsco *C.FILE) int {
-	return int(C.csoundInitializeCscore(csound.cs, insco, outsco))
+	return int(C.csoundInitializeCscore(csound.Cs, insco, outsco))
 }
 
 //  Read arguments, parse and compile an orchestra, read, process and
@@ -508,7 +508,7 @@ func (csound CSOUND) CompileArgs(args []string) int {
 	for i, arg := range args {
 		argv[i] = C.CString(arg)
 	}
-	result := C.csoundCompileArgs(csound.cs, argc, &argv[0])
+	result := C.csoundCompileArgs(csound.Cs, argc, &argv[0])
 	for _, arg := range argv {
 		C.free(unsafe.Pointer(arg))
 	}
@@ -521,7 +521,7 @@ func (csound CSOUND) CompileArgs(args []string) int {
 // it is only required if performance is started without
 // call to that function
 func (csound CSOUND) Start() int {
-	return int(C.csoundStart(csound.cs))
+	return int(C.csoundStart(csound.Cs))
 }
 
 // Compile Csound input files (such as an orchestra and score)
@@ -542,7 +542,7 @@ func (csound CSOUND) Compile(args []string) int {
 	for i, arg := range args {
 		argv[i] = C.CString(arg)
 	}
-	result := C.csoundCompile(csound.cs, argc, &argv[0])
+	result := C.csoundCompile(csound.Cs, argc, &argv[0])
 	for _, arg := range argv {
 		C.free(unsafe.Pointer(arg))
 	}
@@ -563,7 +563,7 @@ func (csound CSOUND) Compile(args []string) int {
 func (csound CSOUND) CompileCsd(fileName string) int {
 	var cfileName *C.char = C.CString(fileName)
 	defer C.free(unsafe.Pointer(cfileName))
-	return int(C.csoundCompileCsd(csound.cs, cfileName))
+	return int(C.csoundCompileCsd(csound.Cs, cfileName))
 }
 
 // Senses input events and performs audio output until the end of score
@@ -578,7 +578,7 @@ func (csound CSOUND) CompileCsd(fileName string) int {
 // to continue the stopped performance. Otherwise, Reset() should be
 // called to clean up after the finished or failed performance.
 func (csound CSOUND) Perform() int {
-	return int(C.csoundPerform(csound.cs))
+	return int(C.csoundPerform(csound.Cs))
 }
 
 // Senses input events, and performs one control sample worth (ksmps) of
@@ -592,7 +592,7 @@ func (csound CSOUND) Perform() int {
 // Enables external software to control the execution of Csound,
 // and to synchronize performance with audio input and output.
 func (csound CSOUND) PerformKsmps() int {
-	return int(C.csoundPerformKsmps(csound.cs))
+	return int(C.csoundPerformKsmps(csound.Cs))
 }
 
 // Performs Csound, sensing real-time and score events
@@ -605,14 +605,14 @@ func (csound CSOUND) PerformKsmps() int {
 //
 // Return false during performance, and true when performance is finished.
 func (csound CSOUND) PerformBuffer() int {
-	return int(C.csoundPerformBuffer(csound.cs))
+	return int(C.csoundPerformBuffer(csound.Cs))
 }
 
 // Stops a Perform() running in another thread. Note that it is
 // not guaranteed that Perform() has already stopped when this
 // function returns.
 func (csound CSOUND) Stop() {
-	C.csoundStop(csound.cs)
+	C.csoundStop(csound.Cs)
 }
 
 // Prints information about the end of a performance, and closes audio
@@ -622,14 +622,14 @@ func (csound CSOUND) Stop() {
 // functions is undefined.
 func (csound CSOUND) Cleanup() int {
 	numSenseEvent = 0
-	return int(C.csoundCleanup(csound.cs))
+	return int(C.csoundCleanup(csound.Cs))
 }
 
 // Resets all internal memory and state in preparation for a new performance.
 // Enables external software to run successive Csound performances
 // without reloading Csound. Implies Cleanup(), unless already called.
 func (csound CSOUND) Reset() {
-	C.csoundReset(csound.cs)
+	C.csoundReset(csound.Cs)
 }
 
 /*
@@ -638,40 +638,40 @@ func (csound CSOUND) Reset() {
 
 // Return the number of audio sample frames per second.
 func (csound CSOUND) Sr() MYFLT {
-	return MYFLT(C.csoundGetSr(csound.cs))
+	return MYFLT(C.csoundGetSr(csound.Cs))
 }
 
 // Return the number of control samples per second.
 func (csound CSOUND) Kr() MYFLT {
-	return MYFLT(C.csoundGetKr(csound.cs))
+	return MYFLT(C.csoundGetKr(csound.Cs))
 }
 
 // Return the number of audio sample frames per control sample.
 func (csound CSOUND) Ksmps() int {
-	return int(C.csoundGetKsmps(csound.cs))
+	return int(C.csoundGetKsmps(csound.Cs))
 }
 
 // Return the number of audio output channels. Set through the nchnls
 // header variable in the csd file.
 func (csound CSOUND) Nchnls() int {
-	return int(C.csoundGetNchnls(csound.cs))
+	return int(C.csoundGetNchnls(csound.Cs))
 }
 
 // Return the number of audio input channels. Set through the
 // nchnls_i header variable in the csd file. If this variable is
 // not set, the value is taken from nchnls.
 func (csound CSOUND) NchnlsInput() int {
-	return int(C.csoundGetNchnlsInput(csound.cs))
+	return int(C.csoundGetNchnlsInput(csound.Cs))
 }
 
 // Return the 0dBFS level of the spin/spout buffers.
 func (csound CSOUND) ZerodBFS() MYFLT {
-	return MYFLT(C.csoundGet0dBFS(csound.cs))
+	return MYFLT(C.csoundGet0dBFS(csound.Cs))
 }
 
 // Return the current performance time in samples.
 func (csound CSOUND) CurrentTimeSamples() int {
-	return int(C.csoundGetCurrentTimeSamples(csound.cs))
+	return int(C.csoundGetCurrentTimeSamples(csound.Cs))
 }
 
 // Return the size of MYFLT in bytes.
@@ -681,12 +681,12 @@ func (csound CSOUND) SizeOfMYFLT() int {
 
 // Return host data.
 func (csound CSOUND) HostData() unsafe.Pointer {
-	return C.csoundGetHostData(csound.cs)
+	return C.csoundGetHostData(csound.Cs)
 }
 
 // Set host data.
 func (csound CSOUND) SetHostData(hostData unsafe.Pointer) {
-	C.csoundSetHostData(csound.cs, hostData)
+	C.csoundSetHostData(csound.Cs, hostData)
 }
 
 // Set a single csound option (flag). Return CSOUND_SUCCESS on success.
@@ -694,7 +694,7 @@ func (csound CSOUND) SetHostData(hostData unsafe.Pointer) {
 func (csound CSOUND) SetOption(option string) int {
 	var coption *C.char = C.CString(option)
 	defer C.free(unsafe.Pointer(coption))
-	return int(C.csoundSetOption(csound.cs, coption))
+	return int(C.csoundSetOption(csound.Cs, coption))
 }
 
 //  Configure Csound with a given set of parameters defined in
@@ -704,26 +704,26 @@ func (csound CSOUND) SetOption(option string) int {
 //  These options should only be changed before performance has started.
 func (csound CSOUND) SetParams(p *CsoundParams) {
 	pp := &p.DebugMode
-	C.csoundSetParams(csound.cs, (*C.CSOUND_PARAMS)(unsafe.Pointer(pp)))
+	C.csoundSetParams(csound.Cs, (*C.CSOUND_PARAMS)(unsafe.Pointer(pp)))
 }
 
 //  Get the current set of parameters from a CSOUND instance in
 //  a CsoundParams structure. See SetParams().
 func (csound CSOUND) Params(p *CsoundParams) {
 	pp := &p.DebugMode
-	C.csoundGetParams(csound.cs, (*C.CSOUND_PARAMS)(unsafe.Pointer(pp)))
+	C.csoundGetParams(csound.Cs, (*C.CSOUND_PARAMS)(unsafe.Pointer(pp)))
 }
 
 // Return whether Csound is set to print debug messages sent through the
 // DebugMsg() internal API function.
 func (csound CSOUND) Debug() bool {
-	return C.csoundGetDebug(csound.cs) != 0
+	return C.csoundGetDebug(csound.Cs) != 0
 }
 
 // Set whether Csound prints debug messages from the DebugMsg() internal
 // API function.
 func (csound CSOUND) SetDebug(debug bool) {
-	C.csoundSetDebug(csound.cs, cbool(debug))
+	C.csoundSetDebug(csound.Cs, cbool(debug))
 }
 
 /*
@@ -732,7 +732,7 @@ func (csound CSOUND) SetDebug(debug bool) {
 
 // Return the audio output name (-o).
 func (csound CSOUND) OutputName() string {
-	return C.GoString(C.csoundGetOutputName(csound.cs))
+	return C.GoString(C.csoundGetOutputName(csound.Cs))
 }
 
 //  Set output destination, type and format
@@ -759,42 +759,42 @@ func (csound CSOUND) SetOutput(name, otype, format string) {
 	} else {
 		cformat = nil
 	}
-	C.csoundSetOutput(csound.cs, cname, ctype, cformat)
+	C.csoundSetOutput(csound.Cs, cname, ctype, cformat)
 }
 
 // Set input source.
 func (csound CSOUND) SetInput(name string) {
 	var cname *C.char = C.CString(name)
 	defer C.free(unsafe.Pointer(cname))
-	C.csoundSetInput(csound.cs, cname)
+	C.csoundSetInput(csound.Cs, cname)
 }
 
 // Set MIDI input device name/number.
 func (csound CSOUND) SetMIDIInput(name string) {
 	var cname *C.char = C.CString(name)
 	defer C.free(unsafe.Pointer(cname))
-	C.csoundSetMIDIInput(csound.cs, cname)
+	C.csoundSetMIDIInput(csound.Cs, cname)
 }
 
 // Set MIDI file input name.
 func (csound CSOUND) SetMIDIFileInput(name string) {
 	var cname *C.char = C.CString(name)
 	defer C.free(unsafe.Pointer(cname))
-	C.csoundSetMIDIFileInput(csound.cs, cname)
+	C.csoundSetMIDIFileInput(csound.Cs, cname)
 }
 
 // Set MIDI output device name/number.
 func (csound CSOUND) SetMIDIOutput(name string) {
 	var cname *C.char = C.CString(name)
 	defer C.free(unsafe.Pointer(cname))
-	C.csoundSetMIDIOutput(csound.cs, cname)
+	C.csoundSetMIDIOutput(csound.Cs, cname)
 }
 
 // Set MIDI file output name.
 func (csound CSOUND) SetMIDIFileOutput(name string) {
 	var cname *C.char = C.CString(name)
 	defer C.free(unsafe.Pointer(cname))
-	C.csoundSetMIDIFileOutput(csound.cs, cname)
+	C.csoundSetMIDIFileOutput(csound.Cs, cname)
 }
 
 /*
@@ -805,7 +805,7 @@ func (csound CSOUND) SetMIDIFileOutput(name string) {
 func (csound CSOUND) SetRTAudioModule(module string) {
 	var cmodule *C.char = C.CString(module)
 	defer C.free(unsafe.Pointer(cmodule))
-	C.csoundSetRTAudioModule(csound.cs, cmodule)
+	C.csoundSetRTAudioModule(csound.Cs, cmodule)
 }
 
 // Retrieve a module name and type ("audio" or "midi") given a
@@ -822,7 +822,7 @@ func (csound CSOUND) SetRTAudioModule(module string) {
 //   }
 func (csound CSOUND) Module(number int) (name, mtype string, error int) {
 	var cname, ctype *C.char
-	cerror := C.csoundGetModule(csound.cs, C.int(number), &cname, &ctype)
+	cerror := C.csoundGetModule(csound.Cs, C.int(number), &cname, &ctype)
 	name = C.GoString(cname)
 	mtype = C.GoString(ctype)
 	error = int(cerror)
@@ -831,20 +831,20 @@ func (csound CSOUND) Module(number int) (name, mtype string, error int) {
 
 // Return the number of samples in Csound input buffer.
 func (csound CSOUND) InputBufferSize() int {
-	return int(C.csoundGetInputBufferSize(csound.cs))
+	return int(C.csoundGetInputBufferSize(csound.Cs))
 }
 
 // Return the number of samples in Csound output buffer.
 func (csound CSOUND) OutputBufferSize() int {
-	return int(C.csoundGetOutputBufferSize(csound.cs))
+	return int(C.csoundGetOutputBufferSize(csound.Cs))
 }
 
 // Return the Csound audio input buffer as a []MYFLT.
 // Enable external software to write audio into Csound before calling
 // PerformBuffer.
 func (csound CSOUND) InputBuffer() []MYFLT {
-	buffer := (*MYFLT)(C.csoundGetInputBuffer(csound.cs))
-	length := int(C.csoundGetInputBufferSize(csound.cs))
+	buffer := (*MYFLT)(C.csoundGetInputBuffer(csound.Cs))
+	length := int(C.csoundGetInputBufferSize(csound.Cs))
 	var slice []MYFLT
 	sliceHeader := (*reflect.SliceHeader)(unsafe.Pointer(&slice))
 	sliceHeader.Cap = length
@@ -857,8 +857,8 @@ func (csound CSOUND) InputBuffer() []MYFLT {
 // Enable external software to read audio from Csound after calling
 // PerformBuffer.
 func (csound CSOUND) OutputBuffer() []MYFLT {
-	buffer := (*MYFLT)(C.csoundGetOutputBuffer(csound.cs))
-	length := int(C.csoundGetOutputBufferSize(csound.cs))
+	buffer := (*MYFLT)(C.csoundGetOutputBuffer(csound.Cs))
+	length := int(C.csoundGetOutputBufferSize(csound.Cs))
 	var slice []MYFLT
 	sliceHeader := (*reflect.SliceHeader)(unsafe.Pointer(&slice))
 	sliceHeader.Cap = length
@@ -871,7 +871,7 @@ func (csound CSOUND) OutputBuffer() []MYFLT {
 // Enable external software to write audio into Csound before calling
 // PerformKsmps.
 func (csound CSOUND) Spin() []MYFLT {
-	buffer := (*MYFLT)(C.csoundGetSpin(csound.cs))
+	buffer := (*MYFLT)(C.csoundGetSpin(csound.Cs))
 	length := csound.Ksmps() * csound.Nchnls()
 	var slice []MYFLT
 	sliceHeader := (*reflect.SliceHeader)(unsafe.Pointer(&slice))
@@ -885,14 +885,14 @@ func (csound CSOUND) Spin() []MYFLT {
 // this only ever makes sense before calling PerformKsmps().
 // The frame and channel must be in bounds relative to ksmps and nchnls.
 func (csound CSOUND) AddSpinSample(frame, channel int, sample MYFLT) {
-	C.csoundAddSpinSample(csound.cs, C.int(frame), C.int(channel), cMYFLT(sample))
+	C.csoundAddSpinSample(csound.Cs, C.int(frame), C.int(channel), cMYFLT(sample))
 }
 
 // Return the Csound audio output working buffer (spout) as a []MYFLT.
 // Enable external software to read audio from Csound after calling
 // PerformKsmps.
 func (csound CSOUND) Spout() []MYFLT {
-	buffer := (*MYFLT)(C.csoundGetSpout(csound.cs))
+	buffer := (*MYFLT)(C.csoundGetSpout(csound.Cs))
 	length := csound.Ksmps() * csound.Nchnls()
 	var slice []MYFLT
 	sliceHeader := (*reflect.SliceHeader)(unsafe.Pointer(&slice))
@@ -907,17 +907,17 @@ func (csound CSOUND) Spout() []MYFLT {
 // PerformKsmps(). The frame and channel must be in bounds
 // relative to ksmps and nchnls.
 func (csound CSOUND) SpoutSample(frame, channel int) MYFLT {
-	return MYFLT(C.csoundGetSpoutSample(csound.cs, C.int(frame), C.int(channel)))
+	return MYFLT(C.csoundGetSpoutSample(csound.Cs, C.int(frame), C.int(channel)))
 }
 
 // Return a pointer to user data for real time audio input.
 func (csound CSOUND) RtRecordUserData() unsafe.Pointer {
-	return unsafe.Pointer(C.csoundGetRtRecordUserData(csound.cs))
+	return unsafe.Pointer(C.csoundGetRtRecordUserData(csound.Cs))
 }
 
 // Return a pointer to user data for real time audio output.
 func (csound CSOUND) RtPlaydUserData() unsafe.Pointer {
-	return unsafe.Pointer(C.csoundGetRtPlayUserData(csound.cs))
+	return unsafe.Pointer(C.csoundGetRtPlayUserData(csound.Cs))
 }
 
 // Calling this function with a non-zero 'state' value between
@@ -928,7 +928,7 @@ func (csound CSOUND) RtPlaydUserData() unsafe.Pointer {
 // set to the integer multiple of ksmps that is nearest to the value
 // specified.
 func (csound CSOUND) SetHostImplementedAudioIO(state, bufSize int) {
-	C.csoundSetHostImplementedAudioIO(csound.cs, C.int(state), C.int(bufSize))
+	C.csoundSetHostImplementedAudioIO(csound.Cs, C.int(state), C.int(bufSize))
 }
 
 // This function can be called to obtain a list of available
@@ -942,8 +942,8 @@ func (csound CSOUND) SetHostImplementedAudioIO(state, bufSize int) {
 //   }
 func (csound CSOUND) AudioDevList(isOutput bool) []CsoundAudioDevice {
 	cflag := cbool(isOutput)
-	n := C.csoundGetAudioDevList(csound.cs, nil, cflag)
-	devs := C.getAudioDevList(csound.cs, n, cflag)
+	n := C.csoundGetAudioDevList(csound.Cs, nil, cflag)
+	devs := C.getAudioDevList(csound.Cs, n, cflag)
 	defer C.free(unsafe.Pointer(devs))
 	length := int(n)
 	var list = make([]CsoundAudioDevice, length)
@@ -968,21 +968,21 @@ func (csound CSOUND) AudioDevList(isOutput bool) []CsoundAudioDevice {
 func (csound CSOUND) SetMIDIModule(module string) {
 	var cmodule *C.char = C.CString(module)
 	defer C.free(unsafe.Pointer(cmodule))
-	C.csoundSetMIDIModule(csound.cs, cmodule)
+	C.csoundSetMIDIModule(csound.Cs, cmodule)
 }
 
 // Call this function with state true if the host is implementing
 // MIDI via the callbacks below.
 func (csound CSOUND) SetHostImplementedMIDIIO(state bool) {
-	C.csoundSetHostImplementedMIDIIO(csound.cs, cbool(state))
+	C.csoundSetHostImplementedMIDIIO(csound.Cs, cbool(state))
 }
 
 // This function can be called to obtain a list of available
 // input or output midi devices. (see also AudioDevList())
 func (csound CSOUND) MidiDevList(isOutput bool) []CsoundMidiDevice {
 	cflag := cbool(isOutput)
-	n := C.csoundGetMIDIDevList(csound.cs, nil, cflag)
-	devs := C.getMidiDevList(csound.cs, n, cflag)
+	n := C.csoundGetMIDIDevList(csound.Cs, nil, cflag)
+	devs := C.getMidiDevList(csound.Cs, n, cflag)
 	defer C.free(unsafe.Pointer(devs))
 	length := int(n)
 	var list = make([]CsoundMidiDevice, length)
@@ -1008,19 +1008,19 @@ func (csound CSOUND) MidiDevList(isOutput bool) []CsoundMidiDevice {
 func (csound CSOUND) ReadScore(str string) int {
 	var cstr *C.char = C.CString(str)
 	defer C.free(unsafe.Pointer(cstr))
-	return int(C.csoundReadScore(csound.cs, cstr))
+	return int(C.csoundReadScore(csound.Cs, cstr))
 }
 
 // Return the current score time in seconds
 // since the beginning of performance.
 func (csound CSOUND) ScoreTime() float64 {
-	return float64(C.csoundGetScoreTime(csound.cs))
+	return float64(C.csoundGetScoreTime(csound.Cs))
 }
 
 // Tell whether Csound score events are performed or not, independently
 // of real-time MIDI events (see SetScorePending()).
 func (csound CSOUND) IsScorePending() bool {
-	return C.csoundIsScorePending(csound.cs) != 0
+	return C.csoundIsScorePending(csound.Cs) != 0
 }
 
 // Set whether Csound score events are performed or not (real-time
@@ -1030,13 +1030,13 @@ func (csound CSOUND) IsScorePending() bool {
 // mute a Csound score while working on other tracks of a piece, or
 // to play the Csound instruments live.
 func (csound CSOUND) SetScorePending(pending bool) {
-	C.csoundSetScorePending(csound.cs, cbool(pending))
+	C.csoundSetScorePending(csound.Cs, cbool(pending))
 }
 
 // Return the score time beginning at which score events will
 // actually immediately be performed (see SetScoreOffsetSeconds()).
 func (csound CSOUND) ScoreOffsetSeconds() MYFLT {
-	return MYFLT(C.csoundGetScoreOffsetSeconds(csound.cs))
+	return MYFLT(C.csoundGetScoreOffsetSeconds(csound.Cs))
 }
 
 // Csound score events prior to the specified time are not performed, and
@@ -1047,13 +1047,13 @@ func (csound CSOUND) ScoreOffsetSeconds() MYFLT {
 // for example to repeat a loop in a sequencer, or to synchronize
 // other events with the Csound score.
 func (csound CSOUND) SetScoreOffsetSeconds(time MYFLT) {
-	C.csoundSetScoreOffsetSeconds(csound.cs, cMYFLT(time))
+	C.csoundSetScoreOffsetSeconds(csound.Cs, cMYFLT(time))
 }
 
 // Rewind a compiled Csound score to the time specified with
 // SetScoreOffsetSeconds().
 func (csound CSOUND) RewindScore() {
-	C.csoundRewindScore(csound.cs)
+	C.csoundRewindScore(csound.Cs)
 }
 
 // Sort score file 'inFile' and write the result to 'outFile'.
@@ -1061,7 +1061,7 @@ func (csound CSOUND) RewindScore() {
 // before calling this function, and Reset() should be called
 // after sorting the score to clean up. On success, zero is returned.
 func (csound CSOUND) ScoreSort(inFile, outFile *C.FILE) int {
-	return int(C.csoundScoreSort(csound.cs, inFile, outFile))
+	return int(C.csoundScoreSort(csound.Cs, inFile, outFile))
 }
 
 // Extract from 'inFile', controlled by 'extractFile', and write
@@ -1070,7 +1070,7 @@ func (csound CSOUND) ScoreSort(inFile, outFile *C.FILE) int {
 // should be called after score extraction to clean up.
 // The return value is zero on success.
 func (csound CSOUND) ScoreExtract(inFile, outFile, extractFile *C.FILE) int {
-	return int(C.csoundScoreExtract(csound.cs, inFile, outFile, extractFile))
+	return int(C.csoundScoreExtract(csound.Cs, inFile, outFile, extractFile))
 }
 
 /*
@@ -1079,12 +1079,12 @@ func (csound CSOUND) ScoreExtract(inFile, outFile, extractFile *C.FILE) int {
 
 // Return the Csound message level (from 0 to 231).
 func (csound CSOUND) MessageLevel() int {
-	return int(C.csoundGetMessageLevel(csound.cs))
+	return int(C.csoundGetMessageLevel(csound.Cs))
 }
 
 // Set the Csound message level (from 0 to 231).
 func (csound CSOUND) SetMessageLevel(messageLevel int) {
-	C.csoundSetMessageLevel(csound.cs, C.int(messageLevel))
+	C.csoundSetMessageLevel(csound.Cs, C.int(messageLevel))
 }
 
 // Create a buffer for storing messages printed by Csound.
@@ -1103,34 +1103,34 @@ func (csound CSOUND) SetMessageLevel(messageLevel int) {
 // SetMessageCallback should not be called after creating the
 // message buffer.
 func (csound CSOUND) CreateMessageBuffer(toStdOut bool) {
-	C.csoundCreateMessageBuffer(csound.cs, cbool(toStdOut))
+	C.csoundCreateMessageBuffer(csound.Cs, cbool(toStdOut))
 }
 
 // Return the first message from the buffer.
 func (csound CSOUND) FirstMessage() string {
-	cmsg := C.csoundGetFirstMessage(csound.cs)
+	cmsg := C.csoundGetFirstMessage(csound.Cs)
 	return C.GoString(cmsg)
 }
 
 // Return the attribute parameter (see msg_attr.h) of the first message
 // in the buffer.
 func (csound CSOUND) FirstMessageAttr() int {
-	return int(C.csoundGetFirstMessageAttr(csound.cs))
+	return int(C.csoundGetFirstMessageAttr(csound.Cs))
 }
 
 // Remove the first message from the buffer.
 func (csound CSOUND) PopFirstMessage() {
-	C.csoundPopFirstMessage(csound.cs)
+	C.csoundPopFirstMessage(csound.Cs)
 }
 
 // Return the number of pending messages in the buffer.
 func (csound CSOUND) MessageCnt() int {
-	return int(C.csoundGetMessageCnt(csound.cs))
+	return int(C.csoundGetMessageCnt(csound.Cs))
 }
 
 // Release all memory used by the message buffer.
 func (csound CSOUND) DestroyMessageBuffer() {
-	C.csoundDestroyMessageBuffer(csound.cs)
+	C.csoundDestroyMessageBuffer(csound.Cs)
 }
 
 /*
@@ -1191,13 +1191,13 @@ func (csound CSOUND) ChannelPtr(name string, chnType int) ([]MYFLT, error) {
 	case CSOUND_CONTROL_CHANNEL:
 		length = 1
 	case CSOUND_AUDIO_CHANNEL:
-		length = int(C.csoundGetKsmps(csound.cs))
+		length = int(C.csoundGetKsmps(csound.Cs))
 	case CSOUND_STRING_CHANNEL:
-		length = int(C.csoundGetChannelDatasize(csound.cs, cname))
+		length = int(C.csoundGetChannelDatasize(csound.Cs, cname))
 	default:
 		return nil, fmt.Errorf("%d is not a valid channel type", chnType)
 	}
-	ret := C.csoundGetChannelPtr(csound.cs, cppMYFLT(&ptr), cname, C.int(chnType))
+	ret := C.csoundGetChannelPtr(csound.Cs, cppMYFLT(&ptr), cname, C.int(chnType))
 	switch ret {
 	case CSOUND_SUCCESS:
 		var slice []MYFLT
@@ -1231,7 +1231,7 @@ func (csound CSOUND) ChannelPtr(name string, chnType int) ([]MYFLT, error) {
 // after calling Reset().
 func (csound CSOUND) ListChannels() ([]ControlChannelInfo, error) {
 	var lst *C.controlChannelInfo_t
-	n := int(C.csoundListChannels(csound.cs, &lst))
+	n := int(C.csoundListChannels(csound.Cs, &lst))
 	if n == CSOUND_MEMORY {
 		return nil, fmt.Errorf("Not enough memory for allocating channels list")
 	} else if n == 0 {
@@ -1254,7 +1254,7 @@ func (csound CSOUND) ListChannels() ([]ControlChannelInfo, error) {
 			list[i].Hints.Height = int(hints.height)
 			list[i].Hints.Attributes = C.GoString(hints.attributes)
 		}
-		C.csoundDeleteChannelList(csound.cs, lst)
+		C.csoundDeleteChannelList(csound.Cs, lst)
 		return list, nil
 	}
 }
@@ -1282,7 +1282,7 @@ func (csound CSOUND) SetControlChannelHints(name string, hints ControlChannelHin
 		chints.attributes = C.CString(name)
 		defer C.free(unsafe.Pointer(chints.attributes))
 	}
-	return int(C.csoundSetControlChannelHints(csound.cs, cname, chints))
+	return int(C.csoundSetControlChannelHints(csound.Cs, cname, chints))
 }
 
 // Return special parameters (assuming there are any) of a control channel,
@@ -1297,7 +1297,7 @@ func (csound CSOUND) ControlChannelHints(name string) (ControlChannelHints, int)
 	cname := C.CString(name)
 	defer C.free(unsafe.Pointer(cname))
 	var chints C.controlChannelHints_t
-	ret := C.csoundGetControlChannelHints(csound.cs, cname, &chints)
+	ret := C.csoundGetControlChannelHints(csound.Cs, cname, &chints)
 	var hints ControlChannelHints
 	if ret == 0 {
 		hints.Behav = int(chints.behav)
@@ -1323,7 +1323,7 @@ func (csound CSOUND) ControlChannelHints(name string) (ControlChannelHints, int)
 func (csound CSOUND) ChannelLock(name string) *C.int {
 	cname := C.CString(name)
 	defer C.free(unsafe.Pointer(cname))
-	return C.csoundGetChannelLock(csound.cs, cname)
+	return C.csoundGetChannelLock(csound.Cs, cname)
 }
 
 // Retrieve the value of control channel identified by name.
@@ -1333,7 +1333,7 @@ func (csound CSOUND) ControlChannel(name string) (MYFLT, int) {
 	cname := C.CString(name)
 	defer C.free(unsafe.Pointer(cname))
 	var err C.int
-	val := MYFLT(C.csoundGetControlChannel(csound.cs, cname, &err))
+	val := MYFLT(C.csoundGetControlChannel(csound.Cs, cname, &err))
 	return val, int(err)
 }
 
@@ -1341,7 +1341,7 @@ func (csound CSOUND) ControlChannel(name string) (MYFLT, int) {
 func (csound CSOUND) SetControlChannel(name string, val MYFLT) {
 	cname := C.CString(name)
 	defer C.free(unsafe.Pointer(cname))
-	C.csoundSetControlChannel(csound.cs, cname, cMYFLT(val))
+	C.csoundSetControlChannel(csound.Cs, cname, cMYFLT(val))
 }
 
 // Copy the audio channel identified by name into array
@@ -1350,7 +1350,7 @@ func (csound CSOUND) AudioChannel(name string, samples []MYFLT) {
 	if len(samples) >= csound.Ksmps() {
 		cname := C.CString(name)
 		defer C.free(unsafe.Pointer(cname))
-		C.csoundGetAudioChannel(csound.cs, cname, cpMYFLT(&samples[0]))
+		C.csoundGetAudioChannel(csound.Cs, cname, cpMYFLT(&samples[0]))
 	}
 }
 
@@ -1360,7 +1360,7 @@ func (csound CSOUND) SetAudioChannel(name string, samples []MYFLT) {
 	if len(samples) >= csound.Ksmps() {
 		cname := C.CString(name)
 		defer C.free(unsafe.Pointer(cname))
-		C.csoundSetAudioChannel(csound.cs, cname, cpMYFLT(&samples[0]))
+		C.csoundSetAudioChannel(csound.Cs, cname, cpMYFLT(&samples[0]))
 	}
 }
 
@@ -1368,10 +1368,10 @@ func (csound CSOUND) SetAudioChannel(name string, samples []MYFLT) {
 func (csound CSOUND) StringChannel(name string) string {
 	cname := C.CString(name)
 	defer C.free(unsafe.Pointer(cname))
-	size := C.csoundGetChannelDatasize(csound.cs, cname)
+	size := C.csoundGetChannelDatasize(csound.Cs, cname)
 	cstr := (*C.char)(C.malloc(C.size_t(size)))
 	defer C.free(unsafe.Pointer(cstr))
-	C.csoundGetStringChannel(csound.cs, cname, cstr)
+	C.csoundGetStringChannel(csound.Cs, cname, cstr)
 	return C.GoString(cstr)
 }
 
@@ -1381,7 +1381,7 @@ func (csound CSOUND) SetStringChannel(name, str string) {
 	defer C.free(unsafe.Pointer(cname))
 	cstr := C.CString(str)
 	defer C.free(unsafe.Pointer(cstr))
-	C.csoundSetStringChannel(csound.cs, cname, cstr)
+	C.csoundSetStringChannel(csound.Cs, cname, cstr)
 }
 
 // Return the size of data stored in a channel; for string channels
@@ -1389,7 +1389,7 @@ func (csound CSOUND) SetStringChannel(name, str string) {
 func (csound CSOUND) ChannelDatasize(name string) int {
 	cname := C.CString(name)
 	defer C.free(unsafe.Pointer(cname))
-	return int(C.csoundGetChannelDatasize(csound.cs, cname))
+	return int(C.csoundGetChannelDatasize(csound.Cs, cname))
 }
 
 type PVSDATEXT struct {
@@ -1420,7 +1420,7 @@ func FreeCPvsData(p *PVSDATEXT) {
 func (csound CSOUND) SetPvsChannel(fin *PVSDATEXT, name string) int {
 	cname := C.CString(name)
 	defer C.free(unsafe.Pointer(cname))
-	return int(C.csoundSetPvsChannel(csound.cs, fin.CStruct, cname))
+	return int(C.csoundSetPvsChannel(csound.Cs, fin.CStruct, cname))
 }
 
 // Receive a PVSDAT fout from the pvsout opcode (f-rate) at channel 'name'.
@@ -1430,7 +1430,7 @@ func (csound CSOUND) SetPvsChannel(fin *PVSDATEXT, name string) int {
 func (csound CSOUND) PvsChannel(fout *PVSDATEXT, name string) int {
 	cname := C.CString(name)
 	defer C.free(unsafe.Pointer(cname))
-	return int(C.csoundGetPvsChannel(csound.cs, fout.CStruct, cname))
+	return int(C.csoundGetPvsChannel(csound.Cs, fout.CStruct, cname))
 }
 
 // Send a new score event. 'eventType' is the score event type ('a', 'i', 'q',
@@ -1439,7 +1439,7 @@ func (csound CSOUND) PvsChannel(fout *PVSDATEXT, name string) int {
 // with all the pfields for this event, starting with the p1 value
 // specified in pFields[0].
 func (csound CSOUND) ScoreEvent(eventType byte, pFields []MYFLT) int {
-	return int(C.csoundScoreEvent(csound.cs, C.char(eventType),
+	return int(C.csoundScoreEvent(csound.Cs, C.char(eventType),
 		cpMYFLT(&pFields[0]), C.long(len(pFields))))
 }
 
@@ -1448,7 +1448,7 @@ func (csound CSOUND) ScoreEvent(eventType byte, pFields []MYFLT) int {
 // offset set with timeOfs.
 func (csound CSOUND) ScoreEventAbsolute(eventType byte, pFields []MYFLT,
 	timeOfs float64) int {
-	return int(C.csoundScoreEventAbsolute(csound.cs, C.char(eventType),
+	return int(C.csoundScoreEventAbsolute(csound.Cs, C.char(eventType),
 		cpMYFLT(&pFields[0]), C.long(len(pFields)),
 		C.double(timeOfs)))
 }
@@ -1457,7 +1457,7 @@ func (csound CSOUND) ScoreEventAbsolute(eventType byte, pFields []MYFLT,
 func (csound CSOUND) InputMessage(message string) {
 	var cmsg *C.char = C.CString(message)
 	defer C.free(unsafe.Pointer(cmsg))
-	C.csoundInputMessage(csound.cs, cmsg)
+	C.csoundInputMessage(csound.Cs, cmsg)
 }
 
 // Kill off one or more running instances of an instrument identified
@@ -1477,7 +1477,7 @@ func (csound CSOUND) KillInstance(instr MYFLT, instrName string, mode int,
 	} else {
 		cname = nil
 	}
-	return int(C.csoundKillInstance(csound.cs, cMYFLT(instr), cname, C.int(mode),
+	return int(C.csoundKillInstance(csound.Cs, cMYFLT(instr), cname, C.int(mode),
 		cbool(allowRelease)))
 }
 
@@ -1486,7 +1486,7 @@ func (csound CSOUND) KillInstance(instr MYFLT, instrName string, mode int,
 // for returning keyboard events is not set (see
 // RegisterKeyboardCallback()).
 func (csound CSOUND) KeyPress(c byte) {
-	C.csoundKeyPress(csound.cs, C.char(c))
+	C.csoundKeyPress(csound.Cs, C.char(c))
 }
 
 /*
@@ -1496,19 +1496,19 @@ func (csound CSOUND) KeyPress(c byte) {
 // Return the length of a function table (not including the guard point),
 // or -1 if the table does not exist.
 func (csound CSOUND) TableLength(table int) int {
-	return int(C.csoundTableLength(csound.cs, C.int(table)))
+	return int(C.csoundTableLength(csound.Cs, C.int(table)))
 }
 
 // Return the value of a slot in a function table.
 // The table number and index are assumed to be valid.
 func (csound CSOUND) TableGet(table, index int) MYFLT {
-	return MYFLT(C.csoundTableGet(csound.cs, C.int(table), C.int(index)))
+	return MYFLT(C.csoundTableGet(csound.Cs, C.int(table), C.int(index)))
 }
 
 // Set the value of a slot in a function table.
 // The table number and index are assumed to be valid.
 func (csound CSOUND) TableSet(table, index int, value MYFLT) {
-	C.csoundTableSet(csound.cs, C.int(table), C.int(index), cMYFLT(value))
+	C.csoundTableSet(csound.Cs, C.int(table), C.int(index), cMYFLT(value))
 }
 
 // Copy the contents of a function table into a supplied array dest.
@@ -1516,7 +1516,7 @@ func (csound CSOUND) TableSet(table, index int, value MYFLT) {
 // have sufficient space to receive all the function table contents.
 func (csound CSOUND) TableCopyOut(table int, dest []MYFLT) {
 	cdest := cpMYFLT(&dest[0])
-	C.csoundTableCopyOut(csound.cs, C.int(table), cdest)
+	C.csoundTableCopyOut(csound.Cs, C.int(table), cdest)
 }
 
 // Copy the contents of an array src into a given function table.
@@ -1524,7 +1524,7 @@ func (csound CSOUND) TableCopyOut(table int, dest []MYFLT) {
 // have sufficient space to receive all the array contents.
 func (csound CSOUND) TableCopyIn(table int, src []MYFLT) {
 	csrc := cpMYFLT(&src[0])
-	C.csoundTableCopyIn(csound.cs, C.int(table), csrc)
+	C.csoundTableCopyIn(csound.Cs, C.int(table), csrc)
 }
 
 // Return a pointer to function table 'tableNum' as []MYFLT.
@@ -1532,7 +1532,7 @@ func (csound CSOUND) TableCopyIn(table int, src []MYFLT) {
 // an error is returned.
 func (csound CSOUND) Table(tableNum int) ([]MYFLT, error) {
 	var tablePtr *MYFLT
-	length := int(C.csoundGetTable(csound.cs, cppMYFLT(&tablePtr), C.int(tableNum)))
+	length := int(C.csoundGetTable(csound.Cs, cppMYFLT(&tablePtr), C.int(tableNum)))
 	if length == -1 {
 		return nil, fmt.Errorf("Function table %d does not exist", tableNum)
 	}
@@ -1551,7 +1551,7 @@ func (csound CSOUND) Table(tableNum int) ([]MYFLT, error) {
 // Tell Csound whether external graphic table display is supported.
 // Return the previously set value (initially zero).
 func (csound CSOUND) SetIsGraphable(isGraphable int) int {
-	return int(C.csoundSetIsGraphable(csound.cs, C.int(isGraphable)))
+	return int(C.csoundSetIsGraphable(csound.Cs, C.int(isGraphable)))
 }
 
 /*
@@ -1565,16 +1565,16 @@ type NamedGen struct {
 
 // Find the list of named gens.
 func (csound CSOUND) NamedGens() []NamedGen {
-	n := int(C.getNumNamedGens(csound.cs))
+	n := int(C.getNumNamedGens(csound.Cs))
 	if n == 0 {
 		return nil
 	}
 	namedGens := make([]NamedGen, n)
-	p := C.csoundGetNamedGens(csound.cs)
+	p := C.csoundGetNamedGens(csound.Cs)
 	var name *C.char
 	var num C.int
 	for i := range namedGens {
-		p = C.getNamedGen(csound.cs, p, &name, &num)
+		p = C.getNamedGen(csound.Cs, p, &name, &num)
 		namedGens[i].Name = C.GoString(name)
 		namedGens[i].Num = int(num)
 	}
@@ -1586,7 +1586,7 @@ func (csound CSOUND) NamedGens() []NamedGen {
 // Return the number of opcodes, or a negative error code on failure.
 func (csound CSOUND) OpcodeList() ([]OpcodeListEntry, int) {
 	var opcodeList *C.struct_opcodeListEntry
-	length := int(C.csoundNewOpcodeList(csound.cs,
+	length := int(C.csoundNewOpcodeList(csound.Cs,
 		(**_Ctype_opcodeListEntry)(unsafe.Pointer(&opcodeList))))
 	if length < 0 {
 		return nil, length
@@ -1600,7 +1600,7 @@ func (csound CSOUND) OpcodeList() ([]OpcodeListEntry, int) {
 		list[i].Outypes = C.GoString(outypes)
 		list[i].Intypes = C.GoString(intypes)
 	}
-	C.csoundDisposeOpcodeList(csound.cs,
+	C.csoundDisposeOpcodeList(csound.Cs,
 		(*_Ctype_opcodeListEntry)(unsafe.Pointer(opcodeList)))
 	return list, length
 }
@@ -1879,7 +1879,7 @@ func (csound CSOUND) SetLanguage(langCode Cslanguage_t) {
 func (csound CSOUND) Env(name string) string {
 	var cname *C.char = C.CString(name)
 	defer C.free(unsafe.Pointer(cname))
-	return C.GoString(C.csoundGetEnv(csound.cs, cname))
+	return C.GoString(C.csoundGetEnv(csound.Cs, cname))
 }
 
 // Set the global value of environment variable 'name' to 'value',
@@ -1910,7 +1910,7 @@ func (csound CSOUND) SetGlobalEnv(name, value string) int {
 func (csound CSOUND) CreateGlobalVariable(name string, nbytes uint) int {
 	var cname *C.char = C.CString(name)
 	defer C.free(unsafe.Pointer(cname))
-	return int(C.csoundCreateGlobalVariable(csound.cs, cname, C.size_t(nbytes)))
+	return int(C.csoundCreateGlobalVariable(csound.Cs, cname, C.size_t(nbytes)))
 }
 
 // Get pointer to space allocated with the name "name".
@@ -1918,7 +1918,7 @@ func (csound CSOUND) CreateGlobalVariable(name string, nbytes uint) int {
 func (csound CSOUND) QueryGlobalVariable(name string) unsafe.Pointer {
 	var cname *C.char = C.CString(name)
 	defer C.free(unsafe.Pointer(cname))
-	return (unsafe.Pointer)(C.csoundQueryGlobalVariable(csound.cs, cname))
+	return (unsafe.Pointer)(C.csoundQueryGlobalVariable(csound.Cs, cname))
 }
 
 // This function is the same as QueryGlobalVariable(), except the
@@ -1928,7 +1928,7 @@ func (csound CSOUND) QueryGlobalVariable(name string) unsafe.Pointer {
 func (csound CSOUND) QueryGlobalVariableNoCheck(name string) unsafe.Pointer {
 	var cname *C.char = C.CString(name)
 	defer C.free(unsafe.Pointer(cname))
-	return (unsafe.Pointer)(C.csoundQueryGlobalVariableNoCheck(csound.cs, cname))
+	return (unsafe.Pointer)(C.csoundQueryGlobalVariableNoCheck(csound.Cs, cname))
 }
 
 // Free memory allocated for "name" and remove "name" from the database.
@@ -1937,7 +1937,7 @@ func (csound CSOUND) QueryGlobalVariableNoCheck(name string) unsafe.Pointer {
 func (csound CSOUND) DestroyGlobalVariable(name string) int {
 	var cname *C.char = C.CString(name)
 	defer C.free(unsafe.Pointer(cname))
-	return int(C.csoundDestroyGlobalVariable(csound.cs, cname))
+	return int(C.csoundDestroyGlobalVariable(csound.Cs, cname))
 }
 
 // Run utility with the specified name and command line arguments.
@@ -1952,7 +1952,7 @@ func (csound CSOUND) RunUtility(name string, args []string) int {
 	for i, arg := range args {
 		argv[i] = C.CString(arg)
 	}
-	result := C.csoundRunUtility(csound.cs, cname, argc, &argv[0])
+	result := C.csoundRunUtility(csound.Cs, cname, argc, &argv[0])
 	for _, arg := range argv {
 		C.free(unsafe.Pointer(arg))
 	}
@@ -1962,7 +1962,7 @@ func (csound CSOUND) RunUtility(name string, args []string) int {
 // Return a list of registered utility names.
 // The return value may be nil in case of an error.
 func (csound CSOUND) ListUtilities() ([]string, error) {
-	clist := C.csoundListUtilities(csound.cs)
+	clist := C.csoundListUtilities(csound.Cs)
 	if clist == nil {
 		return nil, fmt.Errorf("ListUtilities error")
 	}
@@ -1971,7 +1971,7 @@ func (csound CSOUND) ListUtilities() ([]string, error) {
 	for i := range list {
 		list[i] = C.GoString(C.utilityName(clist, C.int(i)))
 	}
-	C.csoundDeleteUtilityList(csound.cs, clist)
+	C.csoundDeleteUtilityList(csound.Cs, clist)
 	return list, nil
 }
 
@@ -1981,7 +1981,7 @@ func (csound CSOUND) ListUtilities() ([]string, error) {
 func (csound CSOUND) UtilityDescription(utilName string) string {
 	var cname *C.char = C.CString(utilName)
 	defer C.free(unsafe.Pointer(cname))
-	return C.GoString(C.csoundGetUtilityDescription(csound.cs, cname))
+	return C.GoString(C.csoundGetUtilityDescription(csound.Cs, cname))
 }
 
 // Simple linear congruential random number generator:
@@ -2023,7 +2023,7 @@ func (csound CSOUND) FreeRandMTState(p *C.CsoundRandMTState) {
 //   rb := csound.CreateCircularBuffer(1024)
 func (csound CSOUND) CreateCircularBuffer(numelem int) unsafe.Pointer {
 	var sample MYFLT
-	return unsafe.Pointer(C.csoundCreateCircularBuffer(csound.cs, C.int(numelem),
+	return unsafe.Pointer(C.csoundCreateCircularBuffer(csound.Cs, C.int(numelem),
 		C.int(unsafe.Sizeof(sample))))
 }
 
@@ -2038,7 +2038,7 @@ func (csound CSOUND) ReadCircularBuffer(circularBuffer unsafe.Pointer, out []MYF
 	if len(out) < items {
 		return 0
 	}
-	return int(C.csoundReadCircularBuffer(csound.cs, circularBuffer,
+	return int(C.csoundReadCircularBuffer(csound.Cs, circularBuffer,
 		unsafe.Pointer(&out[0]), C.int(items)))
 }
 
@@ -2053,7 +2053,7 @@ func (csound CSOUND) PeekCircularBuffer(circularBuffer unsafe.Pointer, out []MYF
 	if len(out) < items {
 		return 0
 	}
-	return int(C.csoundPeekCircularBuffer(csound.cs, circularBuffer,
+	return int(C.csoundPeekCircularBuffer(csound.Cs, circularBuffer,
 		unsafe.Pointer(&out[0]), C.int(items)))
 }
 
@@ -2068,18 +2068,21 @@ func (csound CSOUND) WriteCircularBuffer(circularBuffer unsafe.Pointer, inp []MY
 	if len(inp) < items {
 		return 0
 	}
-	return int(C.csoundWriteCircularBuffer(csound.cs, circularBuffer,
+	return int(C.csoundWriteCircularBuffer(csound.Cs, circularBuffer,
 		unsafe.Pointer(&inp[0]), C.int(items)))
 }
 
 // Empty circular buffer of any remaining data.
+// This function shuould only be used if there is no reader actively
+// getting data from the buffer.
+//   circular_buffer - pointer to an existing circular buffer
 func (csound CSOUND) FlushCircularBuffer(circularBuffer unsafe.Pointer) {
-	C.csoundFlushCircularBuffer(csound.cs, circularBuffer)
+	C.csoundFlushCircularBuffer(csound.Cs, circularBuffer)
 }
 
 // Free circular buffer.
 func (csound CSOUND) DestroyCircularBuffer(circularBuffer unsafe.Pointer) {
-	C.csoundDestroyCircularBuffer(csound.cs, circularBuffer)
+	C.csoundDestroyCircularBuffer(csound.Cs, circularBuffer)
 }
 
 // Platform-independent function to load a shared library.
