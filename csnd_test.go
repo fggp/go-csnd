@@ -8,12 +8,12 @@ import (
 
 func TestInstantiation(t *testing.T) {
 	cs := Create(nil)
-	if cs.cs == nil {
+	if cs.Cs == nil {
 		t.Errorf("Could not create Csound instance")
 	}
 	fmt.Println("\n", cs.Version(), cs.APIVersion(), "\n")
 	cs.Destroy()
-	if cs.cs != nil {
+	if cs.Cs != nil {
 		t.Errorf("Csound was destroyed and opaque pointer is not cleared!")
 	}
 }
@@ -162,6 +162,15 @@ func TestChannels(t *testing.T) {
 	} else {
 		fmt.Println(len(lst))
 	}
+}
+
+func TestOpcodeList(t *testing.T) {
+	cs := Create(nil)
+	if list := cs.OpcodeList(); list != nil {
+		fmt.Println(list)
+		fmt.Println(len(list))
+	}
+	cs.Destroy()
 }
 
 func TestNamedGens(t *testing.T) {

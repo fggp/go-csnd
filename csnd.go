@@ -44,13 +44,25 @@ void getMidiDev(CS_MIDIDEVICE *devs, int i, char **pname, char** piname, char **
   *flag = dev.isOutput;
 }
 
-void getOpcodeEntry(opcodeListEntry *list, int n,
+void *getOpcodeList(CSOUND *cs, int *pn)
+{
+  opcodeListEntry *opcodeList;
+  *pn = csoundNewOpcodeList(cs, &opcodeList);
+  return (void *)opcodeList;
+}
+
+void getOpcodeEntry(void *list, int n,
                     char **opname, char **outypes, char** intypes)
 {
-  opcodeListEntry entry = list[n];
+  opcodeListEntry entry = *((opcodeListEntry *)list + n);
   *opname = entry.opname;
   *outypes = entry.outypes;
   *intypes = entry.intypes;
+}
+
+void freeOpcodeList(CSOUND *cs, void *list)
+{
+  csoundDisposeOpcodeList(cs, (opcodeListEntry *)list);
 }
 
 controlChannelHints_t *getControlChannelInfo(controlChannelInfo_t *list, int i,
@@ -336,12 +348,6 @@ type CsoundMidiDevice struct {
 func (dev CsoundMidiDevice) String() string {
 	return fmt.Sprintf("(%s, %s, %s, %s, %t)", dev.DeviceName,
 		dev.InterfaceName, dev.DeviceId, dev.MidiModule, dev.IsOutput)
-}
-
-type OpcodeListEntry struct {
-	Opname  string
-	Outypes string
-	Intypes string
 }
 
 type TREE struct {
@@ -1581,28 +1587,32 @@ func (csound CSOUND) NamedGens() []NamedGen {
 	return namedGens
 }
 
+type OpcodeListEntry struct {
+	Opname  string
+	Outypes string
+	Intypes string
+}
+
 // Get an alphabetically sorted list of all opcodes.
 // Should be called after externals are loaded by Compile().
 // Return the number of opcodes, or a negative error code on failure.
-func (csound CSOUND) OpcodeList() ([]OpcodeListEntry, int) {
-	var opcodeList *C.struct_opcodeListEntry
-	length := int(C.csoundNewOpcodeList(csound.Cs,
-		(**_Ctype_opcodeListEntry)(unsafe.Pointer(&opcodeList))))
+func (csound CSOUND) OpcodeList() []OpcodeListEntry {
+	var opcodeList unsafe.Pointer
+	var length int
+	opcodeList = C.getOpcodeList(csound.Cs, (*C.int)(unsafe.Pointer(&length)))
 	if length < 0 {
-		return nil, length
+		return nil
 	}
 	var list = make([]OpcodeListEntry, length)
 	var opname, outypes, intypes *C.char
 	for i := range list {
-		C.getOpcodeEntry((*_Ctype_opcodeListEntry)(unsafe.Pointer(opcodeList)),
-			C.int(i), &opname, &outypes, &intypes)
+		C.getOpcodeEntry(opcodeList, C.int(i), &opname, &outypes, &intypes)
 		list[i].Opname = C.GoString(opname)
 		list[i].Outypes = C.GoString(outypes)
 		list[i].Intypes = C.GoString(intypes)
 	}
-	C.csoundDisposeOpcodeList(csound.Cs,
-		(*_Ctype_opcodeListEntry)(unsafe.Pointer(opcodeList)))
-	return list, length
+	C.freeOpcodeList(csound.Cs, unsafe.Pointer(opcodeList))
+	return list
 }
 
 /*
