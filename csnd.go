@@ -1533,7 +1533,7 @@ func (csound CSOUND) TableCopyIn(table int, src []MYFLT) {
 	C.csoundTableCopyIn(csound.Cs, C.int(table), csrc)
 }
 
-// Return a pointer to function table 'tableNum' as []MYFLT.
+// Return a pointer to function table 'tableNum' as a []MYFLT.
 // If the table does not exist, the pointer is set to nil and
 // an error is returned.
 func (csound CSOUND) Table(tableNum int) ([]MYFLT, error) {
@@ -1547,6 +1547,27 @@ func (csound CSOUND) Table(tableNum int) ([]MYFLT, error) {
 	sliceHeader.Cap = length
 	sliceHeader.Len = length
 	sliceHeader.Data = uintptr(unsafe.Pointer(tablePtr))
+	return slice, nil
+}
+
+// Return a pointer to the arguments used to generate
+// function table 'tableNum' as a []MYFLT.
+// If the table does not exist, the pointer is set to nil and
+// an error is returned.
+// NB: the argument list starts with the GEN number and is followed by
+// its parameters. eg. f 1 0 1024 10 1 0.5  yields the list [10.0, 1.0, 0.5]
+//
+func (csound CSOUND) TableArgs(tableNum int) ([]MYFLT, error) {
+	var argsPtr *MYFLT
+	length := int(C.csoundGetTableArgs(csound.Cs, cppMYFLT(&argsPtr), C.int(tableNum)))
+	if length == -1 {
+		return nil, fmt.Errorf("Function table %d does not exist", tableNum)
+	}
+	var slice []MYFLT
+	sliceHeader := (*reflect.SliceHeader)(unsafe.Pointer(&slice))
+	sliceHeader.Cap = length
+	sliceHeader.Len = length
+	sliceHeader.Data = uintptr(unsafe.Pointer(argsPtr))
 	return slice, nil
 }
 
