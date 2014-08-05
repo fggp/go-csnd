@@ -217,3 +217,15 @@ func TestRandMT(t *testing.T) {
 	fmt.Println()
 	cs.Destroy()
 }
+
+func TestMessages(t *testing.T) {
+	cs := Create(nil)
+	version := cs.Version()
+	apiVersion := cs.APIVersion()
+	sr := cs.Sr()
+	ksmps := cs.Ksmps()
+	cs.Message("\n%s, %s, %f, %d\n\n", version, apiVersion, sr, ksmps)
+	cs.MessageS(CSOUNDMSG_FG_RED|CSOUNDMSG_FG_UNDERLINE, "\n%s, %s, %f, %d\n\n",
+		version, apiVersion, sr, ksmps)
+	cs.Destroy()
+}

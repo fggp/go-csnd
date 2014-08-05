@@ -44,10 +44,32 @@ void getMidiDev(CS_MIDIDEVICE *devs, int i, char **pname, char** piname, char **
   *flag = dev.isOutput;
 }
 
-void *getOpcodeList(CSOUND *cs, int *pn)
+void cMessage(CSOUND *csound, char *msg)
+{
+  csoundMessage(csound, "%s", msg);
+}
+
+void cMessageS(CSOUND *csound, int attr, char *msg)
+{
+  csoundMessageS(csound, attr, "%s", msg);
+}
+
+void noMessageCallback(CSOUND* cs, int attr, const char *format, va_list valist)
+{
+  // Do nothing so that Csound will not print any message,
+  // leaving a clean console for our app.
+  return;
+}
+
+void cNoMessage(CSOUND* cs)
+{
+  csoundSetMessageCallback(cs, noMessageCallback);
+}
+
+void *getOpcodeList(CSOUND *csound, int *pn)
 {
   opcodeListEntry *opcodeList;
-  *pn = csoundNewOpcodeList(cs, &opcodeList);
+  *pn = csoundNewOpcodeList(csound, &opcodeList);
   return (void *)opcodeList;
 }
 
@@ -389,6 +411,43 @@ type ControlChannelInfo struct {
 	Type  int
 	Hints ControlChannelHints
 }
+
+const (
+	// message types (only one can be specified)
+	CSOUNDMSG_DEFAULT  = 0x0000 // standard message
+	CSOUNDMSG_ERROR    = 0x1000 // error message (initerror, perferror, etc.)
+	CSOUNDMSG_ORCH     = 0x2000 // orchestra opcodes (e.g. printks)
+	CSOUNDMSG_REALTIME = 0x3000 // for progress display and heartbeat characters
+	CSOUNDMSG_WARNING  = 0x4000 // warning messages
+
+	// format attributes (colors etc., use the bitwise OR of any of these:
+	CSOUNDMSG_FG_BLACK   = 0x0100
+	CSOUNDMSG_FG_RED     = 0x0101
+	CSOUNDMSG_FG_GREEN   = 0x0102
+	CSOUNDMSG_FG_YELLOW  = 0x0103
+	CSOUNDMSG_FG_BLUE    = 0x0104
+	CSOUNDMSG_FG_MAGENTA = 0x0105
+	CSOUNDMSG_FG_CYAN    = 0x0106
+	CSOUNDMSG_FG_WHITE   = 0x0107
+
+	CSOUNDMSG_FG_BOLD      = 0x0008
+	CSOUNDMSG_FG_UNDERLINE = 0x0080
+
+	CSOUNDMSG_BG_BLACK   = 0x0200
+	CSOUNDMSG_BG_RED     = 0x0210
+	CSOUNDMSG_BG_GREEN   = 0x0220
+	CSOUNDMSG_BG_ORANGE  = 0x0230
+	CSOUNDMSG_BG_BLUE    = 0x0240
+	CSOUNDMSG_BG_MAGENTA = 0x0250
+	CSOUNDMSG_BG_CYAN    = 0x0260
+	CSOUNDMSG_BG_GREY    = 0x0270
+
+	//-------------------------------------------------------------------------
+	CSOUNDMSG_TYPE_MASK     = 0x7000
+	CSOUNDMSG_FG_COLOR_MASK = 0x0107
+	CSOUNDMSG_FG_ATTR_MASK  = 0x0088
+	CSOUNDMSG_BG_COLOR_MASK = 0x0270
+)
 
 /*
  * Instantiation
@@ -1083,6 +1142,24 @@ func (csound CSOUND) ScoreExtract(inFile, outFile, extractFile *C.FILE) int {
  * Messages and Text
  */
 
+// Displays an informal message.
+func (csound CSOUND) Message(format string, v ...interface{}) {
+	s := fmt.Sprintf(format, v...)
+	var cval *C.char = C.CString(s)
+	defer C.free(unsafe.Pointer(cval))
+	C.cMessage(csound.Cs, cval)
+}
+
+// Print message with special attributes (see const above for the list of
+// available attributes). With attr=0, csoundMessageS() is identical to
+// csoundMessage().
+func (csound CSOUND) MessageS(attr int, format string, v ...interface{}) {
+	s := fmt.Sprintf(format, v...)
+	var cval *C.char = C.CString(s)
+	defer C.free(unsafe.Pointer(cval))
+	C.cMessageS(csound.Cs, C.int(attr), cval)
+}
+
 // Return the Csound message level (from 0 to 231).
 func (csound CSOUND) MessageLevel() int {
 	return int(C.csoundGetMessageLevel(csound.Cs))
@@ -1091,6 +1168,13 @@ func (csound CSOUND) MessageLevel() int {
 // Set the Csound message level (from 0 to 231).
 func (csound CSOUND) SetMessageLevel(messageLevel int) {
 	C.csoundSetMessageLevel(csound.Cs, C.int(messageLevel))
+}
+
+// This is not an API function. It passes to csoundSetMessageCallback a
+// callback function that does nothing, so that Csound will not print
+// any message.
+func (csound CSOUND) NoMessage() {
+	C.cNoMessage(csound.Cs)
 }
 
 // Create a buffer for storing messages printed by Csound.
