@@ -1731,19 +1731,19 @@ func (csound CSOUND) OpcodeList() []OpcodeListEntry {
 // to a thread object, but it should not be compared
 // as a pointer. The pointed to values should be compared,
 // and the user must free the pointer after use.
-func (csound *CSOUND) CurrentThreadId() unsafe.Pointer {
+func (csound CSOUND) CurrentThreadId() unsafe.Pointer {
 	return unsafe.Pointer(C.csoundGetCurrentThreadId())
 }
 
 // Wait until the indicated thread's routine has finished.
 // Return the value returned by the thread routine.
-func (csound *CSOUND) JoinThread(thread unsafe.Pointer) uintptr {
+func (csound CSOUND) JoinThread(thread unsafe.Pointer) uintptr {
 	return uintptr(C.csoundJoinThread(thread))
 }
 
 // Create and return a monitor object, or nil if not successful.
 // The object is initially in signaled (notified) state.
-func (csound *CSOUND) CreateThreadLock() unsafe.Pointer {
+func (csound CSOUND) CreateThreadLock() unsafe.Pointer {
 	return unsafe.Pointer(C.csoundCreateThreadLock())
 }
 
@@ -1754,24 +1754,24 @@ func (csound *CSOUND) CreateThreadLock() unsafe.Pointer {
 //
 // If 'milliseconds' is zero and the object is not notified, the function
 // will return immediately with a non-zero status.
-func (csound *CSOUND) WaitThreadLock(lock unsafe.Pointer, ms uint) int {
+func (csound CSOUND) WaitThreadLock(lock unsafe.Pointer, ms uint) int {
 	return int(C.csoundWaitThreadLock(lock, C.size_t(ms)))
 }
 
 // Wait on the indicated monitor object until it is notified.
 // This function is similar to WaitThreadLock() with an infinite
 // wait time, but may be more efficient.
-func (csound *CSOUND) WaitThreadLockNoTimeout(lock unsafe.Pointer) {
+func (csound CSOUND) WaitThreadLockNoTimeout(lock unsafe.Pointer) {
 	C.csoundWaitThreadLockNoTimeout(lock)
 }
 
 // Notify the indicated monitor object.
-func (csound *CSOUND) NotifyThreadLock(lock unsafe.Pointer) {
+func (csound CSOUND) NotifyThreadLock(lock unsafe.Pointer) {
 	C.csoundNotifyThreadLock(lock)
 }
 
 // Destroy the indicated monitor object.
-func (csound *CSOUND) DestroyThreadLock(lock unsafe.Pointer) {
+func (csound CSOUND) DestroyThreadLock(lock unsafe.Pointer) {
 	C.csoundDestroyThreadLock(lock)
 }
 
@@ -1789,14 +1789,14 @@ func (csound *CSOUND) DestroyThreadLock(lock unsafe.Pointer) {
 //
 // Note: the handles returned by CreateThreadLock() and
 // CreateMutex() are not compatible.
-func (csound *CSOUND) CreateMutex(isRecursive bool) unsafe.Pointer {
+func (csound CSOUND) CreateMutex(isRecursive bool) unsafe.Pointer {
 	return C.csoundCreateMutex(cbool(isRecursive))
 }
 
 // Acquire the indicated mutex object; if it is already in use by
 // another thread, the function waits until the mutex is released by
 // the other thread.
-func (csound *CSOUND) LockMutex(mutex unsafe.Pointer) {
+func (csound CSOUND) LockMutex(mutex unsafe.Pointer) {
 	C.csoundLockMutex(mutex)
 }
 
@@ -1806,7 +1806,7 @@ func (csound *CSOUND) LockMutex(mutex unsafe.Pointer) {
 // available.
 //
 // Note: this function may be unimplemented on Windows.
-func (csound *CSOUND) LockMutexNoWait(mutex unsafe.Pointer) int {
+func (csound CSOUND) LockMutexNoWait(mutex unsafe.Pointer) int {
 	return int(C.csoundLockMutexNoWait(mutex))
 }
 
@@ -1814,36 +1814,36 @@ func (csound *CSOUND) LockMutexNoWait(mutex unsafe.Pointer) int {
 // the current thread, otherwise the operation of this function is
 // undefined. A recursive mutex needs to be unlocked as many times
 // as it was locked previously.
-func (csound *CSOUND) UnlockMutex(mutex unsafe.Pointer) {
+func (csound CSOUND) UnlockMutex(mutex unsafe.Pointer) {
 	C.csoundUnlockMutex(mutex)
 }
 
 // Destroy the indicated mutex object. Destroying a mutex that
 // is currently owned by a thread results in undefined behavior.
-func (csound *CSOUND) DestroyMutex(mutex unsafe.Pointer) {
+func (csound CSOUND) DestroyMutex(mutex unsafe.Pointer) {
 	C.csoundDestroyMutex(mutex)
 }
 
 // Create a Thread Barrier. Max value parameter should be equal to
 // number of child threads using the barrier plus one for the
 // master thread.
-func (csound *CSOUND) CreateBarrier(max uint) unsafe.Pointer {
+func (csound CSOUND) CreateBarrier(max uint) unsafe.Pointer {
 	return C.csoundCreateBarrier(C.uint(max))
 }
 
 // Destroy a Thread Barrier.
-func (csound *CSOUND) DestroyBarrier(barrier unsafe.Pointer) int {
+func (csound CSOUND) DestroyBarrier(barrier unsafe.Pointer) int {
 	return int(C.csoundDestroyBarrier(barrier))
 }
 
 // Wait on the thread barrier.
-func (csound *CSOUND) WaitBarrier(barrier unsafe.Pointer) int {
+func (csound CSOUND) WaitBarrier(barrier unsafe.Pointer) int {
 	return int(C.csoundWaitBarrier(barrier))
 }
 
 // Wait for at least the specified number of milliseconds,
 // yielding the CPU to other threads.
-func (csound *CSOUND) Sleep(ms uint) {
+func (csound CSOUND) Sleep(ms uint) {
 	C.csoundSleep(C.size_t(ms))
 }
 
@@ -1861,7 +1861,7 @@ func (csound *CSOUND) Sleep(ms uint) {
 // non-negative return value is the exit status of the command (0 to
 // 255), otherwise it is the PID of the newly created process.
 // On error, a negative value is returned.
-func (csound *CSOUND) RunCommand(args []string, noWait bool) int {
+func (csound CSOUND) RunCommand(args []string, noWait bool) int {
 	argv := make([]*C.char, len(args)+1)
 	for i, arg := range args {
 		argv[i] = C.CString(arg)
@@ -1871,7 +1871,7 @@ func (csound *CSOUND) RunCommand(args []string, noWait bool) int {
 }
 
 // Initialise a timer structure.
-func (csound *CSOUND) InitTimerStruct() C.RTCLOCK {
+func (csound CSOUND) InitTimerStruct() C.RTCLOCK {
 	var rtc C.RTCLOCK
 	C.csoundInitTimerStruct(&rtc)
 	return rtc
@@ -1879,18 +1879,18 @@ func (csound *CSOUND) InitTimerStruct() C.RTCLOCK {
 
 // Return the elapsed real time (in seconds) since the specified timer
 // structure was initialised.
-func (csound *CSOUND) RealTime(rtc *C.RTCLOCK) float64 {
+func (csound CSOUND) RealTime(rtc *C.RTCLOCK) float64 {
 	return float64(C.csoundGetRealTime(rtc))
 }
 
 // Return the elapsed CPU time (in seconds) since the specified timer
 // structure was initialised.
-func (csound *CSOUND) CPUTime(rtc *C.RTCLOCK) float64 {
+func (csound CSOUND) CPUTime(rtc *C.RTCLOCK) float64 {
 	return float64(C.csoundGetCPUTime(rtc))
 }
 
 // Return a 32-bit unsigned integer to be used as seed from current time.
-func (csound *CSOUND) RandomSeedFromTime() uint32 {
+func (csound CSOUND) RandomSeedFromTime() uint32 {
 	return uint32(C.csoundGetRandomSeedFromTime())
 }
 

@@ -42,7 +42,7 @@ type CsRtAudioParams struct {
 
 ////////////////////////////////////////////////////////////////
 
-type FileOpenHandler func(csound *CSOUND, pathName string, fileType int, write, temp bool)
+type FileOpenHandler func(csound CSOUND, pathName string, fileType int, write, temp bool)
 
 var fileOpen FileOpenHandler
 
@@ -52,7 +52,7 @@ func goFileOpenCB(csound unsafe.Pointer, pathName *C.char, fileType, write, temp
 		return
 	}
 	cs := CSOUND{(*C.CSOUND)(csound)}
-	fileOpen(&cs, C.GoString(pathName), int(fileType), write != 0, temp != 0)
+	fileOpen(cs, C.GoString(pathName), int(fileType), write != 0, temp != 0)
 }
 
 // Set an external callback for receiving notices whenever Csound opens
@@ -65,7 +65,7 @@ func goFileOpenCB(csound unsafe.Pointer, pathName *C.char, fileType, write, temp
 //
 // Pass nil to disable the callback.
 // This callback is retained after a Reset() call.
-func (csound *CSOUND) SetFileOpenCallback(f FileOpenHandler) {
+func (csound CSOUND) SetFileOpenCallback(f FileOpenHandler) {
 	fileOpen = f
 	if f == nil {
 		C.csoundSetFileOpenCallback(csound.Cs, nil)
@@ -76,7 +76,7 @@ func (csound *CSOUND) SetFileOpenCallback(f FileOpenHandler) {
 
 ////////////////////////////////////////////////////////////////
 
-type PlayOpenHandler func(csound *CSOUND, parm *CsRtAudioParams) int32
+type PlayOpenHandler func(csound CSOUND, parm *CsRtAudioParams) int32
 
 var playOpen PlayOpenHandler
 
@@ -95,19 +95,19 @@ func goPlayOpenCB(csound unsafe.Pointer, parm *C.csRtAudioParams) int32 {
 		sampleFormat: int32(parm.sampleFormat),
 		sampleRate:   float32(parm.sampleRate),
 	}
-	return playOpen(&cs, goParm)
+	return playOpen(cs, goParm)
 }
 
 // Set a function to be called by Csound for opening real-time
 // audio playback.
-func (csound *CSOUND) SetPlayOpenCallback(f PlayOpenHandler) {
+func (csound CSOUND) SetPlayOpenCallback(f PlayOpenHandler) {
 	playOpen = f
 	C.csoundSetPlayOpenCB(csound.Cs)
 }
 
 ////////////////////////////////////////////////////////////////
 
-type RtPlayHandler func(csound *CSOUND, outBuf []MYFLT)
+type RtPlayHandler func(csound CSOUND, outBuf []MYFLT)
 
 var rtPlay RtPlayHandler
 
@@ -122,19 +122,19 @@ func goRtPlayCB(csound unsafe.Pointer, outBuf *C.MYFLT, length int32) {
 	sliceHeader.Cap = int(length)
 	sliceHeader.Len = int(length)
 	sliceHeader.Data = uintptr(unsafe.Pointer(outBuf))
-	rtPlay(&cs, slice)
+	rtPlay(cs, slice)
 }
 
 // Set a function to be called by Csound for performing real-time
 // audio playback.
-func (csound *CSOUND) SetRtPlayCallback(f RtPlayHandler) {
+func (csound CSOUND) SetRtPlayCallback(f RtPlayHandler) {
 	rtPlay = f
 	C.csoundSetRtPlayCB(csound.Cs)
 }
 
 ////////////////////////////////////////////////////////////////
 
-type RecOpenHandler func(csound *CSOUND, parm *CsRtAudioParams) int32
+type RecOpenHandler func(csound CSOUND, parm *CsRtAudioParams) int32
 
 var recOpen RecOpenHandler
 
@@ -153,19 +153,19 @@ func goRecOpenCB(csound unsafe.Pointer, parm *C.csRtAudioParams) int32 {
 		sampleFormat: int32(parm.sampleFormat),
 		sampleRate:   float32(parm.sampleRate),
 	}
-	return recOpen(&cs, goParm)
+	return recOpen(cs, goParm)
 }
 
 // Set a function to be called by Csound for opening real-time
 // audio recording.
-func (csound *CSOUND) SetRecOpenCallback(f RecOpenHandler) {
+func (csound CSOUND) SetRecOpenCallback(f RecOpenHandler) {
 	recOpen = f
 	C.csoundSetRecOpenCB(csound.Cs)
 }
 
 ////////////////////////////////////////////////////////////////
 
-type RtRecordHandler func(csound *CSOUND, inBuf []MYFLT) int32
+type RtRecordHandler func(csound CSOUND, inBuf []MYFLT) int32
 
 var rtRecord RtRecordHandler
 
@@ -180,19 +180,19 @@ func goRtRecordCB(csound unsafe.Pointer, inBuf *C.MYFLT, length int32) int32 {
 	sliceHeader.Cap = int(length)
 	sliceHeader.Len = int(length)
 	sliceHeader.Data = uintptr(unsafe.Pointer(inBuf))
-	return rtRecord(&cs, slice)
+	return rtRecord(cs, slice)
 }
 
 // Set a function to be called by Csound for performing real-time
 // audio recording.
-func (csound *CSOUND) SetRtRecordCallback(f RtRecordHandler) {
+func (csound CSOUND) SetRtRecordCallback(f RtRecordHandler) {
 	rtRecord = f
 	C.csoundSetRtRecordCB(csound.Cs)
 }
 
 ////////////////////////////////////////////////////////////////
 
-type RtCloseHandler func(csound *CSOUND)
+type RtCloseHandler func(csound CSOUND)
 
 var rtClose RtCloseHandler
 
@@ -202,19 +202,19 @@ func goRtCloseCB(csound unsafe.Pointer) {
 		return
 	}
 	cs := CSOUND{(*C.CSOUND)(csound)}
-	rtClose(&cs)
+	rtClose(cs)
 }
 
 // Set a function to be called by Csound for closing real-time
 // audio playback and recording.
-func (csound *CSOUND) SetRtCloseCallback(f RtCloseHandler) {
+func (csound CSOUND) SetRtCloseCallback(f RtCloseHandler) {
 	rtClose = f
 	C.csoundSetRtCloseCB(csound.Cs)
 }
 
 ////////////////////////////////////////////////////////////////
 
-type ExternalMidiInOpenHandler func(csound *CSOUND, userData unsafe.Pointer, devName string) int32
+type ExternalMidiInOpenHandler func(csound CSOUND, userData unsafe.Pointer, devName string) int32
 
 var externalMidiInOpen ExternalMidiInOpenHandler
 
@@ -224,18 +224,18 @@ func goExternalMidiInOpenCB(csound unsafe.Pointer, userData unsafe.Pointer, devN
 		return -1
 	}
 	cs := CSOUND{(*C.CSOUND)(csound)}
-	return externalMidiInOpen(&cs, userData, C.GoString(devName))
+	return externalMidiInOpen(cs, userData, C.GoString(devName))
 }
 
 // Set callback for opening real time MIDI input.
-func (csound *CSOUND) SetExternalMidiInOpenCallback(f ExternalMidiInOpenHandler) {
+func (csound CSOUND) SetExternalMidiInOpenCallback(f ExternalMidiInOpenHandler) {
 	externalMidiInOpen = f
 	C.csoundSetExternalMidiInOpenCB(csound.Cs)
 }
 
 ////////////////////////////////////////////////////////////////
 
-type ExternalMidiReadHandler func(csound *CSOUND, userData unsafe.Pointer, buf []uint8) int32
+type ExternalMidiReadHandler func(csound CSOUND, userData unsafe.Pointer, buf []uint8) int32
 
 var externalMidiRead ExternalMidiReadHandler
 
@@ -250,18 +250,18 @@ func goExternalMidiReadCB(csound unsafe.Pointer, userData unsafe.Pointer, buf *C
 	sliceHeader.Cap = int(nBytes)
 	sliceHeader.Len = int(nBytes)
 	sliceHeader.Data = uintptr(unsafe.Pointer(buf))
-	return externalMidiRead(&cs, userData, slice)
+	return externalMidiRead(cs, userData, slice)
 }
 
 // Set callback for reading from real time MIDI input.
-func (csound *CSOUND) SetExternalMidiReadCallback(f ExternalMidiReadHandler) {
+func (csound CSOUND) SetExternalMidiReadCallback(f ExternalMidiReadHandler) {
 	externalMidiRead = f
 	C.csoundSetExternalMidiReadCB(csound.Cs)
 }
 
 ////////////////////////////////////////////////////////////////
 
-type ExternalMidiInCloseHandler func(csound *CSOUND, userData unsafe.Pointer) int32
+type ExternalMidiInCloseHandler func(csound CSOUND, userData unsafe.Pointer) int32
 
 var externalMidiInClose ExternalMidiInCloseHandler
 
@@ -271,18 +271,18 @@ func goExternalMidiInCloseCB(csound unsafe.Pointer, userData unsafe.Pointer) int
 		return -1
 	}
 	cs := CSOUND{(*C.CSOUND)(csound)}
-	return externalMidiInClose(&cs, userData)
+	return externalMidiInClose(cs, userData)
 }
 
 // Set callback for closing real time MIDI input.
-func (csound *CSOUND) SetExternalMidiInCloseCallback(f ExternalMidiInCloseHandler) {
+func (csound CSOUND) SetExternalMidiInCloseCallback(f ExternalMidiInCloseHandler) {
 	externalMidiInClose = f
 	C.csoundSetExternalMidiInCloseCB(csound.Cs)
 }
 
 ////////////////////////////////////////////////////////////////
 
-type ExternalMidiOutOpenHandler func(csound *CSOUND, userData unsafe.Pointer, devName string) int32
+type ExternalMidiOutOpenHandler func(csound CSOUND, userData unsafe.Pointer, devName string) int32
 
 var externalMidiOutOpen ExternalMidiOutOpenHandler
 
@@ -292,18 +292,18 @@ func goExternalMidiOutOpenCB(csound unsafe.Pointer, userData unsafe.Pointer, dev
 		return -1
 	}
 	cs := CSOUND{(*C.CSOUND)(csound)}
-	return externalMidiOutOpen(&cs, userData, C.GoString(devName))
+	return externalMidiOutOpen(cs, userData, C.GoString(devName))
 }
 
 // Set callback for opening real time MIDI output.
-func (csound *CSOUND) SetExternalMidiOutOpenCallback(f ExternalMidiOutOpenHandler) {
+func (csound CSOUND) SetExternalMidiOutOpenCallback(f ExternalMidiOutOpenHandler) {
 	externalMidiOutOpen = f
 	C.csoundSetExternalMidiOutOpenCB(csound.Cs)
 }
 
 ////////////////////////////////////////////////////////////////
 
-type ExternalMidiWriteHandler func(csound *CSOUND, userData unsafe.Pointer, buf []uint8) int32
+type ExternalMidiWriteHandler func(csound CSOUND, userData unsafe.Pointer, buf []uint8) int32
 
 var externalMidiWrite ExternalMidiWriteHandler
 
@@ -318,18 +318,18 @@ func goExternalMidiWriteCB(csound unsafe.Pointer, userData unsafe.Pointer, buf *
 	sliceHeader.Cap = int(nBytes)
 	sliceHeader.Len = int(nBytes)
 	sliceHeader.Data = uintptr(unsafe.Pointer(buf))
-	return externalMidiWrite(&cs, userData, slice)
+	return externalMidiWrite(cs, userData, slice)
 }
 
 // Set callback for writing to real time MIDI output.
-func (csound *CSOUND) SetExternalMidiWriteCallback(f ExternalMidiWriteHandler) {
+func (csound CSOUND) SetExternalMidiWriteCallback(f ExternalMidiWriteHandler) {
 	externalMidiWrite = f
 	C.csoundSetExternalMidiWriteCB(csound.Cs)
 }
 
 ////////////////////////////////////////////////////////////////
 
-type ExternalMidiOutCloseHandler func(csound *CSOUND, userData unsafe.Pointer) int32
+type ExternalMidiOutCloseHandler func(csound CSOUND, userData unsafe.Pointer) int32
 
 var externalMidiOutClose ExternalMidiOutCloseHandler
 
@@ -339,11 +339,11 @@ func goExternalMidiOutCloseCB(csound unsafe.Pointer, userData unsafe.Pointer) in
 		return -1
 	}
 	cs := CSOUND{(*C.CSOUND)(csound)}
-	return externalMidiOutClose(&cs, userData)
+	return externalMidiOutClose(cs, userData)
 }
 
 // Set callback for closing real time MIDI output.
-func (csound *CSOUND) SetExternalMidiOutCloseCallback(f ExternalMidiOutCloseHandler) {
+func (csound CSOUND) SetExternalMidiOutCloseCallback(f ExternalMidiOutCloseHandler) {
 	externalMidiOutClose = f
 	C.csoundSetExternalMidiOutCloseCB(csound.Cs)
 }
@@ -364,14 +364,14 @@ func goExternalMidiErrorStringCB(err int32) *C.char {
 }
 
 // Set callback for converting MIDI error codes to strings.
-func (csound *CSOUND) SetExternalMidiErrorStringCallback(f ExternalMidiErrorStringHandler) {
+func (csound CSOUND) SetExternalMidiErrorStringCallback(f ExternalMidiErrorStringHandler) {
 	externalMidiErrorString = f
 	C.csoundSetExternalMidiErrorStringCB(csound.Cs)
 }
 
 ////////////////////////////////////////////////////////////////
 
-type CscoreHandler func(csound *CSOUND)
+type CscoreHandler func(csound CSOUND)
 
 var cscore CscoreHandler
 
@@ -381,14 +381,14 @@ func goCscoreCB(csound unsafe.Pointer) {
 		return
 	}
 	cs := CSOUND{(*C.CSOUND)(csound)}
-	cscore(&cs)
+	cscore(cs)
 }
 
 // Set an external callback for Cscore processing.
 // Pass nil to reset to the internal cscore() function
 // (which does nothing).
 // This callback is retained after a Reset() call.
-func (csound *CSOUND) SetCscoreCallback(f CscoreHandler) {
+func (csound CSOUND) SetCscoreCallback(f CscoreHandler) {
 	cscore = f
 	if f == nil {
 		C.csoundSetCscoreCallback(csound.Cs, nil)
@@ -399,7 +399,7 @@ func (csound *CSOUND) SetCscoreCallback(f CscoreHandler) {
 
 ////////////////////////////////////////////////////////////////
 
-type ChannelHandler func(csound *CSOUND, channelName string,
+type ChannelHandler func(csound CSOUND, channelName string,
 	channelValue []MYFLT, channelType int)
 
 var inputChannel ChannelHandler
@@ -429,11 +429,11 @@ func goInputChannelCB(csound unsafe.Pointer, channelName *C.char,
 	sliceHeader.Cap = length
 	sliceHeader.Len = length
 	sliceHeader.Data = uintptr(channelValuePtr)
-	inputChannel(&cs, C.GoString(channelName), slice, chnType)
+	inputChannel(cs, C.GoString(channelName), slice, chnType)
 }
 
 // Set the function which will be called whenever the invalue opcode is used.
-func (csound *CSOUND) SetInputChannelCallback(f ChannelHandler) {
+func (csound CSOUND) SetInputChannelCallback(f ChannelHandler) {
 	inputChannel = f
 	C.csoundSetInputChannelCB(csound.Cs)
 }
@@ -465,18 +465,18 @@ func goOutputChannelCB(csound unsafe.Pointer, channelName *C.char,
 	sliceHeader.Cap = length
 	sliceHeader.Len = length
 	sliceHeader.Data = uintptr(channelValuePtr)
-	outputChannel(&cs, C.GoString(channelName), slice, chnType)
+	outputChannel(cs, C.GoString(channelName), slice, chnType)
 }
 
 // Set the function which will be called whenever the outvalue opcode is used.
-func (csound *CSOUND) SetOutputChannelCallback(f ChannelHandler) {
+func (csound CSOUND) SetOutputChannelCallback(f ChannelHandler) {
 	outputChannel = f
 	C.csoundSetOutputChannelCB(csound.Cs)
 }
 
 ////////////////////////////////////////////////////////////////
 
-type SenseEventHandler func(csound *CSOUND, userData unsafe.Pointer)
+type SenseEventHandler func(csound CSOUND, userData unsafe.Pointer)
 
 const maxNumSenseEvent = 10
 
@@ -489,7 +489,7 @@ func goSenseEventCB(csound, userData unsafe.Pointer, numFun int32) {
 		return
 	}
 	cs := CSOUND{(*C.CSOUND)(csound)}
-	senseEvent[numFun](&cs, userData)
+	senseEvent[numFun](cs, userData)
 }
 
 // Register a function to be called once in every control period
@@ -502,7 +502,7 @@ func goSenseEventCB(csound, userData unsafe.Pointer, numFun int32) {
 // to make sure no blocking operations are performed in the callback.
 // The callbacks are cleared on Cleanup().
 // Returns zero on success.
-func (csound *CSOUND) RegisterSenseEventCallback(f SenseEventHandler,
+func (csound CSOUND) RegisterSenseEventCallback(f SenseEventHandler,
 	userData unsafe.Pointer) (ret int, err error) {
 	if numSenseEvent < maxNumSenseEvent {
 		ret = int(C.csoundRegisterSenseEventCB(csound.Cs, userData, C.int(numSenseEvent)))
