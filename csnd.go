@@ -74,12 +74,13 @@ void *getOpcodeList(CSOUND *csound, int *pn)
 }
 
 void getOpcodeEntry(void *list, int n,
-                    char **opname, char **outypes, char** intypes)
+                    char **opname, char **outypes, char** intypes, int* flags )
 {
   opcodeListEntry entry = *((opcodeListEntry *)list + n);
   *opname = entry.opname;
   *outypes = entry.outypes;
   *intypes = entry.intypes;
+  *flags = entry.flags;
 }
 
 void freeOpcodeList(CSOUND *cs, void *list)
@@ -589,7 +590,7 @@ func (csound CSOUND) Start() int {
 	return int(C.csoundStart(csound.Cs))
 }
 
-// Compile Csound input files (such as an orchestra and score)
+// Compile Csound input files (such as an orchestra and score, or CSD)
 // as directed by the supplied command-line arguments,
 // but does not perform them. Return a non-zero error code on failure.
 // This function cannot be called during performance, and before a
@@ -614,21 +615,41 @@ func (csound CSOUND) Compile(args []string) int {
 	return int(result)
 }
 
-// Compiles a Csound input file (.csd file)
+// Compiles a Csound input file (CSD, .csd file)
 // which includes command-line arguments,
 // but does not perform the file. Returns a non-zero error code on failure.
 // In this (host-driven) mode, the sequence of calls should be as follows:
-//       csound.CompileCsd(fileName);
+//       csound.CompileCsd(fileName)
 //       for csound.PerformBuffer() == 0 {
 //       }
 //       csound.Cleanup()
 //       csound.Reset()
 // NB: this function can be called during performance to
 // replace or add new instruments and events.
+// On a first call and if called before csound.Start(), this function
+// behaves similarly to csound.Compile()
 func (csound CSOUND) CompileCsd(fileName string) int {
 	var cfileName *C.char = C.CString(fileName)
 	defer C.free(unsafe.Pointer(cfileName))
 	return int(C.csoundCompileCsd(csound.Cs, cfileName))
+}
+
+// Compiles a Csound input file contained in a string of text,
+// which includes command-line arguments, orchestra, score, etc.,
+// but does not perform the file. Returns a non-zero error code on failure.
+// In this (host-driven) mode, the sequence of calls should be as follows:
+//       csound.CompileCsdText(csound, csdText)
+//       for csound.PerformBuffer() == 0 {
+//       }
+//       csound.Cleanup()
+//       csound.Reset()
+// NB: A temporary file is created, the csd_text is written to the temporary
+// file, and csound.CompileCsd is called with the name of the temporary file,
+// which is deleted after compilation. Behavior may vary by platform.
+func (csound CSOUND) CompileCsdText(csdText string) int {
+	var cCsdText *C.char = C.CString(csdText)
+	defer C.free(unsafe.Pointer(cCsdText))
+	return int(C.csoundCompileCsdText(csound.Cs, cCsdText))
 }
 
 // Senses input events and performs audio output until the end of score
@@ -1696,6 +1717,7 @@ type OpcodeListEntry struct {
 	Opname  string
 	Outypes string
 	Intypes string
+	Flags   int
 }
 
 // Get an alphabetically sorted list of all opcodes.
@@ -1710,11 +1732,13 @@ func (csound CSOUND) OpcodeList() []OpcodeListEntry {
 	}
 	var list = make([]OpcodeListEntry, length)
 	var opname, outypes, intypes *C.char
+	var flags C.int
 	for i := range list {
-		C.getOpcodeEntry(opcodeList, C.int(i), &opname, &outypes, &intypes)
+		C.getOpcodeEntry(opcodeList, C.int(i), &opname, &outypes, &intypes, &flags)
 		list[i].Opname = C.GoString(opname)
 		list[i].Outypes = C.GoString(outypes)
 		list[i].Intypes = C.GoString(intypes)
+		list[i].Flags = int(flags)
 	}
 	C.freeOpcodeList(csound.Cs, unsafe.Pointer(opcodeList))
 	return list
