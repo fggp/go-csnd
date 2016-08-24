@@ -64,10 +64,11 @@ func TestHostData(t *testing.T) {
 	triangle[&Point{1, 2, 3}] = "α"
 	triangle[&Point{4, 5, 6}] = "β"
 	triangle[&Point{7, 8, 9}] = "γ"
-	cs = Create(unsafe.Pointer(&triangle))
+	s1 := "togodo tsoin tsoin"
+	cs = Create(unsafe.Pointer(&s1))
 	ht = cs.HostData()
-	pt := (*Triangle)(unsafe.Pointer(ht))
-	if pt != &triangle {
+	pt := (*string)(unsafe.Pointer(ht))
+	if pt != &s1 {
 		t.Errorf("String hostdata read is different of hostdata written")
 	} else {
 		fmt.Println("\n", *pt, "\n")

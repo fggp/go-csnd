@@ -15,7 +15,7 @@ void csoundSetFileOpenCB(CSOUND *csound)
 
 /*////////////////////////////////////////////////////////////*/
 
-extern int goPlayOpenCB(void *, csRtAudioParams *);
+extern int32 goPlayOpenCB(void *, csRtAudioParams *);
 
 int csoundPlayOpenCB(CSOUND *csound, const csRtAudioParams *parm)
 {
@@ -29,7 +29,7 @@ void csoundSetPlayOpenCB(CSOUND *csound)
 
 /*////////////////////////////////////////////////////////////*/
 
-extern void goRtPlayCB(void *, MYFLT *, int);
+extern void goRtPlayCB(void *, MYFLT *, int32);
 
 void csoundRtPlayCB(CSOUND *csound, const MYFLT *outbuf, int nbytes)
 {
@@ -43,7 +43,7 @@ void csoundSetRtPlayCB(CSOUND *csound)
 
 /*////////////////////////////////////////////////////////////*/
 
-extern int goRecOpenCB(void *, csRtAudioParams *);
+extern int32 goRecOpenCB(void *, csRtAudioParams *);
 
 int csoundRecOpenCB(CSOUND *csound, const csRtAudioParams *parm)
 {
@@ -52,16 +52,16 @@ int csoundRecOpenCB(CSOUND *csound, const csRtAudioParams *parm)
 
 void csoundSetRecOpenCB(CSOUND *csound)
 {
-  csoundSetRecopenCallback(csound, csoundPlayOpenCB);
+  csoundSetRecopenCallback(csound, csoundRecOpenCB);
 }
 
 /*////////////////////////////////////////////////////////////*/
 
-extern int goRtRecordCB(void *, MYFLT *, int);
+extern int32 goRtRecordCB(void *, MYFLT *, int32);
 
 int csoundRtRecordCB(CSOUND *csound, MYFLT *inbuf, int nbytes)
 {
-  return goRtRecordCB((void *)csound, inbuf, nbytes/sizeof(MYFLT));
+  return goRtRecordCB((void *)csound, inbuf, (int32)(nbytes/sizeof(MYFLT)));
 }
 
 void csoundSetRtRecordCB(CSOUND *csound)
@@ -85,7 +85,21 @@ void csoundSetRtCloseCB(CSOUND *csound)
 
 /*////////////////////////////////////////////////////////////*/
 
-extern int goExternalMidiInOpenCB(void *, void *, char *);
+extern int32 goAudioDeviceListCB(void *, void *, int32);
+
+int csoundAudioDeviceListCB(CSOUND *csound, CS_AUDIODEVICE *list, int isOutput)
+{
+  return goAudioDeviceListCB((void *)csound, (void *)list, (int32)isOutput);
+}
+
+void csoundSetAudioDeviceListCB(CSOUND *csound)
+{
+  csoundSetAudioDeviceListCallback(csound, csoundAudioDeviceListCB);
+}
+
+/*////////////////////////////////////////////////////////////*/
+
+extern int32 goExternalMidiInOpenCB(void *, void *, char *);
 
 int csoundExternalMidiInOpenCB(CSOUND *csound, void **userData, const char *devName)
 {
@@ -99,7 +113,7 @@ void csoundSetExternalMidiInOpenCB(CSOUND *csound)
 
 /*////////////////////////////////////////////////////////////*/
 
-extern int goExternalMidiReadCB(void *, void *, unsigned char *, int);
+extern int32 goExternalMidiReadCB(void *, void *, unsigned char *, int);
 
 int csoundExternalMidiReadCB(CSOUND *csound, void *userData, unsigned char *buf, int nBytes)
 {
@@ -113,7 +127,7 @@ void csoundSetExternalMidiReadCB(CSOUND *csound)
 
 /*////////////////////////////////////////////////////////////*/
 
-extern int goExternalMidiInCloseCB(void *, void *);
+extern int32 goExternalMidiInCloseCB(void *, void *);
 
 int csoundExternalMidiInCloseCB(CSOUND *csound, void *userData)
 {
@@ -127,7 +141,7 @@ void csoundSetExternalMidiInCloseCB(CSOUND *csound)
 
 /*////////////////////////////////////////////////////////////*/
 
-extern int goExternalMidiOutOpenCB(void *, void *, char *);
+extern int32 goExternalMidiOutOpenCB(void *, void *, char *);
 
 int csoundExternalMidiOutOpenCB(CSOUND *csound, void **userData, const char *devName)
 {
@@ -141,7 +155,7 @@ void csoundSetExternalMidiOutOpenCB(CSOUND *csound)
 
 /*////////////////////////////////////////////////////////////*/
 
-extern int goExternalMidiWriteCB(void *, void *, unsigned char *, int);
+extern int32 goExternalMidiWriteCB(void *, void *, unsigned char *, int);
 
 int csoundExternalMidiWriteCB(CSOUND *csound, void *userData, const unsigned char *buf, int nBytes)
 {
@@ -155,7 +169,7 @@ void csoundSetExternalMidiWriteCB(CSOUND *csound)
 
 /*////////////////////////////////////////////////////////////*/
 
-extern int goExternalMidiOutCloseCB(void *, void *);
+extern int32 goExternalMidiOutCloseCB(void *, void *);
 
 int csoundExternalMidiOutCloseCB(CSOUND *csound, void *userData)
 {
@@ -179,6 +193,20 @@ const char *csoundExternalMidiErrorStringCB(int err)
 void csoundSetExternalMidiErrorStringCB(CSOUND *csound)
 {
   csoundSetExternalMidiErrorStringCallback(csound, csoundExternalMidiErrorStringCB);
+}
+
+/*////////////////////////////////////////////////////////////*/
+
+extern int32 goMidiDeviceListCB(void *, void *, int32);
+
+int csoundMidiDeviceListCB(CSOUND *csound, CS_MIDIDEVICE *list, int isOutput)
+{
+  return goMidiDeviceListCB((void *)csound, (void *)list, (int32)isOutput);
+}
+
+void csoundSetMidiDeviceListCB(CSOUND *csound)
+{
+  csoundSetMIDIDeviceListCallback(csound, csoundMidiDeviceListCB);
 }
 
 /*////////////////////////////////////////////////////////////*/
@@ -300,4 +328,66 @@ int csoundRegisterSenseEventCB(CSOUND *csound, void *userData, int numFun)
 }
 
 /*////////////////////////////////////////////////////////////*/
+
+extern void goMakeGraphCB(void *, void *, char *);
+
+void csoundMakeGraphCB(CSOUND *csound, WINDAT *windat, const char *name)
+{
+  goMakeGraphCB((void *)csound, (void *)windat, (char *)name);
+}
+
+void csoundSetMakeGraphCB(CSOUND *csound)
+{
+  csoundSetMakeGraphCallback(csound, csoundMakeGraphCB);
+}
+
+extern void goDrawGraphCB(void *, void *);
+
+void csoundDrawGraphCB(CSOUND *csound, WINDAT *windat)
+{
+  goDrawGraphCB((void *)csound, (void *)windat);
+}
+
+void csoundSetDrawGraphCB(CSOUND *csound)
+{
+  csoundSetDrawGraphCallback(csound, csoundDrawGraphCB);
+}
+
+extern void goKillGraphCB(void *, void *);
+
+void csoundKillGraphCB(CSOUND *csound, WINDAT *windat)
+{
+  goKillGraphCB((void *)csound, (void *)windat);
+}
+
+void csoundSetKillGraphCB(CSOUND *csound)
+{
+  csoundSetKillGraphCallback(csound, csoundKillGraphCB);
+}
+
+extern int32 goExitGraphCB(void *);
+
+int csoundExitGraphCB(CSOUND *csound)
+{
+  return goExitGraphCB((void *)csound);
+}
+
+void csoundSetExitGraphCB(CSOUND *csound)
+{
+  csoundSetExitGraphCallback(csound, csoundExitGraphCB);
+}
+
+/*////////////////////////////////////////////////////////////*/
+
+extern int32 goYieldCB(void *);
+
+int csoundYieldCB(CSOUND *csound)
+{
+  return goYieldCB((void *)csound);
+}
+
+void csoundSetYieldCB(CSOUND *csound)
+{
+  csoundSetYieldCallback(csound, csoundYieldCB);
+}
 

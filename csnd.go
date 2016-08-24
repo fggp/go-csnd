@@ -135,6 +135,26 @@ void *getNamedGen(CSOUND *csound, void *currentGen, char **pname, int *num)
   return p->next;
 }
 
+#if defined(CSOUND_SPIN_LOCK)
+void csSpinLock(int32 *spinlock)
+{
+  csoundSpinLock(spinlock);
+}
+void csSpinUnLock(int32 *spinlock)
+{
+  csoundSpinUnLock(spinlock);
+}
+#else
+void csSpinLock(int32 *spinlock)
+{
+  return;
+}
+void csSpinUnLock(int32 *spinlock)
+{
+  return;
+}
+#endif
+
 int utilityListLength(char **list)
 {
   int n;
@@ -201,15 +221,17 @@ func FileClose(f *C.FILE) {
 	C.fclose(f)
 }
 
+// Error Definitions
 const (
-	CSOUND_SUCCESS        = 0
-	CSOUND_ERROR          = -1
-	CSOUND_INITIALIZATION = -2
-	CSOUND_PERFORMANCE    = -3
-	CSOUND_MEMORY         = -4
-	CSOUND_SIGNAL         = -5
+	CSOUND_SUCCESS        = 0  // Completed successfully.
+	CSOUND_ERROR          = -1 // Unspecified failure.
+	CSOUND_INITIALIZATION = -2 // Failed during initialization.
+	CSOUND_PERFORMANCE    = -3 // Failed during performance.
+	CSOUND_MEMORY         = -4 // Failed to allocate requested memory.
+	CSOUND_SIGNAL         = -5 // Termination requested by SIGINT or SIGTERM.
 )
 
+// Flags for csoundInitialize().
 const (
 	CSOUNDINIT_NO_SIGNAL_HANDLER = 1
 	CSOUNDINIT_NO_ATEXIT         = 2
@@ -344,7 +366,8 @@ type CsoundParams struct {
 	NchnlsOverride       int32 // overriding number of out channels
 	NchnlsIoverride      int32 // overriding number of in channels
 	E0dbfsOverride       MYFLT // overriding 0dbfs
-	Daemon               int   // daemon mode
+	Daemon               int32 // daemon mode
+	KsmpsOverride        int32 // ksmps override
 }
 
 type CsoundAudioDevice struct {
@@ -377,6 +400,7 @@ type TREE struct {
 	t (*C.TREE)
 }
 
+// Constants used by the bus interface (csoundGetChannelPtr() etc.).
 const (
 	CSOUND_CONTROL_CHANNEL   = 1
 	CSOUND_AUDIO_CHANNEL     = 2
@@ -454,19 +478,19 @@ const (
  * Instantiation
  */
 
-// Initialize Csound library with specific flags. This function is called
-// internally by csoundCreate(), so there is generally no need to use it
-// explicitly unless you need to avoid default initialization that sets
-// signal handlers and atexit() callbacks.
+// Initialize Csound library with specific flags.
+// This function is called internally by csoundCreate(), so there is
+// generally no need to use it explicitly unless you need to avoid
+// default initialization that sets signal handlers and atexit() callbacks.
 // Return value is zero on success, positive if initialisation was
 // done already, and negative on error.
 func Initialize(flags int) int {
 	return int(C.csoundInitialize(C.int(flags)))
 }
 
-// Create an instance of Csound. Return an object with methods
-// wrapping calls to Csound API functions. The hostData
-// parameter can be nil, or it can be a pointer to any sort of
+// Create an instance of Csound.
+// Return an object with methods wrapping calls to the Csound API functions.
+// The hostData parameter can be nil, or it can be a pointer to any sort of
 // data; this pointer can be accessed from the Csound instance
 // that is passed to callback routines.
 func Create(hostData unsafe.Pointer) CSOUND {
@@ -506,8 +530,8 @@ func (csound CSOUND) APIVersion() string {
 
 // Parse the given orchestra from an ASCII string into a TREE.
 // This can be called during performance to parse new code.
-func (csound CSOUND) ParseOrc(str string) TREE {
-	var cstr *C.char = C.CString(str)
+func (csound CSOUND) ParseOrc(orc string) TREE {
+	var cstr *C.char = C.CString(orc)
 	defer C.free(unsafe.Pointer(cstr))
 	t := C.csoundParseOrc(csound.Cs, cstr)
 	return TREE{t}
@@ -532,8 +556,8 @@ func (csound CSOUND) DeleteTree(tree TREE) {
 // this can be called during performance to compile a new orchestra.
 //      orc := "instr 1 \n a1 rand 0dbfs/4 \n out a1 \n"
 //      csound.CompileOrc(orc)
-func (csound CSOUND) CompileOrc(str string) int {
-	var cstr *C.char = C.CString(str)
+func (csound CSOUND) CompileOrc(orc string) int {
+	var cstr *C.char = C.CString(orc)
 	defer C.free(unsafe.Pointer(cstr))
 	return int(C.csoundCompileOrc(csound.Cs, cstr))
 }
@@ -544,8 +568,8 @@ func (csound CSOUND) CompileOrc(str string) int {
 //   'return' opcode in global space.
 //       code := "i1 = 2 + 2 \n return i1 \n"
 //       retval := csound.EvalCode(code)
-func (csound CSOUND) EvalCode(str string) MYFLT {
-	var cstr *C.char = C.CString(str)
+func (csound CSOUND) EvalCode(code string) MYFLT {
+	var cstr *C.char = C.CString(code)
 	defer C.free(unsafe.Pointer(cstr))
 	return MYFLT(C.csoundEvalCode(csound.Cs, cstr))
 }
@@ -590,7 +614,7 @@ func (csound CSOUND) Start() int {
 	return int(C.csoundStart(csound.Cs))
 }
 
-// Compile Csound input files (such as an orchestra and score, or CSD)
+// Compile Csound input files (such as an orchestra and score, or a CSD)
 // as directed by the supplied command-line arguments,
 // but does not perform them. Return a non-zero error code on failure.
 // This function cannot be called during performance, and before a
@@ -615,9 +639,9 @@ func (csound CSOUND) Compile(args []string) int {
 	return int(result)
 }
 
-// Compiles a Csound input file (CSD, .csd file)
+// Compile a Csound input file (.csd file)
 // which includes command-line arguments,
-// but does not perform the file. Returns a non-zero error code on failure.
+// but does not perform the file. Return a non-zero error code on failure.
 // In this (host-driven) mode, the sequence of calls should be as follows:
 //       csound.CompileCsd(fileName)
 //       for csound.PerformBuffer() == 0 {
@@ -634,7 +658,7 @@ func (csound CSOUND) CompileCsd(fileName string) int {
 	return int(C.csoundCompileCsd(csound.Cs, cfileName))
 }
 
-// Compiles a Csound input file contained in a string of text,
+// Compile a Csound input file contained in a string of text,
 // which includes command-line arguments, orchestra, score, etc.,
 // but does not perform the file. Returns a non-zero error code on failure.
 // In this (host-driven) mode, the sequence of calls should be as follows:
@@ -751,7 +775,7 @@ func (csound CSOUND) NchnlsInput() int {
 }
 
 // Return the 0dBFS level of the spin/spout buffers.
-func (csound CSOUND) ZerodBFS() MYFLT {
+func (csound CSOUND) Get0dBFS() MYFLT {
 	return MYFLT(C.csoundGet0dBFS(csound.Cs))
 }
 
@@ -1676,6 +1700,21 @@ func (csound CSOUND) TableArgs(tableNum int) ([]MYFLT, error) {
 	return slice, nil
 }
 
+// Check if a given GEN number num is a named GEN.
+// If so, it returns the string length.
+// Otherwise it returns 0.
+func (csound CSOUND) IsNamedGEN(num int) int {
+	return int(C.csoundIsNamedGEN(csound.Cs, C.int(num)))
+}
+
+// Get the GEN name from a number num, if this is a named GEN.
+// The final parameter is the max len of the string.
+func (csound CSOUND) NamedGEN(num, namelen int) string {
+	name := make([]byte, namelen+1)
+	C.csoundGetNamedGEN(csound.Cs, C.int(num), (*C.char)(unsafe.Pointer(&name[0])), C.int(namelen))
+	return string(name)
+}
+
 /*
  * Function table display
  */
@@ -1744,9 +1783,15 @@ func (csound CSOUND) OpcodeList() []OpcodeListEntry {
 	return list
 }
 
+// TODO
+//  AppendOpcode
+
 /*
  * Threading and concurrency
  */
+
+// TODO
+//    createThread
 
 // Return the ID of the currently executing thread,
 // or nil for failure.
@@ -1871,6 +1916,31 @@ func (csound CSOUND) Sleep(ms uint) {
 	C.csoundSleep(C.size_t(ms))
 }
 
+// Lock the specified spinlock.
+// If the spinlock is not locked, lock it and return;
+// if is is locked, wait until it is unlocked, then lock it and return.
+// Uses atomic compare and swap operations that are safe across processors
+// and safe for out of order operations,
+// and which are more efficient than operating system locks.
+// Use spinlocks to protect access to shared data, especially in functions
+// that do little more than read or write such data, for example:
+//
+//   var lock int32
+//   func write(cs CSOUND, frames, signal) {
+//       cs.spinLock(&lock)
+//       for frame := range frames {
+//           global_buffer[frame] = global_buffer[frame] + signal[frame]
+//       }
+//       cs.spinUnlock(&lock)
+func (csound CSOUND) SpinLock(spinlock *int32) {
+	C.csSpinLock((*C.int32)(spinlock))
+}
+
+// Unlock the specified spinlock; (see SpinLock()).
+func (csound CSOUND) SpinUnLock(spinlock *int32) {
+	C.csSpinUnLock((*C.int32)(spinlock))
+}
+
 /*
  * Miscellaneous functions
  */
@@ -1920,6 +1990,7 @@ func (csound CSOUND) RandomSeedFromTime() uint32 {
 
 type Cslanguage_t int
 
+// List of languages
 const (
 	CSLANGUAGE_DEFAULT Cslanguage_t = iota
 	CSLANGUAGE_AFRIKAANS
