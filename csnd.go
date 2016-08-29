@@ -368,6 +368,7 @@ type CsoundParams struct {
 	E0dbfsOverride       MYFLT // overriding 0dbfs
 	Daemon               int32 // daemon mode
 	KsmpsOverride        int32 // ksmps override
+	FFT_library          int32 // fft_lib
 }
 
 type CsoundAudioDevice struct {
