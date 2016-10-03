@@ -873,6 +873,18 @@ func (csound CSOUND) SetOutput(name, otype, format string) {
 	C.csoundSetOutput(csound.Cs, cname, ctype, cformat)
 }
 
+// Get output type and format.
+func (csound CSOUND) OutputFormat() (otype, format string) {
+	type_ := make([]byte, 6)
+	format_ := make([]byte, 8)
+	ctype := (*C.char)(unsafe.Pointer(&type_[0]))
+	cformat := (*C.char)(unsafe.Pointer(&format_[0]))
+	C.csoundGetOutputFormat(csound.Cs, ctype, cformat)
+	otype = C.GoString(ctype)
+	format = C.GoString(cformat)
+	return
+}
+
 // Set input source.
 func (csound CSOUND) SetInput(name string) {
 	var cname *C.char = C.CString(name)
@@ -1711,9 +1723,10 @@ func (csound CSOUND) IsNamedGEN(num int) int {
 // Get the GEN name from a number num, if this is a named GEN.
 // The final parameter is the max len of the string.
 func (csound CSOUND) NamedGEN(num, namelen int) string {
-	name := make([]byte, namelen+1)
-	C.csoundGetNamedGEN(csound.Cs, C.int(num), (*C.char)(unsafe.Pointer(&name[0])), C.int(namelen))
-	return string(name)
+	name := make([]byte, namelen)
+	cname := (*C.char)(unsafe.Pointer(&name[0]))
+	C.csoundGetNamedGEN(csound.Cs, C.int(num), cname, C.int(namelen))
+	return string(name[:namelen])
 }
 
 /*
