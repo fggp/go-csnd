@@ -780,6 +780,11 @@ func (csound CSOUND) Get0dBFS() MYFLT {
 	return MYFLT(C.csoundGet0dBFS(csound.Cs))
 }
 
+// Return the A4 frequency reference.
+func (csound CSOUND) A4() MYFLT {
+	return MYFLT(C.csoundGetA4(csound.Cs))
+}
+
 // Return the current performance time in samples.
 func (csound CSOUND) CurrentTimeSamples() int {
 	return int(C.csoundGetCurrentTimeSamples(csound.Cs))
