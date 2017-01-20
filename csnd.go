@@ -606,11 +606,17 @@ func (csound CSOUND) CompileArgs(args []string) int {
 	return int(result)
 }
 
-// Prepare Csound for performance after compilation
-// using one or more of the compile/eval functions.
-// NB: this is called internally by csoundCompile(), therefore
+// Prepares Csound for performance.
+// Normally called after compiling a csd file or an orc file, in which
+// case score preprocessing is performed and performance terminates
+// when the score terminates.
+// However, if called before compiling a csd file or an orc file, 
+// score preprocessing is not performed and "i" statements are dispatched 
+// as real-time events, the <CsOptions> tag is ignored, and performance 
+// continues indefinitely or until ended using the API.
+// NB: this is called internally by Compile(), therefore
 // it is only required if performance is started without
-// call to that function
+// a call to that function.
 func (csound CSOUND) Start() int {
 	return int(C.csoundStart(csound.Cs))
 }
