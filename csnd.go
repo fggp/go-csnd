@@ -1015,11 +1015,25 @@ func (csound CSOUND) Spin() []MYFLT {
 	return slice
 }
 
+// Clear the input buffer (spin).
+func (csound CSOUND) ClearSpin() {
+	C.csoundClearSpin(csound.Cs)
+}
+
 // Add the indicated sample into the audio input working buffer (spin);
 // this only ever makes sense before calling PerformKsmps().
 // The frame and channel must be in bounds relative to ksmps and nchnls.
+// NB: the spin buffer needs to be cleared at every k-cycle by calling 
+// ClearSpin().
 func (csound CSOUND) AddSpinSample(frame, channel int, sample MYFLT) {
 	C.csoundAddSpinSample(csound.Cs, C.int(frame), C.int(channel), cMYFLT(sample))
+}
+
+// Set the audio input working buffer (spin) to the indicated sample
+// this only ever makes sense before calling PerformKsmps().
+// The frame and channel must be in bounds relative to ksmps and nchnls.
+func (csound CSOUND) SetSpinSample(frame, channel int, sample MYFLT) {
+	C.csoundSetSpinSample(csound.Cs, C.int(frame), C.int(channel), cMYFLT(sample))
 }
 
 // Return the Csound audio output working buffer (spout) as a []MYFLT.
