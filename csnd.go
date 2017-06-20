@@ -610,9 +610,9 @@ func (csound CSOUND) CompileArgs(args []string) int {
 // Normally called after compiling a csd file or an orc file, in which
 // case score preprocessing is performed and performance terminates
 // when the score terminates.
-// However, if called before compiling a csd file or an orc file, 
-// score preprocessing is not performed and "i" statements are dispatched 
-// as real-time events, the <CsOptions> tag is ignored, and performance 
+// However, if called before compiling a csd file or an orc file,
+// score preprocessing is not performed and "i" statements are dispatched
+// as real-time events, the <CsOptions> tag is ignored, and performance
 // continues indefinitely or until ended using the API.
 // NB: this is called internally by Compile(), therefore
 // it is only required if performance is started without
@@ -1023,7 +1023,7 @@ func (csound CSOUND) ClearSpin() {
 // Add the indicated sample into the audio input working buffer (spin);
 // this only ever makes sense before calling PerformKsmps().
 // The frame and channel must be in bounds relative to ksmps and nchnls.
-// NB: the spin buffer needs to be cleared at every k-cycle by calling 
+// NB: the spin buffer needs to be cleared at every k-cycle by calling
 // ClearSpin().
 func (csound CSOUND) AddSpinSample(frame, channel int, sample MYFLT) {
 	C.csoundAddSpinSample(csound.Cs, C.int(frame), C.int(channel), cMYFLT(sample))
