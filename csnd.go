@@ -545,6 +545,12 @@ func (csound CSOUND) CompileTree(root TREE) int {
 	return int(result)
 }
 
+// Asynchronous version of CompileTree().
+func (csound CSOUND) CompileTreeAsync(root TREE) int {
+	result := C.csoundCompileTreeAsync(csound.Cs, root.t)
+	return int(result)
+}
+
 // Free the resources associated with the TREE tree.
 // This function should be called whenever the TREE was
 // created with ParseOrc and memory can be deallocated.
@@ -561,6 +567,16 @@ func (csound CSOUND) CompileOrc(orc string) int {
 	var cstr *C.char = C.CString(orc)
 	defer C.free(unsafe.Pointer(cstr))
 	return int(C.csoundCompileOrc(csound.Cs, cstr))
+}
+
+// Async version of CompileOrc().
+// The code is parsed and compiled, then placed on a queue for
+// asynchronous merge into the running engine, and evaluation.
+// The function returns following parsing and compilation.
+func (csound CSOUND) CompileOrcAsync(orc string) int {
+	var cstr *C.char = C.CString(orc)
+	defer C.free(unsafe.Pointer(cstr))
+	return int(C.csoundCompileOrcAsync(csound.Cs, cstr))
 }
 
 //   Parse and compile an orchestra given on a string,
@@ -1160,6 +1176,13 @@ func (csound CSOUND) ReadScore(str string) int {
 	return int(C.csoundReadScore(csound.Cs, cstr))
 }
 
+// Asynchronous version of ReadScore().
+func (csound CSOUND) ReadScoreAsync(str string) {
+	var cstr *C.char = C.CString(str)
+	defer C.free(unsafe.Pointer(cstr))
+	C.csoundReadScoreAsync(csound.Cs, cstr)
+}
+
 // Return the current score time in seconds
 // since the beginning of performance.
 func (csound CSOUND) ScoreTime() float64 {
@@ -1617,6 +1640,12 @@ func (csound CSOUND) ScoreEvent(eventType byte, pFields []MYFLT) int {
 		cpMYFLT(&pFields[0]), C.long(len(pFields))))
 }
 
+// Asynchronous version of ScoreEvent().
+func (csound CSOUND) ScoreEventAsync(eventType byte, pFields []MYFLT) {
+	C.csoundScoreEventAsync(csound.Cs, C.char(eventType),
+		cpMYFLT(&pFields[0]), C.long(len(pFields)))
+}
+
 // Like ScoreEvent(), this function inserts a score event, but
 // at absolute time with respect to the start of performance, or from an
 // offset set with timeOfs.
@@ -1627,11 +1656,26 @@ func (csound CSOUND) ScoreEventAbsolute(eventType byte, pFields []MYFLT,
 		C.double(timeOfs)))
 }
 
+// Asynchronous version of ScoreEventAbsolute().
+func (csound CSOUND) ScoreEventAbsoluteAsync(eventType byte, pFields []MYFLT,
+	timeOfs float64) {
+	C.csoundScoreEventAbsoluteAsync(csound.Cs, C.char(eventType),
+		cpMYFLT(&pFields[0]), C.long(len(pFields)),
+		C.double(timeOfs))
+}
+
 // Input a string (as if from a console), used for line events.
 func (csound CSOUND) InputMessage(message string) {
 	var cmsg *C.char = C.CString(message)
 	defer C.free(unsafe.Pointer(cmsg))
 	C.csoundInputMessage(csound.Cs, cmsg)
+}
+
+// Asynchronous version of InputMessage().
+func (csound CSOUND) InputMessageAsync(message string) {
+	var cmsg *C.char = C.CString(message)
+	defer C.free(unsafe.Pointer(cmsg))
+	C.csoundInputMessageAsync(csound.Cs, cmsg)
 }
 
 // Kill off one or more running instances of an instrument identified
@@ -1693,12 +1737,24 @@ func (csound CSOUND) TableCopyOut(table int, dest []MYFLT) {
 	C.csoundTableCopyOut(csound.Cs, C.int(table), cdest)
 }
 
+// Asynchronous version of TableCopyOut().
+func (csound CSOUND) TableCopyOutAsync(table int, dest []MYFLT) {
+	cdest := cpMYFLT(&dest[0])
+	C.csoundTableCopyOutAsync(csound.Cs, C.int(table), cdest)
+}
+
 // Copy the contents of an array src into a given function table.
 // The table number is assumed to be valid, and the table needs to
 // have sufficient space to receive all the array contents.
 func (csound CSOUND) TableCopyIn(table int, src []MYFLT) {
 	csrc := cpMYFLT(&src[0])
 	C.csoundTableCopyIn(csound.Cs, C.int(table), csrc)
+}
+
+// Asynchronous version of TableCopyIn().
+func (csound CSOUND) TableCopyInAsync(table int, src []MYFLT) {
+	csrc := cpMYFLT(&src[0])
+	C.csoundTableCopyInAsync(csound.Cs, C.int(table), csrc)
 }
 
 // Return a pointer to function table 'tableNum' as a []MYFLT.
