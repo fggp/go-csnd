@@ -34,6 +34,7 @@ import "C"
 import (
 	"fmt"
 	"reflect"
+	"sync"
 	"unsafe"
 )
 
@@ -542,13 +543,22 @@ const maxNumSenseEvent = 10
 var senseEventH []SenseEventHandler = make([]SenseEventHandler, maxNumSenseEvent)
 var numSenseEvent int
 
+// Workaround to avoid the 'cgo argument has Go pointer to Go pointer'
+// runtime error (since go1.6)
+var registry = make(map[int]unsafe.Pointer)
+var indexes int
+var mutex = sync.Mutex{}
+
 //export goSenseEventCB
 func goSenseEventCB(csound, userData unsafe.Pointer, numFun int32) {
 	if senseEventH[numFun] == nil {
 		return
 	}
 	cs := CSOUND{(*C.CSOUND)(csound)}
-	senseEventH[numFun](cs, userData)
+	mutex.Lock()
+	userDataP := registry[*(*int)(userData)]
+	mutex.Unlock()
+	senseEventH[numFun](cs, userDataP)
 }
 
 // Register a function to be called once in every control period
@@ -564,12 +574,17 @@ func goSenseEventCB(csound, userData unsafe.Pointer, numFun int32) {
 func (csound CSOUND) RegisterSenseEventCallback(f SenseEventHandler,
 	userData unsafe.Pointer) (ret int, err error) {
 	if numSenseEvent < maxNumSenseEvent {
-		ret = int(C.csoundRegisterSenseEventCB(csound.Cs, userData, C.int(numSenseEvent)))
+		mutex.Lock()
+		index := indexes
+		registry[index] = userData
+		mutex.Unlock()
+		ret = int(C.csoundRegisterSenseEventCB(csound.Cs, unsafe.Pointer(&index), C.int(numSenseEvent)))
 		if ret != 0 {
 			err = fmt.Errorf("Csound could not register SenseEvent callback %d", numSenseEvent)
 		} else {
 			senseEventH[numSenseEvent] = f
 			numSenseEvent++
+			indexes++
 		}
 		return
 	}
