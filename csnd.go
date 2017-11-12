@@ -765,6 +765,25 @@ func (csound CSOUND) Reset() {
 	C.csoundReset(csound.Cs)
 }
 
+// Starts the UDP server on a supplied port number.
+// Returns CSOUND_SUCCESS if server has been started successfully,
+// otherwise, CSOUND_ERROR.
+func (csound CSOUND) UDPServerStart(port uint) int {
+	return int(C.csoundUDPServerStart(csound.Cs, C.uint(port)))
+}
+
+// Returns the port number on which the server is running, or
+// CSOUND_ERROR if the server is not running.
+func (csound CSOUND) UDPServerStatus() int {
+	return int(C.csoundUDPServerStatus(csound.Cs))
+}
+
+// Closes the UDP server, returning CSOUND_SUCCESS if the
+// running server was successfully closed, CSOUND_ERROR otherwise.
+func (csound CSOUND) UDPServerClose() int {
+	return int(C.csoundUDPServerClose(csound.Cs))
+}
+
 /*
  * Attributes
  */
@@ -2005,6 +2024,10 @@ func (csound CSOUND) DestroyBarrier(barrier unsafe.Pointer) int {
 func (csound CSOUND) WaitBarrier(barrier unsafe.Pointer) int {
 	return int(C.csoundWaitBarrier(barrier))
 }
+
+//func (csound CSOUND) CreateCondVar
+//func (csound CSOUND) CondWait
+//func (csound CSOUND) CondSignal
 
 // Wait for at least the specified number of milliseconds,
 // yielding the CPU to other threads.
