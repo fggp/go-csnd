@@ -668,6 +668,15 @@ Use examples can be seen here: <a href="https://github.com/kunstmusik/csoundAPI_
 					<dd>&nbsp; &nbsp; <a href="#CSOUND.TableSet">func (csound CSOUND) TableSet(table, index int, value MYFLT)</a></dd>
 				
 					
+					<dd>&nbsp; &nbsp; <a href="#CSOUND.UDPServerClose">func (csound CSOUND) UDPServerClose() int</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#CSOUND.UDPServerStart">func (csound CSOUND) UDPServerStart(port uint) int</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#CSOUND.UDPServerStatus">func (csound CSOUND) UDPServerStatus() int</a></dd>
+				
+					
 					<dd>&nbsp; &nbsp; <a href="#CSOUND.UnlockMutex">func (csound CSOUND) UnlockMutex(mutex unsafe.Pointer)</a></dd>
 				
 					
@@ -1126,7 +1135,7 @@ Constants used by the bus interface (csoundGetChannelPtr() etc.).
 		
 			
 			
-			<h2 id="FreeCPvsData">func <a href="/src/target/csnd.go?s=51983:52014#L1599">FreeCPvsData</a>
+			<h2 id="FreeCPvsData">func <a href="/src/target/csnd.go?s=52670:52701#L1618">FreeCPvsData</a>
 				<a class="permalink" href="#FreeCPvsData">&#xb6;</a>
 			</h2>
 			<pre>func FreeCPvsData(p *<a href="#PVSDATEXT">PVSDATEXT</a>)</pre>
@@ -1157,7 +1166,7 @@ done already, and negative on error.
 		
 			
 			
-			<h2 id="AudioDeviceListHandler">type <a href="/src/target/callback.go?s=6701:6792#L214">AudioDeviceListHandler</a>
+			<h2 id="AudioDeviceListHandler">type <a href="/src/target/callback.go?s=6709:6800#L215">AudioDeviceListHandler</a>
 				<a class="permalink" href="#AudioDeviceListHandler">&#xb6;</a>
 			</h2>
 			
@@ -1216,7 +1225,7 @@ that is passed to callback routines.
 
 			
 				
-				<h3 id="CSOUND.A4">func (CSOUND) <a href="/src/target/csnd.go?s=23533:23564#L796">A4</a>
+				<h3 id="CSOUND.A4">func (CSOUND) <a href="/src/target/csnd.go?s=24220:24251#L815">A4</a>
 					<a class="permalink" href="#CSOUND.A4">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) A4() <a href="#MYFLT">MYFLT</a></pre>
@@ -1242,7 +1251,7 @@ Return the API version number
 				
 			
 				
-				<h3 id="CSOUND.AddSpinSample">func (CSOUND) <a href="/src/target/csnd.go?s=31149:31217#L1034">AddSpinSample</a>
+				<h3 id="CSOUND.AddSpinSample">func (CSOUND) <a href="/src/target/csnd.go?s=31836:31904#L1053">AddSpinSample</a>
 					<a class="permalink" href="#CSOUND.AddSpinSample">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) AddSpinSample(frame, channel <a href="http://golang.org/pkg/builtin/#int">int</a>, sample <a href="#MYFLT">MYFLT</a>)</pre>
@@ -1259,7 +1268,7 @@ ClearSpin().
 				
 			
 				
-				<h3 id="CSOUND.AudioChannel">func (CSOUND) <a href="/src/target/csnd.go?s=50016:50079#L1536">AudioChannel</a>
+				<h3 id="CSOUND.AudioChannel">func (CSOUND) <a href="/src/target/csnd.go?s=50703:50766#L1555">AudioChannel</a>
 					<a class="permalink" href="#CSOUND.AudioChannel">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) AudioChannel(name <a href="http://golang.org/pkg/builtin/#string">string</a>, samples []<a href="#MYFLT">MYFLT</a>)</pre>
@@ -1273,7 +1282,7 @@ samples which should contain enough memory for ksmps MYFLTs.
 				
 			
 				
-				<h3 id="CSOUND.AudioDevList">func (CSOUND) <a href="/src/target/csnd.go?s=33849:33917#L1098">AudioDevList</a>
+				<h3 id="CSOUND.AudioDevList">func (CSOUND) <a href="/src/target/csnd.go?s=34536:34604#L1117">AudioDevList</a>
 					<a class="permalink" href="#CSOUND.AudioDevList">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) AudioDevList(isOutput <a href="http://golang.org/pkg/builtin/#bool">bool</a>) []<a href="#CsoundAudioDevice">CsoundAudioDevice</a></pre>
@@ -1294,7 +1303,7 @@ for i := range list {
 				
 			
 				
-				<h3 id="CSOUND.CPUTime">func (CSOUND) <a href="/src/target/csnd.go?s=68165:68217#L2068">CPUTime</a>
+				<h3 id="CSOUND.CPUTime">func (CSOUND) <a href="/src/target/csnd.go?s=68956:69008#L2091">CPUTime</a>
 					<a class="permalink" href="#CSOUND.CPUTime">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) CPUTime(rtc *<a href="http://golang.org/pkg/C/">C</a>.<a href="http://golang.org/pkg/C/#RTCLOCK">RTCLOCK</a>) <a href="http://golang.org/pkg/builtin/#float64">float64</a></pre>
@@ -1308,7 +1317,7 @@ structure was initialised.
 				
 			
 				
-				<h3 id="CSOUND.ChannelDatasize">func (CSOUND) <a href="/src/target/csnd.go?s=51428:51481#L1576">ChannelDatasize</a>
+				<h3 id="CSOUND.ChannelDatasize">func (CSOUND) <a href="/src/target/csnd.go?s=52115:52168#L1595">ChannelDatasize</a>
 					<a class="permalink" href="#CSOUND.ChannelDatasize">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) ChannelDatasize(name <a href="http://golang.org/pkg/builtin/#string">string</a>) <a href="http://golang.org/pkg/builtin/#int">int</a></pre>
@@ -1322,7 +1331,7 @@ this might change if the channel space gets reallocated.
 				
 			
 				
-				<h3 id="CSOUND.ChannelLock">func (CSOUND) <a href="/src/target/csnd.go?s=49100:49152#L1510">ChannelLock</a>
+				<h3 id="CSOUND.ChannelLock">func (CSOUND) <a href="/src/target/csnd.go?s=49787:49839#L1529">ChannelLock</a>
 					<a class="permalink" href="#CSOUND.ChannelLock">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) ChannelLock(name <a href="http://golang.org/pkg/builtin/#string">string</a>) *<a href="http://golang.org/pkg/C/">C</a>.<a href="http://golang.org/pkg/C/#int">int</a></pre>
@@ -1338,7 +1347,7 @@ Return the address of the lock or nil if the channel does not exist
 				
 			
 				
-				<h3 id="CSOUND.ChannelPtr">func (CSOUND) <a href="/src/target/csnd.go?s=43889:43963#L1372">ChannelPtr</a>
+				<h3 id="CSOUND.ChannelPtr">func (CSOUND) <a href="/src/target/csnd.go?s=44576:44650#L1391">ChannelPtr</a>
 					<a class="permalink" href="#CSOUND.ChannelPtr">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) ChannelPtr(name <a href="http://golang.org/pkg/builtin/#string">string</a>, chnType <a href="http://golang.org/pkg/builtin/#int">int</a>) ([]<a href="#MYFLT">MYFLT</a>, <a href="http://golang.org/pkg/builtin/#error">error</a>)</pre>
@@ -1427,7 +1436,7 @@ functions is undefined.
 				
 			
 				
-				<h3 id="CSOUND.ClearSpin">func (CSOUND) <a href="/src/target/csnd.go?s=30788:30820#L1025">ClearSpin</a>
+				<h3 id="CSOUND.ClearSpin">func (CSOUND) <a href="/src/target/csnd.go?s=31475:31507#L1044">ClearSpin</a>
 					<a class="permalink" href="#CSOUND.ClearSpin">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) ClearSpin()</pre>
@@ -1440,7 +1449,7 @@ Clear the input buffer (spin).
 				
 			
 				
-				<h3 id="CSOUND.CloseLibrary">func (CSOUND) <a href="/src/target/csnd.go?s=79081:79142#L2394">CloseLibrary</a>
+				<h3 id="CSOUND.CloseLibrary">func (CSOUND) <a href="/src/target/csnd.go?s=79872:79933#L2417">CloseLibrary</a>
 					<a class="permalink" href="#CSOUND.CloseLibrary">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) CloseLibrary(library <a href="http://golang.org/pkg/unsafe/">unsafe</a>.<a href="http://golang.org/pkg/unsafe/#Pointer">Pointer</a>) <a href="http://golang.org/pkg/builtin/#int">int</a></pre>
@@ -1610,7 +1619,7 @@ Asynchronous version of CompileTree().
 				
 			
 				
-				<h3 id="CSOUND.ControlChannel">func (CSOUND) <a href="/src/target/csnd.go?s=49419:49480#L1519">ControlChannel</a>
+				<h3 id="CSOUND.ControlChannel">func (CSOUND) <a href="/src/target/csnd.go?s=50106:50167#L1538">ControlChannel</a>
 					<a class="permalink" href="#CSOUND.ControlChannel">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) ControlChannel(name <a href="http://golang.org/pkg/builtin/#string">string</a>) (<a href="#MYFLT">MYFLT</a>, <a href="http://golang.org/pkg/builtin/#int">int</a>)</pre>
@@ -1625,7 +1634,7 @@ finding or accessing the channel is returned as well.
 				
 			
 				
-				<h3 id="CSOUND.ControlChannelHints">func (CSOUND) <a href="/src/target/csnd.go?s=48145:48225#L1483">ControlChannelHints</a>
+				<h3 id="CSOUND.ControlChannelHints">func (CSOUND) <a href="/src/target/csnd.go?s=48832:48912#L1502">ControlChannelHints</a>
 					<a class="permalink" href="#CSOUND.ControlChannelHints">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) ControlChannelHints(name <a href="http://golang.org/pkg/builtin/#string">string</a>) (<a href="#ControlChannelHints">ControlChannelHints</a>, <a href="http://golang.org/pkg/builtin/#int">int</a>)</pre>
@@ -1646,7 +1655,7 @@ channel, otherwise, an error code is returned.
 				
 			
 				
-				<h3 id="CSOUND.CreateBarrier">func (CSOUND) <a href="/src/target/csnd.go?s=65358:65417#L1985">CreateBarrier</a>
+				<h3 id="CSOUND.CreateBarrier">func (CSOUND) <a href="/src/target/csnd.go?s=66045:66104#L2004">CreateBarrier</a>
 					<a class="permalink" href="#CSOUND.CreateBarrier">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) CreateBarrier(max <a href="http://golang.org/pkg/builtin/#uint">uint</a>) <a href="http://golang.org/pkg/unsafe/">unsafe</a>.<a href="http://golang.org/pkg/unsafe/#Pointer">Pointer</a></pre>
@@ -1661,7 +1670,7 @@ master thread.
 				
 			
 				
-				<h3 id="CSOUND.CreateCircularBuffer">func (CSOUND) <a href="/src/target/csnd.go?s=76247:76316#L2320">CreateCircularBuffer</a>
+				<h3 id="CSOUND.CreateCircularBuffer">func (CSOUND) <a href="/src/target/csnd.go?s=77038:77107#L2343">CreateCircularBuffer</a>
 					<a class="permalink" href="#CSOUND.CreateCircularBuffer">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) CreateCircularBuffer(numelem <a href="http://golang.org/pkg/builtin/#int">int</a>) <a href="http://golang.org/pkg/unsafe/">unsafe</a>.<a href="http://golang.org/pkg/unsafe/#Pointer">Pointer</a></pre>
@@ -1677,7 +1686,7 @@ It should be used like:
 				
 			
 				
-				<h3 id="CSOUND.CreateGlobalVariable">func (CSOUND) <a href="/src/target/csnd.go?s=71992:72063#L2206">CreateGlobalVariable</a>
+				<h3 id="CSOUND.CreateGlobalVariable">func (CSOUND) <a href="/src/target/csnd.go?s=72783:72854#L2229">CreateGlobalVariable</a>
 					<a class="permalink" href="#CSOUND.CreateGlobalVariable">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) CreateGlobalVariable(name <a href="http://golang.org/pkg/builtin/#string">string</a>, nbytes <a href="http://golang.org/pkg/builtin/#uint">uint</a>) <a href="http://golang.org/pkg/builtin/#int">int</a></pre>
@@ -1697,7 +1706,7 @@ CSOUND_MEMORY if there is not enough memory.
 				
 			
 				
-				<h3 id="CSOUND.CreateMessageBuffer">func (CSOUND) <a href="/src/target/csnd.go?s=40800:40855#L1292">CreateMessageBuffer</a>
+				<h3 id="CSOUND.CreateMessageBuffer">func (CSOUND) <a href="/src/target/csnd.go?s=41487:41542#L1311">CreateMessageBuffer</a>
 					<a class="permalink" href="#CSOUND.CreateMessageBuffer">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) CreateMessageBuffer(toStdOut <a href="http://golang.org/pkg/builtin/#bool">bool</a>)</pre>
@@ -1727,7 +1736,7 @@ message buffer.
 				
 			
 				
-				<h3 id="CSOUND.CreateMutex">func (CSOUND) <a href="/src/target/csnd.go?s=63923:63988#L1947">CreateMutex</a>
+				<h3 id="CSOUND.CreateMutex">func (CSOUND) <a href="/src/target/csnd.go?s=64610:64675#L1966">CreateMutex</a>
 					<a class="permalink" href="#CSOUND.CreateMutex">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) CreateMutex(isRecursive <a href="http://golang.org/pkg/builtin/#bool">bool</a>) <a href="http://golang.org/pkg/unsafe/">unsafe</a>.<a href="http://golang.org/pkg/unsafe/#Pointer">Pointer</a></pre>
@@ -1756,7 +1765,7 @@ CreateMutex() are not compatible.
 				
 			
 				
-				<h3 id="CSOUND.CreateThreadLock">func (CSOUND) <a href="/src/target/csnd.go?s=62132:62186#L1901">CreateThreadLock</a>
+				<h3 id="CSOUND.CreateThreadLock">func (CSOUND) <a href="/src/target/csnd.go?s=62819:62873#L1920">CreateThreadLock</a>
 					<a class="permalink" href="#CSOUND.CreateThreadLock">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) CreateThreadLock() <a href="http://golang.org/pkg/unsafe/">unsafe</a>.<a href="http://golang.org/pkg/unsafe/#Pointer">Pointer</a></pre>
@@ -1770,7 +1779,7 @@ The object is initially in signaled (notified) state.
 				
 			
 				
-				<h3 id="CSOUND.CurrentThreadId">func (CSOUND) <a href="/src/target/csnd.go?s=61675:61728#L1889">CurrentThreadId</a>
+				<h3 id="CSOUND.CurrentThreadId">func (CSOUND) <a href="/src/target/csnd.go?s=62362:62415#L1908">CurrentThreadId</a>
 					<a class="permalink" href="#CSOUND.CurrentThreadId">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) CurrentThreadId() <a href="http://golang.org/pkg/unsafe/">unsafe</a>.<a href="http://golang.org/pkg/unsafe/#Pointer">Pointer</a></pre>
@@ -1790,7 +1799,7 @@ and the user must free the pointer after use.
 				
 			
 				
-				<h3 id="CSOUND.CurrentTimeSamples">func (CSOUND) <a href="/src/target/csnd.go?s=23661:23706#L801">CurrentTimeSamples</a>
+				<h3 id="CSOUND.CurrentTimeSamples">func (CSOUND) <a href="/src/target/csnd.go?s=24348:24393#L820">CurrentTimeSamples</a>
 					<a class="permalink" href="#CSOUND.CurrentTimeSamples">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) CurrentTimeSamples() <a href="http://golang.org/pkg/builtin/#int">int</a></pre>
@@ -1803,7 +1812,7 @@ Return the current performance time in samples.
 				
 			
 				
-				<h3 id="CSOUND.Debug">func (CSOUND) <a href="/src/target/csnd.go?s=25255:25288#L847">Debug</a>
+				<h3 id="CSOUND.Debug">func (CSOUND) <a href="/src/target/csnd.go?s=25942:25975#L866">Debug</a>
 					<a class="permalink" href="#CSOUND.Debug">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) Debug() <a href="http://golang.org/pkg/builtin/#bool">bool</a></pre>
@@ -1845,7 +1854,7 @@ Destroy an instance of Csound.
 				
 			
 				
-				<h3 id="CSOUND.DestroyBarrier">func (CSOUND) <a href="/src/target/csnd.go?s=65495:65558#L1990">DestroyBarrier</a>
+				<h3 id="CSOUND.DestroyBarrier">func (CSOUND) <a href="/src/target/csnd.go?s=66182:66245#L2009">DestroyBarrier</a>
 					<a class="permalink" href="#CSOUND.DestroyBarrier">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) DestroyBarrier(barrier <a href="http://golang.org/pkg/unsafe/">unsafe</a>.<a href="http://golang.org/pkg/unsafe/#Pointer">Pointer</a>) <a href="http://golang.org/pkg/builtin/#int">int</a></pre>
@@ -1858,7 +1867,7 @@ Destroy a Thread Barrier.
 				
 			
 				
-				<h3 id="CSOUND.DestroyCircularBuffer">func (CSOUND) <a href="/src/target/csnd.go?s=78545:78618#L2380">DestroyCircularBuffer</a>
+				<h3 id="CSOUND.DestroyCircularBuffer">func (CSOUND) <a href="/src/target/csnd.go?s=79336:79409#L2403">DestroyCircularBuffer</a>
 					<a class="permalink" href="#CSOUND.DestroyCircularBuffer">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) DestroyCircularBuffer(circularBuffer <a href="http://golang.org/pkg/unsafe/">unsafe</a>.<a href="http://golang.org/pkg/unsafe/#Pointer">Pointer</a>)</pre>
@@ -1871,7 +1880,7 @@ Free circular buffer.
 				
 			
 				
-				<h3 id="CSOUND.DestroyGlobalVariable">func (CSOUND) <a href="/src/target/csnd.go?s=73162:73221#L2233">DestroyGlobalVariable</a>
+				<h3 id="CSOUND.DestroyGlobalVariable">func (CSOUND) <a href="/src/target/csnd.go?s=73953:74012#L2256">DestroyGlobalVariable</a>
 					<a class="permalink" href="#CSOUND.DestroyGlobalVariable">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) DestroyGlobalVariable(name <a href="http://golang.org/pkg/builtin/#string">string</a>) <a href="http://golang.org/pkg/builtin/#int">int</a></pre>
@@ -1886,7 +1895,7 @@ not defined.
 				
 			
 				
-				<h3 id="CSOUND.DestroyMessageBuffer">func (CSOUND) <a href="/src/target/csnd.go?s=41591:41634#L1319">DestroyMessageBuffer</a>
+				<h3 id="CSOUND.DestroyMessageBuffer">func (CSOUND) <a href="/src/target/csnd.go?s=42278:42321#L1338">DestroyMessageBuffer</a>
 					<a class="permalink" href="#CSOUND.DestroyMessageBuffer">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) DestroyMessageBuffer()</pre>
@@ -1899,7 +1908,7 @@ Release all memory used by the message buffer.
 				
 			
 				
-				<h3 id="CSOUND.DestroyMutex">func (CSOUND) <a href="/src/target/csnd.go?s=65121:65176#L1978">DestroyMutex</a>
+				<h3 id="CSOUND.DestroyMutex">func (CSOUND) <a href="/src/target/csnd.go?s=65808:65863#L1997">DestroyMutex</a>
 					<a class="permalink" href="#CSOUND.DestroyMutex">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) DestroyMutex(mutex <a href="http://golang.org/pkg/unsafe/">unsafe</a>.<a href="http://golang.org/pkg/unsafe/#Pointer">Pointer</a>)</pre>
@@ -1913,7 +1922,7 @@ is currently owned by a thread results in undefined behavior.
 				
 			
 				
-				<h3 id="CSOUND.DestroyThreadLock">func (CSOUND) <a href="/src/target/csnd.go?s=63187:63246#L1929">DestroyThreadLock</a>
+				<h3 id="CSOUND.DestroyThreadLock">func (CSOUND) <a href="/src/target/csnd.go?s=63874:63933#L1948">DestroyThreadLock</a>
 					<a class="permalink" href="#CSOUND.DestroyThreadLock">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) DestroyThreadLock(lock <a href="http://golang.org/pkg/unsafe/">unsafe</a>.<a href="http://golang.org/pkg/unsafe/#Pointer">Pointer</a>)</pre>
@@ -1926,7 +1935,7 @@ Destroy the indicated monitor object.
 				
 			
 				
-				<h3 id="CSOUND.Env">func (CSOUND) <a href="/src/target/csnd.go?s=70937:70981#L2175">Env</a>
+				<h3 id="CSOUND.Env">func (CSOUND) <a href="/src/target/csnd.go?s=71728:71772#L2198">Env</a>
 					<a class="permalink" href="#CSOUND.Env">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) Env(name <a href="http://golang.org/pkg/builtin/#string">string</a>) <a href="http://golang.org/pkg/builtin/#string">string</a></pre>
@@ -1962,7 +1971,7 @@ retval := csound.EvalCode(code)
 				
 			
 				
-				<h3 id="CSOUND.FirstMessage">func (CSOUND) <a href="/src/target/csnd.go?s=40963:41005#L1297">FirstMessage</a>
+				<h3 id="CSOUND.FirstMessage">func (CSOUND) <a href="/src/target/csnd.go?s=41650:41692#L1316">FirstMessage</a>
 					<a class="permalink" href="#CSOUND.FirstMessage">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) FirstMessage() <a href="http://golang.org/pkg/builtin/#string">string</a></pre>
@@ -1975,7 +1984,7 @@ Return the first message from the buffer.
 				
 			
 				
-				<h3 id="CSOUND.FirstMessageAttr">func (CSOUND) <a href="/src/target/csnd.go?s=41170:41213#L1304">FirstMessageAttr</a>
+				<h3 id="CSOUND.FirstMessageAttr">func (CSOUND) <a href="/src/target/csnd.go?s=41857:41900#L1323">FirstMessageAttr</a>
 					<a class="permalink" href="#CSOUND.FirstMessageAttr">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) FirstMessageAttr() <a href="http://golang.org/pkg/builtin/#int">int</a></pre>
@@ -1989,7 +1998,7 @@ in the buffer.
 				
 			
 				
-				<h3 id="CSOUND.FlushCircularBuffer">func (CSOUND) <a href="/src/target/csnd.go?s=78387:78458#L2375">FlushCircularBuffer</a>
+				<h3 id="CSOUND.FlushCircularBuffer">func (CSOUND) <a href="/src/target/csnd.go?s=79178:79249#L2398">FlushCircularBuffer</a>
 					<a class="permalink" href="#CSOUND.FlushCircularBuffer">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) FlushCircularBuffer(circularBuffer <a href="http://golang.org/pkg/unsafe/">unsafe</a>.<a href="http://golang.org/pkg/unsafe/#Pointer">Pointer</a>)</pre>
@@ -2006,7 +2015,7 @@ getting data from the buffer.
 				
 			
 				
-				<h3 id="CSOUND.FreeRandMTState">func (CSOUND) <a href="/src/target/csnd.go?s=76022:76082#L2313">FreeRandMTState</a>
+				<h3 id="CSOUND.FreeRandMTState">func (CSOUND) <a href="/src/target/csnd.go?s=76813:76873#L2336">FreeRandMTState</a>
 					<a class="permalink" href="#CSOUND.FreeRandMTState">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) FreeRandMTState(p *<a href="http://golang.org/pkg/C/">C</a>.<a href="http://golang.org/pkg/C/#CsoundRandMTState">CsoundRandMTState</a>)</pre>
@@ -2019,7 +2028,7 @@ Free the memory pointed to by the C.CsoundRandMTState pointer.
 				
 			
 				
-				<h3 id="CSOUND.Get0dBFS">func (CSOUND) <a href="/src/target/csnd.go?s=23409:23446#L791">Get0dBFS</a>
+				<h3 id="CSOUND.Get0dBFS">func (CSOUND) <a href="/src/target/csnd.go?s=24096:24133#L810">Get0dBFS</a>
 					<a class="permalink" href="#CSOUND.Get0dBFS">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) Get0dBFS() <a href="#MYFLT">MYFLT</a></pre>
@@ -2032,7 +2041,7 @@ Return the 0dBFS level of the spin/spout buffers.
 				
 			
 				
-				<h3 id="CSOUND.HostData">func (CSOUND) <a href="/src/target/csnd.go?s=23907:23953#L811">HostData</a>
+				<h3 id="CSOUND.HostData">func (CSOUND) <a href="/src/target/csnd.go?s=24594:24640#L830">HostData</a>
 					<a class="permalink" href="#CSOUND.HostData">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) HostData() <a href="http://golang.org/pkg/unsafe/">unsafe</a>.<a href="http://golang.org/pkg/unsafe/#Pointer">Pointer</a></pre>
@@ -2045,7 +2054,7 @@ Return host data.
 				
 			
 				
-				<h3 id="CSOUND.InitTimerStruct">func (CSOUND) <a href="/src/target/csnd.go?s=67747:67795#L2054">InitTimerStruct</a>
+				<h3 id="CSOUND.InitTimerStruct">func (CSOUND) <a href="/src/target/csnd.go?s=68538:68586#L2077">InitTimerStruct</a>
 					<a class="permalink" href="#CSOUND.InitTimerStruct">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) InitTimerStruct() <a href="http://golang.org/pkg/C/">C</a>.<a href="http://golang.org/pkg/C/#RTCLOCK">RTCLOCK</a></pre>
@@ -2084,7 +2093,7 @@ error code if it fails.
 				
 			
 				
-				<h3 id="CSOUND.InputBuffer">func (CSOUND) <a href="/src/target/csnd.go?s=29407:29449#L985">InputBuffer</a>
+				<h3 id="CSOUND.InputBuffer">func (CSOUND) <a href="/src/target/csnd.go?s=30094:30136#L1004">InputBuffer</a>
 					<a class="permalink" href="#CSOUND.InputBuffer">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) InputBuffer() []<a href="#MYFLT">MYFLT</a></pre>
@@ -2099,7 +2108,7 @@ PerformBuffer.
 				
 			
 				
-				<h3 id="CSOUND.InputBufferSize">func (CSOUND) <a href="/src/target/csnd.go?s=29008:29050#L973">InputBufferSize</a>
+				<h3 id="CSOUND.InputBufferSize">func (CSOUND) <a href="/src/target/csnd.go?s=29695:29737#L992">InputBufferSize</a>
 					<a class="permalink" href="#CSOUND.InputBufferSize">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) InputBufferSize() <a href="http://golang.org/pkg/builtin/#int">int</a></pre>
@@ -2112,7 +2121,7 @@ Return the number of samples in Csound input buffer.
 				
 			
 				
-				<h3 id="CSOUND.InputMessage">func (CSOUND) <a href="/src/target/csnd.go?s=54306:54355#L1658">InputMessage</a>
+				<h3 id="CSOUND.InputMessage">func (CSOUND) <a href="/src/target/csnd.go?s=54993:55042#L1677">InputMessage</a>
 					<a class="permalink" href="#CSOUND.InputMessage">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) InputMessage(message <a href="http://golang.org/pkg/builtin/#string">string</a>)</pre>
@@ -2125,7 +2134,7 @@ Input a string (as if from a console), used for line events.
 				
 			
 				
-				<h3 id="CSOUND.InputMessageAsync">func (CSOUND) <a href="/src/target/csnd.go?s=54518:54572#L1665">InputMessageAsync</a>
+				<h3 id="CSOUND.InputMessageAsync">func (CSOUND) <a href="/src/target/csnd.go?s=55205:55259#L1684">InputMessageAsync</a>
 					<a class="permalink" href="#CSOUND.InputMessageAsync">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) InputMessageAsync(message <a href="http://golang.org/pkg/builtin/#string">string</a>)</pre>
@@ -2138,7 +2147,7 @@ Asynchronous version of InputMessage().
 				
 			
 				
-				<h3 id="CSOUND.IsNamedGEN">func (CSOUND) <a href="/src/target/csnd.go?s=59155:59199#L1791">IsNamedGEN</a>
+				<h3 id="CSOUND.IsNamedGEN">func (CSOUND) <a href="/src/target/csnd.go?s=59842:59886#L1810">IsNamedGEN</a>
 					<a class="permalink" href="#CSOUND.IsNamedGEN">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) IsNamedGEN(num <a href="http://golang.org/pkg/builtin/#int">int</a>) <a href="http://golang.org/pkg/builtin/#int">int</a></pre>
@@ -2153,7 +2162,7 @@ Otherwise it returns 0.
 				
 			
 				
-				<h3 id="CSOUND.IsScorePending">func (CSOUND) <a href="/src/target/csnd.go?s=36581:36623#L1184">IsScorePending</a>
+				<h3 id="CSOUND.IsScorePending">func (CSOUND) <a href="/src/target/csnd.go?s=37268:37310#L1203">IsScorePending</a>
 					<a class="permalink" href="#CSOUND.IsScorePending">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) IsScorePending() <a href="http://golang.org/pkg/builtin/#bool">bool</a></pre>
@@ -2167,7 +2176,7 @@ of real-time MIDI events (see SetScorePending()).
 				
 			
 				
-				<h3 id="CSOUND.JoinThread">func (CSOUND) <a href="/src/target/csnd.go?s=61898:61960#L1895">JoinThread</a>
+				<h3 id="CSOUND.JoinThread">func (CSOUND) <a href="/src/target/csnd.go?s=62585:62647#L1914">JoinThread</a>
 					<a class="permalink" href="#CSOUND.JoinThread">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) JoinThread(thread <a href="http://golang.org/pkg/unsafe/">unsafe</a>.<a href="http://golang.org/pkg/unsafe/#Pointer">Pointer</a>) <a href="http://golang.org/pkg/builtin/#uintptr">uintptr</a></pre>
@@ -2181,7 +2190,7 @@ Return the value returned by the thread routine.
 				
 			
 				
-				<h3 id="CSOUND.KeyPress">func (CSOUND) <a href="/src/target/csnd.go?s=55733:55770#L1696">KeyPress</a>
+				<h3 id="CSOUND.KeyPress">func (CSOUND) <a href="/src/target/csnd.go?s=56420:56457#L1715">KeyPress</a>
 					<a class="permalink" href="#CSOUND.KeyPress">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) KeyPress(c <a href="http://golang.org/pkg/builtin/#byte">byte</a>)</pre>
@@ -2197,7 +2206,7 @@ RegisterKeyboardCallback()).
 				
 			
 				
-				<h3 id="CSOUND.KillInstance">func (CSOUND) <a href="/src/target/csnd.go?s=55190:55288#L1679">KillInstance</a>
+				<h3 id="CSOUND.KillInstance">func (CSOUND) <a href="/src/target/csnd.go?s=55877:55975#L1698">KillInstance</a>
 					<a class="permalink" href="#CSOUND.KillInstance">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) KillInstance(instr <a href="#MYFLT">MYFLT</a>, instrName <a href="http://golang.org/pkg/builtin/#string">string</a>, mode <a href="http://golang.org/pkg/builtin/#int">int</a>,
@@ -2221,7 +2230,7 @@ allowRelease: if true, the killed instances are allowed to release.
 				
 			
 				
-				<h3 id="CSOUND.Kr">func (CSOUND) <a href="/src/target/csnd.go?s=22687:22718#L768">Kr</a>
+				<h3 id="CSOUND.Kr">func (CSOUND) <a href="/src/target/csnd.go?s=23374:23405#L787">Kr</a>
 					<a class="permalink" href="#CSOUND.Kr">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) Kr() <a href="#MYFLT">MYFLT</a></pre>
@@ -2234,7 +2243,7 @@ Return the number of control samples per second.
 				
 			
 				
-				<h3 id="CSOUND.Ksmps">func (CSOUND) <a href="/src/target/csnd.go?s=22828:22860#L773">Ksmps</a>
+				<h3 id="CSOUND.Ksmps">func (CSOUND) <a href="/src/target/csnd.go?s=23515:23547#L792">Ksmps</a>
 					<a class="permalink" href="#CSOUND.Ksmps">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) Ksmps() <a href="http://golang.org/pkg/builtin/#int">int</a></pre>
@@ -2247,7 +2256,7 @@ Return the number of audio sample frames per control sample.
 				
 			
 				
-				<h3 id="CSOUND.LibrarySymbol">func (CSOUND) <a href="/src/target/csnd.go?s=79269:79362#L2399">LibrarySymbol</a>
+				<h3 id="CSOUND.LibrarySymbol">func (CSOUND) <a href="/src/target/csnd.go?s=80060:80153#L2422">LibrarySymbol</a>
 					<a class="permalink" href="#CSOUND.LibrarySymbol">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) LibrarySymbol(library <a href="http://golang.org/pkg/unsafe/">unsafe</a>.<a href="http://golang.org/pkg/unsafe/#Pointer">Pointer</a>,
@@ -2261,7 +2270,7 @@ Platform-independent function to get a symbol address in a shared library.
 				
 			
 				
-				<h3 id="CSOUND.ListChannels">func (CSOUND) <a href="/src/target/csnd.go?s=45651:45716#L1419">ListChannels</a>
+				<h3 id="CSOUND.ListChannels">func (CSOUND) <a href="/src/target/csnd.go?s=46338:46403#L1438">ListChannels</a>
 					<a class="permalink" href="#CSOUND.ListChannels">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) ListChannels() ([]<a href="#ControlChannelInfo">ControlChannelInfo</a>, <a href="http://golang.org/pkg/builtin/#error">error</a>)</pre>
@@ -2282,7 +2291,7 @@ after calling Reset().
 				
 			
 				
-				<h3 id="CSOUND.ListUtilities">func (CSOUND) <a href="/src/target/csnd.go?s=74108:74162#L2260">ListUtilities</a>
+				<h3 id="CSOUND.ListUtilities">func (CSOUND) <a href="/src/target/csnd.go?s=74899:74953#L2283">ListUtilities</a>
 					<a class="permalink" href="#CSOUND.ListUtilities">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) ListUtilities() ([]<a href="http://golang.org/pkg/builtin/#string">string</a>, <a href="http://golang.org/pkg/builtin/#error">error</a>)</pre>
@@ -2296,7 +2305,7 @@ The return value may be nil in case of an error.
 				
 			
 				
-				<h3 id="CSOUND.LockMutex">func (CSOUND) <a href="/src/target/csnd.go?s=64198:64250#L1954">LockMutex</a>
+				<h3 id="CSOUND.LockMutex">func (CSOUND) <a href="/src/target/csnd.go?s=64885:64937#L1973">LockMutex</a>
 					<a class="permalink" href="#CSOUND.LockMutex">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) LockMutex(mutex <a href="http://golang.org/pkg/unsafe/">unsafe</a>.<a href="http://golang.org/pkg/unsafe/#Pointer">Pointer</a>)</pre>
@@ -2311,7 +2320,7 @@ the other thread.
 				
 			
 				
-				<h3 id="CSOUND.LockMutexNoWait">func (CSOUND) <a href="/src/target/csnd.go?s=64563:64625#L1964">LockMutexNoWait</a>
+				<h3 id="CSOUND.LockMutexNoWait">func (CSOUND) <a href="/src/target/csnd.go?s=65250:65312#L1983">LockMutexNoWait</a>
 					<a class="permalink" href="#CSOUND.LockMutexNoWait">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) LockMutexNoWait(mutex <a href="http://golang.org/pkg/unsafe/">unsafe</a>.<a href="http://golang.org/pkg/unsafe/#Pointer">Pointer</a>) <a href="http://golang.org/pkg/builtin/#int">int</a></pre>
@@ -2330,7 +2339,7 @@ Note: this function may be unimplemented on Windows.
 				
 			
 				
-				<h3 id="CSOUND.Message">func (CSOUND) <a href="/src/target/csnd.go?s=39001:39062#L1243">Message</a>
+				<h3 id="CSOUND.Message">func (CSOUND) <a href="/src/target/csnd.go?s=39688:39749#L1262">Message</a>
 					<a class="permalink" href="#CSOUND.Message">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) Message(format <a href="http://golang.org/pkg/builtin/#string">string</a>, v ...interface{})</pre>
@@ -2343,7 +2352,7 @@ Displays an informal message.
 				
 			
 				
-				<h3 id="CSOUND.MessageCnt">func (CSOUND) <a href="/src/target/csnd.go?s=41452:41489#L1314">MessageCnt</a>
+				<h3 id="CSOUND.MessageCnt">func (CSOUND) <a href="/src/target/csnd.go?s=42139:42176#L1333">MessageCnt</a>
 					<a class="permalink" href="#CSOUND.MessageCnt">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) MessageCnt() <a href="http://golang.org/pkg/builtin/#int">int</a></pre>
@@ -2356,7 +2365,7 @@ Return the number of pending messages in the buffer.
 				
 			
 				
-				<h3 id="CSOUND.MessageLevel">func (CSOUND) <a href="/src/target/csnd.go?s=39638:39677#L1261">MessageLevel</a>
+				<h3 id="CSOUND.MessageLevel">func (CSOUND) <a href="/src/target/csnd.go?s=40325:40364#L1280">MessageLevel</a>
 					<a class="permalink" href="#CSOUND.MessageLevel">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) MessageLevel() <a href="http://golang.org/pkg/builtin/#int">int</a></pre>
@@ -2369,7 +2378,7 @@ Return the Csound message level (from 0 to 231).
 				
 			
 				
-				<h3 id="CSOUND.MessageS">func (CSOUND) <a href="/src/target/csnd.go?s=39364:39436#L1253">MessageS</a>
+				<h3 id="CSOUND.MessageS">func (CSOUND) <a href="/src/target/csnd.go?s=40051:40123#L1272">MessageS</a>
 					<a class="permalink" href="#CSOUND.MessageS">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) MessageS(attr <a href="http://golang.org/pkg/builtin/#int">int</a>, format <a href="http://golang.org/pkg/builtin/#string">string</a>, v ...interface{})</pre>
@@ -2384,7 +2393,7 @@ csoundMessage().
 				
 			
 				
-				<h3 id="CSOUND.MidiDevList">func (CSOUND) <a href="/src/target/csnd.go?s=35074:35140#L1137">MidiDevList</a>
+				<h3 id="CSOUND.MidiDevList">func (CSOUND) <a href="/src/target/csnd.go?s=35761:35827#L1156">MidiDevList</a>
 					<a class="permalink" href="#CSOUND.MidiDevList">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) MidiDevList(isOutput <a href="http://golang.org/pkg/builtin/#bool">bool</a>) []<a href="#CsoundMidiDevice">CsoundMidiDevice</a></pre>
@@ -2398,7 +2407,7 @@ input or output midi devices. (see also AudioDevList())
 				
 			
 				
-				<h3 id="CSOUND.Module">func (CSOUND) <a href="/src/target/csnd.go?s=28696:28767#L963">Module</a>
+				<h3 id="CSOUND.Module">func (CSOUND) <a href="/src/target/csnd.go?s=29383:29454#L982">Module</a>
 					<a class="permalink" href="#CSOUND.Module">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) Module(number <a href="http://golang.org/pkg/builtin/#int">int</a>) (name, mtype <a href="http://golang.org/pkg/builtin/#string">string</a>, error <a href="http://golang.org/pkg/builtin/#int">int</a>)</pre>
@@ -2422,7 +2431,7 @@ for err != CSOUND_ERROR {
 				
 			
 				
-				<h3 id="CSOUND.NamedGEN">func (CSOUND) <a href="/src/target/csnd.go?s=59376:59430#L1797">NamedGEN</a>
+				<h3 id="CSOUND.NamedGEN">func (CSOUND) <a href="/src/target/csnd.go?s=60063:60117#L1816">NamedGEN</a>
 					<a class="permalink" href="#CSOUND.NamedGEN">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) NamedGEN(num, namelen <a href="http://golang.org/pkg/builtin/#int">int</a>) <a href="http://golang.org/pkg/builtin/#string">string</a></pre>
@@ -2436,7 +2445,7 @@ The final parameter is the max len of the string.
 				
 			
 				
-				<h3 id="CSOUND.NamedGens">func (CSOUND) <a href="/src/target/csnd.go?s=59995:60038#L1824">NamedGens</a>
+				<h3 id="CSOUND.NamedGens">func (CSOUND) <a href="/src/target/csnd.go?s=60682:60725#L1843">NamedGens</a>
 					<a class="permalink" href="#CSOUND.NamedGens">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) NamedGens() []<a href="#NamedGen">NamedGen</a></pre>
@@ -2449,7 +2458,7 @@ Find the list of named gens.
 				
 			
 				
-				<h3 id="CSOUND.Nchnls">func (CSOUND) <a href="/src/target/csnd.go?s=23013:23046#L779">Nchnls</a>
+				<h3 id="CSOUND.Nchnls">func (CSOUND) <a href="/src/target/csnd.go?s=23700:23733#L798">Nchnls</a>
 					<a class="permalink" href="#CSOUND.Nchnls">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) Nchnls() <a href="http://golang.org/pkg/builtin/#int">int</a></pre>
@@ -2463,7 +2472,7 @@ header variable in the csd file.
 				
 			
 				
-				<h3 id="CSOUND.NchnlsInput">func (CSOUND) <a href="/src/target/csnd.go?s=23265:23303#L786">NchnlsInput</a>
+				<h3 id="CSOUND.NchnlsInput">func (CSOUND) <a href="/src/target/csnd.go?s=23952:23990#L805">NchnlsInput</a>
 					<a class="permalink" href="#CSOUND.NchnlsInput">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) NchnlsInput() <a href="http://golang.org/pkg/builtin/#int">int</a></pre>
@@ -2478,7 +2487,7 @@ not set, the value is taken from nchnls.
 				
 			
 				
-				<h3 id="CSOUND.NoMessage">func (CSOUND) <a href="/src/target/csnd.go?s=40055:40087#L1273">NoMessage</a>
+				<h3 id="CSOUND.NoMessage">func (CSOUND) <a href="/src/target/csnd.go?s=40742:40774#L1292">NoMessage</a>
 					<a class="permalink" href="#CSOUND.NoMessage">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) NoMessage()</pre>
@@ -2493,7 +2502,7 @@ any message.
 				
 			
 				
-				<h3 id="CSOUND.NotifyThreadLock">func (CSOUND) <a href="/src/target/csnd.go?s=63050:63108#L1924">NotifyThreadLock</a>
+				<h3 id="CSOUND.NotifyThreadLock">func (CSOUND) <a href="/src/target/csnd.go?s=63737:63795#L1943">NotifyThreadLock</a>
 					<a class="permalink" href="#CSOUND.NotifyThreadLock">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) NotifyThreadLock(lock <a href="http://golang.org/pkg/unsafe/">unsafe</a>.<a href="http://golang.org/pkg/unsafe/#Pointer">Pointer</a>)</pre>
@@ -2506,7 +2515,7 @@ Notify the indicated monitor object.
 				
 			
 				
-				<h3 id="CSOUND.OpcodeList">func (CSOUND) <a href="/src/target/csnd.go?s=60661:60712#L1851">OpcodeList</a>
+				<h3 id="CSOUND.OpcodeList">func (CSOUND) <a href="/src/target/csnd.go?s=61348:61399#L1870">OpcodeList</a>
 					<a class="permalink" href="#CSOUND.OpcodeList">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) OpcodeList() []<a href="#OpcodeListEntry">OpcodeListEntry</a></pre>
@@ -2521,7 +2530,7 @@ Return the number of opcodes, or a negative error code on failure.
 				
 			
 				
-				<h3 id="CSOUND.OpenLibrary">func (CSOUND) <a href="/src/target/csnd.go?s=78741:78815#L2385">OpenLibrary</a>
+				<h3 id="CSOUND.OpenLibrary">func (CSOUND) <a href="/src/target/csnd.go?s=79532:79606#L2408">OpenLibrary</a>
 					<a class="permalink" href="#CSOUND.OpenLibrary">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) OpenLibrary(libraryPath <a href="http://golang.org/pkg/builtin/#string">string</a>) (<a href="http://golang.org/pkg/builtin/#int">int</a>, <a href="http://golang.org/pkg/unsafe/">unsafe</a>.<a href="http://golang.org/pkg/unsafe/#Pointer">Pointer</a>)</pre>
@@ -2534,7 +2543,7 @@ Platform-independent function to load a shared library.
 				
 			
 				
-				<h3 id="CSOUND.OutputBuffer">func (CSOUND) <a href="/src/target/csnd.go?s=29905:29948#L999">OutputBuffer</a>
+				<h3 id="CSOUND.OutputBuffer">func (CSOUND) <a href="/src/target/csnd.go?s=30592:30635#L1018">OutputBuffer</a>
 					<a class="permalink" href="#CSOUND.OutputBuffer">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) OutputBuffer() []<a href="#MYFLT">MYFLT</a></pre>
@@ -2549,7 +2558,7 @@ PerformBuffer.
 				
 			
 				
-				<h3 id="CSOUND.OutputBufferSize">func (CSOUND) <a href="/src/target/csnd.go?s=29164:29207#L978">OutputBufferSize</a>
+				<h3 id="CSOUND.OutputBufferSize">func (CSOUND) <a href="/src/target/csnd.go?s=29851:29894#L997">OutputBufferSize</a>
 					<a class="permalink" href="#CSOUND.OutputBufferSize">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) OutputBufferSize() <a href="http://golang.org/pkg/builtin/#int">int</a></pre>
@@ -2562,7 +2571,7 @@ Return the number of samples in Csound output buffer.
 				
 			
 				
-				<h3 id="CSOUND.OutputFormat">func (CSOUND) <a href="/src/target/csnd.go?s=26688:26746#L894">OutputFormat</a>
+				<h3 id="CSOUND.OutputFormat">func (CSOUND) <a href="/src/target/csnd.go?s=27375:27433#L913">OutputFormat</a>
 					<a class="permalink" href="#CSOUND.OutputFormat">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) OutputFormat() (otype, format <a href="http://golang.org/pkg/builtin/#string">string</a>)</pre>
@@ -2575,7 +2584,7 @@ Get output type and format.
 				
 			
 				
-				<h3 id="CSOUND.OutputName">func (CSOUND) <a href="/src/target/csnd.go?s=25585:25625#L862">OutputName</a>
+				<h3 id="CSOUND.OutputName">func (CSOUND) <a href="/src/target/csnd.go?s=26272:26312#L881">OutputName</a>
 					<a class="permalink" href="#CSOUND.OutputName">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) OutputName() <a href="http://golang.org/pkg/builtin/#string">string</a></pre>
@@ -2588,7 +2597,7 @@ Return the audio output name (-o).
 				
 			
 				
-				<h3 id="CSOUND.Params">func (CSOUND) <a href="/src/target/csnd.go?s=25005:25049#L840">Params</a>
+				<h3 id="CSOUND.Params">func (CSOUND) <a href="/src/target/csnd.go?s=25692:25736#L859">Params</a>
 					<a class="permalink" href="#CSOUND.Params">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) Params(p *<a href="#CsoundParams">CsoundParams</a>)</pre>
@@ -2616,7 +2625,7 @@ This can be called during performance to parse new code.
 				
 			
 				
-				<h3 id="CSOUND.PeekCircularBuffer">func (CSOUND) <a href="/src/target/csnd.go?s=77369:77468#L2347">PeekCircularBuffer</a>
+				<h3 id="CSOUND.PeekCircularBuffer">func (CSOUND) <a href="/src/target/csnd.go?s=78160:78259#L2370">PeekCircularBuffer</a>
 					<a class="permalink" href="#CSOUND.PeekCircularBuffer">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) PeekCircularBuffer(circularBuffer <a href="http://golang.org/pkg/unsafe/">unsafe</a>.<a href="http://golang.org/pkg/unsafe/#Pointer">Pointer</a>, out []<a href="#MYFLT">MYFLT</a>,
@@ -2710,7 +2719,7 @@ and to synchronize performance with audio input and output.
 				
 			
 				
-				<h3 id="CSOUND.PopFirstMessage">func (CSOUND) <a href="/src/target/csnd.go?s=41316:41354#L1309">PopFirstMessage</a>
+				<h3 id="CSOUND.PopFirstMessage">func (CSOUND) <a href="/src/target/csnd.go?s=42003:42041#L1328">PopFirstMessage</a>
 					<a class="permalink" href="#CSOUND.PopFirstMessage">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) PopFirstMessage()</pre>
@@ -2723,7 +2732,7 @@ Remove the first message from the buffer.
 				
 			
 				
-				<h3 id="CSOUND.PvsChannel">func (CSOUND) <a href="/src/target/csnd.go?s=52739:52804#L1617">PvsChannel</a>
+				<h3 id="CSOUND.PvsChannel">func (CSOUND) <a href="/src/target/csnd.go?s=53426:53491#L1636">PvsChannel</a>
 					<a class="permalink" href="#CSOUND.PvsChannel">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) PvsChannel(fout *<a href="#PVSDATEXT">PVSDATEXT</a>, name <a href="http://golang.org/pkg/builtin/#string">string</a>) <a href="http://golang.org/pkg/builtin/#int">int</a></pre>
@@ -2739,7 +2748,7 @@ CSOUND_MEMORY if there is not enough memory to extend the bus.
 				
 			
 				
-				<h3 id="CSOUND.QueryGlobalVariable">func (CSOUND) <a href="/src/target/csnd.go?s=72330:72398#L2214">QueryGlobalVariable</a>
+				<h3 id="CSOUND.QueryGlobalVariable">func (CSOUND) <a href="/src/target/csnd.go?s=73121:73189#L2237">QueryGlobalVariable</a>
 					<a class="permalink" href="#CSOUND.QueryGlobalVariable">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) QueryGlobalVariable(name <a href="http://golang.org/pkg/builtin/#string">string</a>) <a href="http://golang.org/pkg/unsafe/">unsafe</a>.<a href="http://golang.org/pkg/unsafe/#Pointer">Pointer</a></pre>
@@ -2753,7 +2762,7 @@ Returns nil if the specified name is not defined.
 				
 			
 				
-				<h3 id="CSOUND.QueryGlobalVariableNoCheck">func (CSOUND) <a href="/src/target/csnd.go?s=72762:72837#L2224">QueryGlobalVariableNoCheck</a>
+				<h3 id="CSOUND.QueryGlobalVariableNoCheck">func (CSOUND) <a href="/src/target/csnd.go?s=73553:73628#L2247">QueryGlobalVariableNoCheck</a>
 					<a class="permalink" href="#CSOUND.QueryGlobalVariableNoCheck">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) QueryGlobalVariableNoCheck(name <a href="http://golang.org/pkg/builtin/#string">string</a>) <a href="http://golang.org/pkg/unsafe/">unsafe</a>.<a href="http://golang.org/pkg/unsafe/#Pointer">Pointer</a></pre>
@@ -2769,7 +2778,7 @@ not defined.
 				
 			
 				
-				<h3 id="CSOUND.Rand31">func (CSOUND) <a href="/src/target/csnd.go?s=75102:75151#L2288">Rand31</a>
+				<h3 id="CSOUND.Rand31">func (CSOUND) <a href="/src/target/csnd.go?s=75893:75942#L2311">Rand31</a>
 					<a class="permalink" href="#CSOUND.Rand31">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) Rand31(seedVal *<a href="http://golang.org/pkg/builtin/#int32">int32</a>) <a href="http://golang.org/pkg/builtin/#int32">int32</a></pre>
@@ -2789,7 +2798,7 @@ in the range 1 to 2147483646.
 				
 			
 				
-				<h3 id="CSOUND.RandMT">func (CSOUND) <a href="/src/target/csnd.go?s=75858:75916#L2308">RandMT</a>
+				<h3 id="CSOUND.RandMT">func (CSOUND) <a href="/src/target/csnd.go?s=76649:76707#L2331">RandMT</a>
 					<a class="permalink" href="#CSOUND.RandMT">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) RandMT(p *<a href="http://golang.org/pkg/C/">C</a>.<a href="http://golang.org/pkg/C/#CsoundRandMTState">CsoundRandMTState</a>) <a href="http://golang.org/pkg/builtin/#uint32">uint32</a></pre>
@@ -2803,7 +2812,7 @@ The PRNG must be initialised first by calling SeedRandMT().
 				
 			
 				
-				<h3 id="CSOUND.RandomSeedFromTime">func (CSOUND) <a href="/src/target/csnd.go?s=68338:68386#L2073">RandomSeedFromTime</a>
+				<h3 id="CSOUND.RandomSeedFromTime">func (CSOUND) <a href="/src/target/csnd.go?s=69129:69177#L2096">RandomSeedFromTime</a>
 					<a class="permalink" href="#CSOUND.RandomSeedFromTime">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) RandomSeedFromTime() <a href="http://golang.org/pkg/builtin/#uint32">uint32</a></pre>
@@ -2816,7 +2825,7 @@ Return a 32-bit unsigned integer to be used as seed from current time.
 				
 			
 				
-				<h3 id="CSOUND.ReadCircularBuffer">func (CSOUND) <a href="/src/target/csnd.go?s=76767:76866#L2332">ReadCircularBuffer</a>
+				<h3 id="CSOUND.ReadCircularBuffer">func (CSOUND) <a href="/src/target/csnd.go?s=77558:77657#L2355">ReadCircularBuffer</a>
 					<a class="permalink" href="#CSOUND.ReadCircularBuffer">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) ReadCircularBuffer(circularBuffer <a href="http://golang.org/pkg/unsafe/">unsafe</a>.<a href="http://golang.org/pkg/unsafe/#Pointer">Pointer</a>, out []<a href="#MYFLT">MYFLT</a>,
@@ -2838,7 +2847,7 @@ Return the actual number of items read (0 &lt;= n &lt;= items)
 				
 			
 				
-				<h3 id="CSOUND.ReadScore">func (CSOUND) <a href="/src/target/csnd.go?s=35902:35948#L1163">ReadScore</a>
+				<h3 id="CSOUND.ReadScore">func (CSOUND) <a href="/src/target/csnd.go?s=36589:36635#L1182">ReadScore</a>
 					<a class="permalink" href="#CSOUND.ReadScore">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) ReadScore(str <a href="http://golang.org/pkg/builtin/#string">string</a>) <a href="http://golang.org/pkg/builtin/#int">int</a></pre>
@@ -2853,7 +2862,7 @@ being added to the currently scheduled ones.
 				
 			
 				
-				<h3 id="CSOUND.ReadScoreAsync">func (CSOUND) <a href="/src/target/csnd.go?s=36113:36160#L1170">ReadScoreAsync</a>
+				<h3 id="CSOUND.ReadScoreAsync">func (CSOUND) <a href="/src/target/csnd.go?s=36800:36847#L1189">ReadScoreAsync</a>
 					<a class="permalink" href="#CSOUND.ReadScoreAsync">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) ReadScoreAsync(str <a href="http://golang.org/pkg/builtin/#string">string</a>)</pre>
@@ -2866,7 +2875,7 @@ Asynchronous version of ReadScore().
 				
 			
 				
-				<h3 id="CSOUND.RealTime">func (CSOUND) <a href="/src/target/csnd.go?s=67964:68017#L2062">RealTime</a>
+				<h3 id="CSOUND.RealTime">func (CSOUND) <a href="/src/target/csnd.go?s=68755:68808#L2085">RealTime</a>
 					<a class="permalink" href="#CSOUND.RealTime">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) RealTime(rtc *<a href="http://golang.org/pkg/C/">C</a>.<a href="http://golang.org/pkg/C/#RTCLOCK">RTCLOCK</a>) <a href="http://golang.org/pkg/builtin/#float64">float64</a></pre>
@@ -2880,7 +2889,7 @@ structure was initialised.
 				
 			
 				
-				<h3 id="CSOUND.RegisterSenseEventCallback">func (CSOUND) <a href="/src/target/callback.go?s=17622:17737#L554">RegisterSenseEventCallback</a>
+				<h3 id="CSOUND.RegisterSenseEventCallback">func (CSOUND) <a href="/src/target/callback.go?s=17891:18006#L564">RegisterSenseEventCallback</a>
 					<a class="permalink" href="#CSOUND.RegisterSenseEventCallback">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) RegisterSenseEventCallback(f <a href="#SenseEventHandler">SenseEventHandler</a>,
@@ -2918,7 +2927,7 @@ without reloading Csound. Implies Cleanup(), unless already called.
 				
 			
 				
-				<h3 id="CSOUND.RewindScore">func (CSOUND) <a href="/src/target/csnd.go?s=38035:38069#L1217">RewindScore</a>
+				<h3 id="CSOUND.RewindScore">func (CSOUND) <a href="/src/target/csnd.go?s=38722:38756#L1236">RewindScore</a>
 					<a class="permalink" href="#CSOUND.RewindScore">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) RewindScore()</pre>
@@ -2932,7 +2941,7 @@ SetScoreOffsetSeconds().
 				
 			
 				
-				<h3 id="CSOUND.RtPlaydUserData">func (CSOUND) <a href="/src/target/csnd.go?s=32753:32806#L1073">RtPlaydUserData</a>
+				<h3 id="CSOUND.RtPlaydUserData">func (CSOUND) <a href="/src/target/csnd.go?s=33440:33493#L1092">RtPlaydUserData</a>
 					<a class="permalink" href="#CSOUND.RtPlaydUserData">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) RtPlaydUserData() <a href="http://golang.org/pkg/unsafe/">unsafe</a>.<a href="http://golang.org/pkg/unsafe/#Pointer">Pointer</a></pre>
@@ -2945,7 +2954,7 @@ Return a pointer to user data for real time audio output.
 				
 			
 				
-				<h3 id="CSOUND.RtRecordUserData">func (CSOUND) <a href="/src/target/csnd.go?s=32569:32623#L1068">RtRecordUserData</a>
+				<h3 id="CSOUND.RtRecordUserData">func (CSOUND) <a href="/src/target/csnd.go?s=33256:33310#L1087">RtRecordUserData</a>
 					<a class="permalink" href="#CSOUND.RtRecordUserData">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) RtRecordUserData() <a href="http://golang.org/pkg/unsafe/">unsafe</a>.<a href="http://golang.org/pkg/unsafe/#Pointer">Pointer</a></pre>
@@ -2958,7 +2967,7 @@ Return a pointer to user data for real time audio input.
 				
 			
 				
-				<h3 id="CSOUND.RunCommand">func (CSOUND) <a href="/src/target/csnd.go?s=67452:67515#L2044">RunCommand</a>
+				<h3 id="CSOUND.RunCommand">func (CSOUND) <a href="/src/target/csnd.go?s=68243:68306#L2067">RunCommand</a>
 					<a class="permalink" href="#CSOUND.RunCommand">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) RunCommand(args []<a href="http://golang.org/pkg/builtin/#string">string</a>, noWait <a href="http://golang.org/pkg/builtin/#bool">bool</a>) <a href="http://golang.org/pkg/builtin/#int">int</a></pre>
@@ -2981,7 +2990,7 @@ On error, a negative value is returned.
 				
 			
 				
-				<h3 id="CSOUND.RunUtility">func (CSOUND) <a href="/src/target/csnd.go?s=73607:73670#L2243">RunUtility</a>
+				<h3 id="CSOUND.RunUtility">func (CSOUND) <a href="/src/target/csnd.go?s=74398:74461#L2266">RunUtility</a>
 					<a class="permalink" href="#CSOUND.RunUtility">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) RunUtility(name <a href="http://golang.org/pkg/builtin/#string">string</a>, args []<a href="http://golang.org/pkg/builtin/#string">string</a>) <a href="http://golang.org/pkg/builtin/#int">int</a></pre>
@@ -2997,7 +3006,7 @@ Returns zero if the utility was run successfully.
 				
 			
 				
-				<h3 id="CSOUND.ScoreEvent">func (CSOUND) <a href="/src/target/csnd.go?s=53162:53230#L1628">ScoreEvent</a>
+				<h3 id="CSOUND.ScoreEvent">func (CSOUND) <a href="/src/target/csnd.go?s=53849:53917#L1647">ScoreEvent</a>
 					<a class="permalink" href="#CSOUND.ScoreEvent">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) ScoreEvent(eventType <a href="http://golang.org/pkg/builtin/#byte">byte</a>, pFields []<a href="#MYFLT">MYFLT</a>) <a href="http://golang.org/pkg/builtin/#int">int</a></pre>
@@ -3014,7 +3023,7 @@ specified in pFields[0].
 				
 			
 				
-				<h3 id="CSOUND.ScoreEventAbsolute">func (CSOUND) <a href="/src/target/csnd.go?s=53725:53819#L1642">ScoreEventAbsolute</a>
+				<h3 id="CSOUND.ScoreEventAbsolute">func (CSOUND) <a href="/src/target/csnd.go?s=54412:54506#L1661">ScoreEventAbsolute</a>
 					<a class="permalink" href="#CSOUND.ScoreEventAbsolute">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) ScoreEventAbsolute(eventType <a href="http://golang.org/pkg/builtin/#byte">byte</a>, pFields []<a href="#MYFLT">MYFLT</a>,
@@ -3030,7 +3039,7 @@ offset set with timeOfs.
 				
 			
 				
-				<h3 id="CSOUND.ScoreEventAbsoluteAsync">func (CSOUND) <a href="/src/target/csnd.go?s=54011:54106#L1650">ScoreEventAbsoluteAsync</a>
+				<h3 id="CSOUND.ScoreEventAbsoluteAsync">func (CSOUND) <a href="/src/target/csnd.go?s=54698:54793#L1669">ScoreEventAbsoluteAsync</a>
 					<a class="permalink" href="#CSOUND.ScoreEventAbsoluteAsync">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) ScoreEventAbsoluteAsync(eventType <a href="http://golang.org/pkg/builtin/#byte">byte</a>, pFields []<a href="#MYFLT">MYFLT</a>,
@@ -3044,7 +3053,7 @@ Asynchronous version of ScoreEventAbsolute().
 				
 			
 				
-				<h3 id="CSOUND.ScoreEventAsync">func (CSOUND) <a href="/src/target/csnd.go?s=53385:53454#L1634">ScoreEventAsync</a>
+				<h3 id="CSOUND.ScoreEventAsync">func (CSOUND) <a href="/src/target/csnd.go?s=54072:54141#L1653">ScoreEventAsync</a>
 					<a class="permalink" href="#CSOUND.ScoreEventAsync">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) ScoreEventAsync(eventType <a href="http://golang.org/pkg/builtin/#byte">byte</a>, pFields []<a href="#MYFLT">MYFLT</a>)</pre>
@@ -3057,7 +3066,7 @@ Asynchronous version of ScoreEvent().
 				
 			
 				
-				<h3 id="CSOUND.ScoreExtract">func (CSOUND) <a href="/src/target/csnd.go?s=38783:38858#L1234">ScoreExtract</a>
+				<h3 id="CSOUND.ScoreExtract">func (CSOUND) <a href="/src/target/csnd.go?s=39470:39545#L1253">ScoreExtract</a>
 					<a class="permalink" href="#CSOUND.ScoreExtract">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) ScoreExtract(inFile, outFile, extractFile *<a href="http://golang.org/pkg/C/">C</a>.<a href="http://golang.org/pkg/C/#FILE">FILE</a>) <a href="http://golang.org/pkg/builtin/#int">int</a></pre>
@@ -3074,7 +3083,7 @@ The return value is zero on success.
 				
 			
 				
-				<h3 id="CSOUND.ScoreOffsetSeconds">func (CSOUND) <a href="/src/target/csnd.go?s=37294:37341#L1200">ScoreOffsetSeconds</a>
+				<h3 id="CSOUND.ScoreOffsetSeconds">func (CSOUND) <a href="/src/target/csnd.go?s=37981:38028#L1219">ScoreOffsetSeconds</a>
 					<a class="permalink" href="#CSOUND.ScoreOffsetSeconds">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) ScoreOffsetSeconds() <a href="#MYFLT">MYFLT</a></pre>
@@ -3088,7 +3097,7 @@ actually immediately be performed (see SetScoreOffsetSeconds()).
 				
 			
 				
-				<h3 id="CSOUND.ScoreSort">func (CSOUND) <a href="/src/target/csnd.go?s=38365:38424#L1225">ScoreSort</a>
+				<h3 id="CSOUND.ScoreSort">func (CSOUND) <a href="/src/target/csnd.go?s=39052:39111#L1244">ScoreSort</a>
 					<a class="permalink" href="#CSOUND.ScoreSort">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) ScoreSort(inFile, outFile *<a href="http://golang.org/pkg/C/">C</a>.<a href="http://golang.org/pkg/C/#FILE">FILE</a>) <a href="http://golang.org/pkg/builtin/#int">int</a></pre>
@@ -3104,7 +3113,7 @@ after sorting the score to clean up. On success, zero is returned.
 				
 			
 				
-				<h3 id="CSOUND.ScoreTime">func (CSOUND) <a href="/src/target/csnd.go?s=36361:36401#L1178">ScoreTime</a>
+				<h3 id="CSOUND.ScoreTime">func (CSOUND) <a href="/src/target/csnd.go?s=37048:37088#L1197">ScoreTime</a>
 					<a class="permalink" href="#CSOUND.ScoreTime">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) ScoreTime() <a href="http://golang.org/pkg/builtin/#float64">float64</a></pre>
@@ -3118,7 +3127,7 @@ since the beginning of performance.
 				
 			
 				
-				<h3 id="CSOUND.SeedRandMT">func (CSOUND) <a href="/src/target/csnd.go?s=75464:75534#L2296">SeedRandMT</a>
+				<h3 id="CSOUND.SeedRandMT">func (CSOUND) <a href="/src/target/csnd.go?s=76255:76325#L2319">SeedRandMT</a>
 					<a class="permalink" href="#CSOUND.SeedRandMT">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) SeedRandMT(initKey []<a href="http://golang.org/pkg/builtin/#uint32">uint32</a>) *<a href="http://golang.org/pkg/C/">C</a>.<a href="http://golang.org/pkg/C/#CsoundRandMTState">CsoundRandMTState</a></pre>
@@ -3134,7 +3143,7 @@ is not needed anymore (see FreeRandMTState())
 				
 			
 				
-				<h3 id="CSOUND.SetAudioChannel">func (CSOUND) <a href="/src/target/csnd.go?s=50376:50442#L1546">SetAudioChannel</a>
+				<h3 id="CSOUND.SetAudioChannel">func (CSOUND) <a href="/src/target/csnd.go?s=51063:51129#L1565">SetAudioChannel</a>
 					<a class="permalink" href="#CSOUND.SetAudioChannel">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) SetAudioChannel(name <a href="http://golang.org/pkg/builtin/#string">string</a>, samples []<a href="#MYFLT">MYFLT</a>)</pre>
@@ -3148,7 +3157,7 @@ samples which should contain at least ksmps MYFLTs.
 				
 			
 				
-				<h3 id="CSOUND.SetAudioDeviceListCallback">func (CSOUND) <a href="/src/target/callback.go?s=7279:7352#L230">SetAudioDeviceListCallback</a>
+				<h3 id="CSOUND.SetAudioDeviceListCallback">func (CSOUND) <a href="/src/target/callback.go?s=7287:7360#L231">SetAudioDeviceListCallback</a>
 					<a class="permalink" href="#CSOUND.SetAudioDeviceListCallback">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) SetAudioDeviceListCallback(f <a href="#AudioDeviceListHandler">AudioDeviceListHandler</a>)</pre>
@@ -3163,7 +3172,7 @@ This should be set by rtaudio modules and should not be set by hosts.
 				
 			
 				
-				<h3 id="CSOUND.SetControlChannel">func (CSOUND) <a href="/src/target/csnd.go?s=49707:49769#L1528">SetControlChannel</a>
+				<h3 id="CSOUND.SetControlChannel">func (CSOUND) <a href="/src/target/csnd.go?s=50394:50456#L1547">SetControlChannel</a>
 					<a class="permalink" href="#CSOUND.SetControlChannel">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) SetControlChannel(name <a href="http://golang.org/pkg/builtin/#string">string</a>, val <a href="#MYFLT">MYFLT</a>)</pre>
@@ -3176,7 +3185,7 @@ Set the value of control channel identified by name.
 				
 			
 				
-				<h3 id="CSOUND.SetControlChannelHints">func (CSOUND) <a href="/src/target/csnd.go?s=47092:47179#L1456">SetControlChannelHints</a>
+				<h3 id="CSOUND.SetControlChannelHints">func (CSOUND) <a href="/src/target/csnd.go?s=47779:47866#L1475">SetControlChannelHints</a>
 					<a class="permalink" href="#CSOUND.SetControlChannelHints">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) SetControlChannelHints(name <a href="http://golang.org/pkg/builtin/#string">string</a>, hints <a href="#ControlChannelHints">ControlChannelHints</a>) <a href="http://golang.org/pkg/builtin/#int">int</a></pre>
@@ -3196,7 +3205,7 @@ CSOUND_MEMORY: could not allocate memory
 				
 			
 				
-				<h3 id="CSOUND.SetCscoreCallback">func (CSOUND) <a href="/src/target/callback.go?s=13771:13826#L434">SetCscoreCallback</a>
+				<h3 id="CSOUND.SetCscoreCallback">func (CSOUND) <a href="/src/target/callback.go?s=13779:13834#L435">SetCscoreCallback</a>
 					<a class="permalink" href="#CSOUND.SetCscoreCallback">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) SetCscoreCallback(f <a href="#CscoreHandler">CscoreHandler</a>)</pre>
@@ -3212,7 +3221,7 @@ This callback is retained after a Reset() call.
 				
 			
 				
-				<h3 id="CSOUND.SetDebug">func (CSOUND) <a href="/src/target/csnd.go?s=25425:25466#L853">SetDebug</a>
+				<h3 id="CSOUND.SetDebug">func (CSOUND) <a href="/src/target/csnd.go?s=26112:26153#L872">SetDebug</a>
 					<a class="permalink" href="#CSOUND.SetDebug">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) SetDebug(debug <a href="http://golang.org/pkg/builtin/#bool">bool</a>)</pre>
@@ -3226,7 +3235,7 @@ API function.
 				
 			
 				
-				<h3 id="CSOUND.SetDrawGraphCallback">func (CSOUND) <a href="/src/target/callback.go?s=19634:19691#L629">SetDrawGraphCallback</a>
+				<h3 id="CSOUND.SetDrawGraphCallback">func (CSOUND) <a href="/src/target/callback.go?s=20010:20067#L644">SetDrawGraphCallback</a>
 					<a class="permalink" href="#CSOUND.SetDrawGraphCallback">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) SetDrawGraphCallback(f <a href="#GraphHandler">GraphHandler</a>)</pre>
@@ -3239,7 +3248,7 @@ Called by external software to set Csound&#39;s DrawGraph function.
 				
 			
 				
-				<h3 id="CSOUND.SetExitGraphCallback">func (CSOUND) <a href="/src/target/callback.go?s=19996:20057#L641">SetExitGraphCallback</a>
+				<h3 id="CSOUND.SetExitGraphCallback">func (CSOUND) <a href="/src/target/callback.go?s=20372:20433#L656">SetExitGraphCallback</a>
 					<a class="permalink" href="#CSOUND.SetExitGraphCallback">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) SetExitGraphCallback(f <a href="#ExitGraphHandler">ExitGraphHandler</a>)</pre>
@@ -3252,7 +3261,7 @@ Called by external software to set Csound&#39;s ExitGraph function.
 				
 			
 				
-				<h3 id="CSOUND.SetExternalMidiErrorStringCallback">func (CSOUND) <a href="/src/target/callback.go?s=12373:12462#L387">SetExternalMidiErrorStringCallback</a>
+				<h3 id="CSOUND.SetExternalMidiErrorStringCallback">func (CSOUND) <a href="/src/target/callback.go?s=12381:12470#L388">SetExternalMidiErrorStringCallback</a>
 					<a class="permalink" href="#CSOUND.SetExternalMidiErrorStringCallback">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) SetExternalMidiErrorStringCallback(f <a href="#ExternalMidiErrorStringHandler">ExternalMidiErrorStringHandler</a>)</pre>
@@ -3265,7 +3274,7 @@ Set callback for converting MIDI error codes to strings.
 				
 			
 				
-				<h3 id="CSOUND.SetExternalMidiInCloseCallback">func (CSOUND) <a href="/src/target/callback.go?s=9493:9574#L298">SetExternalMidiInCloseCallback</a>
+				<h3 id="CSOUND.SetExternalMidiInCloseCallback">func (CSOUND) <a href="/src/target/callback.go?s=9501:9582#L299">SetExternalMidiInCloseCallback</a>
 					<a class="permalink" href="#CSOUND.SetExternalMidiInCloseCallback">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) SetExternalMidiInCloseCallback(f <a href="#ExternalMidiInCloseHandler">ExternalMidiInCloseHandler</a>)</pre>
@@ -3278,7 +3287,7 @@ Set callback for closing real time MIDI input.
 				
 			
 				
-				<h3 id="CSOUND.SetExternalMidiInOpenCallback">func (CSOUND) <a href="/src/target/callback.go?s=7966:8045#L251">SetExternalMidiInOpenCallback</a>
+				<h3 id="CSOUND.SetExternalMidiInOpenCallback">func (CSOUND) <a href="/src/target/callback.go?s=7974:8053#L252">SetExternalMidiInOpenCallback</a>
 					<a class="permalink" href="#CSOUND.SetExternalMidiInOpenCallback">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) SetExternalMidiInOpenCallback(f <a href="#ExternalMidiInOpenHandler">ExternalMidiInOpenHandler</a>)</pre>
@@ -3291,7 +3300,7 @@ Set callback for opening real time MIDI input.
 				
 			
 				
-				<h3 id="CSOUND.SetExternalMidiOutCloseCallback">func (CSOUND) <a href="/src/target/callback.go?s=11756:11839#L366">SetExternalMidiOutCloseCallback</a>
+				<h3 id="CSOUND.SetExternalMidiOutCloseCallback">func (CSOUND) <a href="/src/target/callback.go?s=11764:11847#L367">SetExternalMidiOutCloseCallback</a>
 					<a class="permalink" href="#CSOUND.SetExternalMidiOutCloseCallback">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) SetExternalMidiOutCloseCallback(f <a href="#ExternalMidiOutCloseHandler">ExternalMidiOutCloseHandler</a>)</pre>
@@ -3304,7 +3313,7 @@ Set callback for closing real time MIDI output.
 				
 			
 				
-				<h3 id="CSOUND.SetExternalMidiOutOpenCallback">func (CSOUND) <a href="/src/target/callback.go?s=10207:10288#L319">SetExternalMidiOutOpenCallback</a>
+				<h3 id="CSOUND.SetExternalMidiOutOpenCallback">func (CSOUND) <a href="/src/target/callback.go?s=10215:10296#L320">SetExternalMidiOutOpenCallback</a>
 					<a class="permalink" href="#CSOUND.SetExternalMidiOutOpenCallback">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) SetExternalMidiOutOpenCallback(f <a href="#ExternalMidiOutOpenHandler">ExternalMidiOutOpenHandler</a>)</pre>
@@ -3317,7 +3326,7 @@ Set callback for opening real time MIDI output.
 				
 			
 				
-				<h3 id="CSOUND.SetExternalMidiReadCallback">func (CSOUND) <a href="/src/target/callback.go?s=8846:8921#L277">SetExternalMidiReadCallback</a>
+				<h3 id="CSOUND.SetExternalMidiReadCallback">func (CSOUND) <a href="/src/target/callback.go?s=8854:8929#L278">SetExternalMidiReadCallback</a>
 					<a class="permalink" href="#CSOUND.SetExternalMidiReadCallback">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) SetExternalMidiReadCallback(f <a href="#ExternalMidiReadHandler">ExternalMidiReadHandler</a>)</pre>
@@ -3330,7 +3339,7 @@ Set callback for reading from real time MIDI input.
 				
 			
 				
-				<h3 id="CSOUND.SetExternalMidiWriteCallback">func (CSOUND) <a href="/src/target/callback.go?s=11097:11174#L345">SetExternalMidiWriteCallback</a>
+				<h3 id="CSOUND.SetExternalMidiWriteCallback">func (CSOUND) <a href="/src/target/callback.go?s=11105:11182#L346">SetExternalMidiWriteCallback</a>
 					<a class="permalink" href="#CSOUND.SetExternalMidiWriteCallback">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) SetExternalMidiWriteCallback(f <a href="#ExternalMidiWriteHandler">ExternalMidiWriteHandler</a>)</pre>
@@ -3343,7 +3352,7 @@ Set callback for writing to real time MIDI output.
 				
 			
 				
-				<h3 id="CSOUND.SetFileOpenCallback">func (CSOUND) <a href="/src/target/callback.go?s=2727:2786#L65">SetFileOpenCallback</a>
+				<h3 id="CSOUND.SetFileOpenCallback">func (CSOUND) <a href="/src/target/callback.go?s=2735:2794#L66">SetFileOpenCallback</a>
 					<a class="permalink" href="#CSOUND.SetFileOpenCallback">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) SetFileOpenCallback(f <a href="#FileOpenHandler">FileOpenHandler</a>)</pre>
@@ -3367,7 +3376,7 @@ This callback is retained after a Reset() call.
 				
 			
 				
-				<h3 id="CSOUND.SetGlobalEnv">func (CSOUND) <a href="/src/target/csnd.go?s=71331:71388#L2186">SetGlobalEnv</a>
+				<h3 id="CSOUND.SetGlobalEnv">func (CSOUND) <a href="/src/target/csnd.go?s=72122:72179#L2209">SetGlobalEnv</a>
 					<a class="permalink" href="#CSOUND.SetGlobalEnv">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) SetGlobalEnv(name, value <a href="http://golang.org/pkg/builtin/#string">string</a>) <a href="http://golang.org/pkg/builtin/#int">int</a></pre>
@@ -3384,7 +3393,7 @@ Return zero on success.
 				
 			
 				
-				<h3 id="CSOUND.SetHostData">func (CSOUND) <a href="/src/target/csnd.go?s=24016:24073#L816">SetHostData</a>
+				<h3 id="CSOUND.SetHostData">func (CSOUND) <a href="/src/target/csnd.go?s=24703:24760#L835">SetHostData</a>
 					<a class="permalink" href="#CSOUND.SetHostData">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) SetHostData(hostData <a href="http://golang.org/pkg/unsafe/">unsafe</a>.<a href="http://golang.org/pkg/unsafe/#Pointer">Pointer</a>)</pre>
@@ -3397,7 +3406,7 @@ Set host data.
 				
 			
 				
-				<h3 id="CSOUND.SetHostImplementedAudioIO">func (CSOUND) <a href="/src/target/csnd.go?s=33352:33418#L1085">SetHostImplementedAudioIO</a>
+				<h3 id="CSOUND.SetHostImplementedAudioIO">func (CSOUND) <a href="/src/target/csnd.go?s=34039:34105#L1104">SetHostImplementedAudioIO</a>
 					<a class="permalink" href="#CSOUND.SetHostImplementedAudioIO">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) SetHostImplementedAudioIO(state, bufSize <a href="http://golang.org/pkg/builtin/#int">int</a>)</pre>
@@ -3417,7 +3426,7 @@ specified.
 				
 			
 				
-				<h3 id="CSOUND.SetHostImplementedMIDIIO">func (CSOUND) <a href="/src/target/csnd.go?s=34832:34889#L1131">SetHostImplementedMIDIIO</a>
+				<h3 id="CSOUND.SetHostImplementedMIDIIO">func (CSOUND) <a href="/src/target/csnd.go?s=35519:35576#L1150">SetHostImplementedMIDIIO</a>
 					<a class="permalink" href="#CSOUND.SetHostImplementedMIDIIO">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) SetHostImplementedMIDIIO(state <a href="http://golang.org/pkg/builtin/#bool">bool</a>)</pre>
@@ -3431,7 +3440,7 @@ MIDI via the callbacks below.
 				
 			
 				
-				<h3 id="CSOUND.SetInput">func (CSOUND) <a href="/src/target/csnd.go?s=27042:27084#L906">SetInput</a>
+				<h3 id="CSOUND.SetInput">func (CSOUND) <a href="/src/target/csnd.go?s=27729:27771#L925">SetInput</a>
 					<a class="permalink" href="#CSOUND.SetInput">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) SetInput(name <a href="http://golang.org/pkg/builtin/#string">string</a>)</pre>
@@ -3444,7 +3453,7 @@ Set input source.
 				
 			
 				
-				<h3 id="CSOUND.SetInputChannelCallback">func (CSOUND) <a href="/src/target/callback.go?s=15267:15329#L485">SetInputChannelCallback</a>
+				<h3 id="CSOUND.SetInputChannelCallback">func (CSOUND) <a href="/src/target/callback.go?s=15275:15337#L486">SetInputChannelCallback</a>
 					<a class="permalink" href="#CSOUND.SetInputChannelCallback">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) SetInputChannelCallback(f <a href="#ChannelHandler">ChannelHandler</a>)</pre>
@@ -3457,7 +3466,7 @@ Set the function which will be called whenever the invalue opcode is used.
 				
 			
 				
-				<h3 id="CSOUND.SetIsGraphable">func (CSOUND) <a href="/src/target/csnd.go?s=59766:59822#L1810">SetIsGraphable</a>
+				<h3 id="CSOUND.SetIsGraphable">func (CSOUND) <a href="/src/target/csnd.go?s=60453:60509#L1829">SetIsGraphable</a>
 					<a class="permalink" href="#CSOUND.SetIsGraphable">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) SetIsGraphable(isGraphable <a href="http://golang.org/pkg/builtin/#int">int</a>) <a href="http://golang.org/pkg/builtin/#int">int</a></pre>
@@ -3471,7 +3480,7 @@ Return the previously set value (initially zero).
 				
 			
 				
-				<h3 id="CSOUND.SetKillGraphCallback">func (CSOUND) <a href="/src/target/callback.go?s=19815:19872#L635">SetKillGraphCallback</a>
+				<h3 id="CSOUND.SetKillGraphCallback">func (CSOUND) <a href="/src/target/callback.go?s=20191:20248#L650">SetKillGraphCallback</a>
 					<a class="permalink" href="#CSOUND.SetKillGraphCallback">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) SetKillGraphCallback(f <a href="#GraphHandler">GraphHandler</a>)</pre>
@@ -3484,7 +3493,7 @@ Called by external software to set Csound&#39;s KillGraph function.
 				
 			
 				
-				<h3 id="CSOUND.SetLanguage">func (CSOUND) <a href="/src/target/csnd.go?s=70545:70600#L2166">SetLanguage</a>
+				<h3 id="CSOUND.SetLanguage">func (CSOUND) <a href="/src/target/csnd.go?s=71336:71391#L2189">SetLanguage</a>
 					<a class="permalink" href="#CSOUND.SetLanguage">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) SetLanguage(langCode <a href="#Cslanguage_t">Cslanguage_t</a>)</pre>
@@ -3506,7 +3515,7 @@ variable.
 				
 			
 				
-				<h3 id="CSOUND.SetMIDIFileInput">func (CSOUND) <a href="/src/target/csnd.go?s=27433:27483#L920">SetMIDIFileInput</a>
+				<h3 id="CSOUND.SetMIDIFileInput">func (CSOUND) <a href="/src/target/csnd.go?s=28120:28170#L939">SetMIDIFileInput</a>
 					<a class="permalink" href="#CSOUND.SetMIDIFileInput">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) SetMIDIFileInput(name <a href="http://golang.org/pkg/builtin/#string">string</a>)</pre>
@@ -3519,7 +3528,7 @@ Set MIDI file input name.
 				
 			
 				
-				<h3 id="CSOUND.SetMIDIFileOutput">func (CSOUND) <a href="/src/target/csnd.go?s=27844:27895#L934">SetMIDIFileOutput</a>
+				<h3 id="CSOUND.SetMIDIFileOutput">func (CSOUND) <a href="/src/target/csnd.go?s=28531:28582#L953">SetMIDIFileOutput</a>
 					<a class="permalink" href="#CSOUND.SetMIDIFileOutput">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) SetMIDIFileOutput(name <a href="http://golang.org/pkg/builtin/#string">string</a>)</pre>
@@ -3532,7 +3541,7 @@ Set MIDI file output name.
 				
 			
 				
-				<h3 id="CSOUND.SetMIDIInput">func (CSOUND) <a href="/src/target/csnd.go?s=27238:27284#L913">SetMIDIInput</a>
+				<h3 id="CSOUND.SetMIDIInput">func (CSOUND) <a href="/src/target/csnd.go?s=27925:27971#L932">SetMIDIInput</a>
 					<a class="permalink" href="#CSOUND.SetMIDIInput">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) SetMIDIInput(name <a href="http://golang.org/pkg/builtin/#string">string</a>)</pre>
@@ -3545,7 +3554,7 @@ Set MIDI input device name/number.
 				
 			
 				
-				<h3 id="CSOUND.SetMIDIModule">func (CSOUND) <a href="/src/target/csnd.go?s=34555:34604#L1123">SetMIDIModule</a>
+				<h3 id="CSOUND.SetMIDIModule">func (CSOUND) <a href="/src/target/csnd.go?s=35242:35291#L1142">SetMIDIModule</a>
 					<a class="permalink" href="#CSOUND.SetMIDIModule">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) SetMIDIModule(module <a href="http://golang.org/pkg/builtin/#string">string</a>)</pre>
@@ -3558,7 +3567,7 @@ Set the current MIDI IO module.
 				
 			
 				
-				<h3 id="CSOUND.SetMIDIOutput">func (CSOUND) <a href="/src/target/csnd.go?s=27646:27693#L927">SetMIDIOutput</a>
+				<h3 id="CSOUND.SetMIDIOutput">func (CSOUND) <a href="/src/target/csnd.go?s=28333:28380#L946">SetMIDIOutput</a>
 					<a class="permalink" href="#CSOUND.SetMIDIOutput">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) SetMIDIOutput(name <a href="http://golang.org/pkg/builtin/#string">string</a>)</pre>
@@ -3571,7 +3580,7 @@ Set MIDI output device name/number.
 				
 			
 				
-				<h3 id="CSOUND.SetMakeGraphCallback">func (CSOUND) <a href="/src/target/callback.go?s=19449:19510#L623">SetMakeGraphCallback</a>
+				<h3 id="CSOUND.SetMakeGraphCallback">func (CSOUND) <a href="/src/target/callback.go?s=19825:19886#L638">SetMakeGraphCallback</a>
 					<a class="permalink" href="#CSOUND.SetMakeGraphCallback">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) SetMakeGraphCallback(f <a href="#MakeGraphHandler">MakeGraphHandler</a>)</pre>
@@ -3584,7 +3593,7 @@ Called by external software to set Csound&#39;s MakeGraph function.
 				
 			
 				
-				<h3 id="CSOUND.SetMessageLevel">func (CSOUND) <a href="/src/target/csnd.go?s=39780:39834#L1266">SetMessageLevel</a>
+				<h3 id="CSOUND.SetMessageLevel">func (CSOUND) <a href="/src/target/csnd.go?s=40467:40521#L1285">SetMessageLevel</a>
 					<a class="permalink" href="#CSOUND.SetMessageLevel">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) SetMessageLevel(messageLevel <a href="http://golang.org/pkg/builtin/#int">int</a>)</pre>
@@ -3597,7 +3606,7 @@ Set the Csound message level (from 0 to 231).
 				
 			
 				
-				<h3 id="CSOUND.SetMidiDeviceListCallback">func (CSOUND) <a href="/src/target/callback.go?s=13176:13247#L410">SetMidiDeviceListCallback</a>
+				<h3 id="CSOUND.SetMidiDeviceListCallback">func (CSOUND) <a href="/src/target/callback.go?s=13184:13255#L411">SetMidiDeviceListCallback</a>
 					<a class="permalink" href="#CSOUND.SetMidiDeviceListCallback">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) SetMidiDeviceListCallback(f <a href="#MidiDeviceListHandler">MidiDeviceListHandler</a>)</pre>
@@ -3612,7 +3621,7 @@ This should be set by IO plugins, and should not be set by hosts.
 				
 			
 				
-				<h3 id="CSOUND.SetOption">func (CSOUND) <a href="/src/target/csnd.go?s=24229:24278#L822">SetOption</a>
+				<h3 id="CSOUND.SetOption">func (CSOUND) <a href="/src/target/csnd.go?s=24916:24965#L841">SetOption</a>
 					<a class="permalink" href="#CSOUND.SetOption">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) SetOption(option <a href="http://golang.org/pkg/builtin/#string">string</a>) <a href="http://golang.org/pkg/builtin/#int">int</a></pre>
@@ -3626,7 +3635,7 @@ NB: blank spaces are not allowed
 				
 			
 				
-				<h3 id="CSOUND.SetOutput">func (CSOUND) <a href="/src/target/csnd.go?s=26209:26267#L874">SetOutput</a>
+				<h3 id="CSOUND.SetOutput">func (CSOUND) <a href="/src/target/csnd.go?s=26896:26954#L893">SetOutput</a>
 					<a class="permalink" href="#CSOUND.SetOutput">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) SetOutput(name, otype, format <a href="http://golang.org/pkg/builtin/#string">string</a>)</pre>
@@ -3647,7 +3656,7 @@ format can be one of &#34;alaw&#34;, &#34;schar&#34;, &#34;uchar&#34;, &#34;floa
 				
 			
 				
-				<h3 id="CSOUND.SetOutputChannelCallback">func (CSOUND) <a href="/src/target/callback.go?s=16422:16485#L521">SetOutputChannelCallback</a>
+				<h3 id="CSOUND.SetOutputChannelCallback">func (CSOUND) <a href="/src/target/callback.go?s=16430:16493#L522">SetOutputChannelCallback</a>
 					<a class="permalink" href="#CSOUND.SetOutputChannelCallback">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) SetOutputChannelCallback(f <a href="#ChannelHandler">ChannelHandler</a>)</pre>
@@ -3660,7 +3669,7 @@ Set the function which will be called whenever the outvalue opcode is used.
 				
 			
 				
-				<h3 id="CSOUND.SetParams">func (CSOUND) <a href="/src/target/csnd.go?s=24751:24798#L833">SetParams</a>
+				<h3 id="CSOUND.SetParams">func (CSOUND) <a href="/src/target/csnd.go?s=25438:25485#L852">SetParams</a>
 					<a class="permalink" href="#CSOUND.SetParams">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) SetParams(p *<a href="#CsoundParams">CsoundParams</a>)</pre>
@@ -3677,7 +3686,7 @@ These options should only be changed before performance has started.
 				
 			
 				
-				<h3 id="CSOUND.SetPlayOpenCallback">func (CSOUND) <a href="/src/target/callback.go?s=3680:3739#L100">SetPlayOpenCallback</a>
+				<h3 id="CSOUND.SetPlayOpenCallback">func (CSOUND) <a href="/src/target/callback.go?s=3688:3747#L101">SetPlayOpenCallback</a>
 					<a class="permalink" href="#CSOUND.SetPlayOpenCallback">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) SetPlayOpenCallback(f <a href="#PlayOpenHandler">PlayOpenHandler</a>)</pre>
@@ -3691,7 +3700,7 @@ audio playback.
 				
 			
 				
-				<h3 id="CSOUND.SetPvsChannel">func (CSOUND) <a href="/src/target/csnd.go?s=52288:52355#L1607">SetPvsChannel</a>
+				<h3 id="CSOUND.SetPvsChannel">func (CSOUND) <a href="/src/target/csnd.go?s=52975:53042#L1626">SetPvsChannel</a>
 					<a class="permalink" href="#CSOUND.SetPvsChannel">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) SetPvsChannel(fin *<a href="#PVSDATEXT">PVSDATEXT</a>, name <a href="http://golang.org/pkg/builtin/#string">string</a>) <a href="http://golang.org/pkg/builtin/#int">int</a></pre>
@@ -3707,7 +3716,7 @@ CSOUND_MEMORY if there is not enough memory to extend the bus.
 				
 			
 				
-				<h3 id="CSOUND.SetRTAudioModule">func (CSOUND) <a href="/src/target/csnd.go?s=28086:28138#L945">SetRTAudioModule</a>
+				<h3 id="CSOUND.SetRTAudioModule">func (CSOUND) <a href="/src/target/csnd.go?s=28773:28825#L964">SetRTAudioModule</a>
 					<a class="permalink" href="#CSOUND.SetRTAudioModule">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) SetRTAudioModule(module <a href="http://golang.org/pkg/builtin/#string">string</a>)</pre>
@@ -3720,7 +3729,7 @@ Set the current RT audio module.
 				
 			
 				
-				<h3 id="CSOUND.SetRecOpenCallback">func (CSOUND) <a href="/src/target/callback.go?s=5273:5330#L158">SetRecOpenCallback</a>
+				<h3 id="CSOUND.SetRecOpenCallback">func (CSOUND) <a href="/src/target/callback.go?s=5281:5338#L159">SetRecOpenCallback</a>
 					<a class="permalink" href="#CSOUND.SetRecOpenCallback">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) SetRecOpenCallback(f <a href="#RecOpenHandler">RecOpenHandler</a>)</pre>
@@ -3734,7 +3743,7 @@ audio recording.
 				
 			
 				
-				<h3 id="CSOUND.SetRtCloseCallback">func (CSOUND) <a href="/src/target/callback.go?s=6525:6582#L207">SetRtCloseCallback</a>
+				<h3 id="CSOUND.SetRtCloseCallback">func (CSOUND) <a href="/src/target/callback.go?s=6533:6590#L208">SetRtCloseCallback</a>
 					<a class="permalink" href="#CSOUND.SetRtCloseCallback">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) SetRtCloseCallback(f <a href="#RtCloseHandler">RtCloseHandler</a>)</pre>
@@ -3748,7 +3757,7 @@ audio playback and recording.
 				
 			
 				
-				<h3 id="CSOUND.SetRtPlayCallback">func (CSOUND) <a href="/src/target/callback.go?s=4407:4462#L127">SetRtPlayCallback</a>
+				<h3 id="CSOUND.SetRtPlayCallback">func (CSOUND) <a href="/src/target/callback.go?s=4415:4470#L128">SetRtPlayCallback</a>
 					<a class="permalink" href="#CSOUND.SetRtPlayCallback">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) SetRtPlayCallback(f <a href="#RtPlayHandler">RtPlayHandler</a>)</pre>
@@ -3762,7 +3771,7 @@ audio playback.
 				
 			
 				
-				<h3 id="CSOUND.SetRtRecordCallback">func (CSOUND) <a href="/src/target/callback.go?s=6030:6089#L185">SetRtRecordCallback</a>
+				<h3 id="CSOUND.SetRtRecordCallback">func (CSOUND) <a href="/src/target/callback.go?s=6038:6097#L186">SetRtRecordCallback</a>
 					<a class="permalink" href="#CSOUND.SetRtRecordCallback">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) SetRtRecordCallback(f <a href="#RtRecordHandler">RtRecordHandler</a>)</pre>
@@ -3776,7 +3785,7 @@ audio recording.
 				
 			
 				
-				<h3 id="CSOUND.SetScoreOffsetSeconds">func (CSOUND) <a href="/src/target/csnd.go?s=37830:37884#L1211">SetScoreOffsetSeconds</a>
+				<h3 id="CSOUND.SetScoreOffsetSeconds">func (CSOUND) <a href="/src/target/csnd.go?s=38517:38571#L1230">SetScoreOffsetSeconds</a>
 					<a class="permalink" href="#CSOUND.SetScoreOffsetSeconds">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) SetScoreOffsetSeconds(time <a href="#MYFLT">MYFLT</a>)</pre>
@@ -3795,7 +3804,7 @@ other events with the Csound score.
 				
 			
 				
-				<h3 id="CSOUND.SetScorePending">func (CSOUND) <a href="/src/target/csnd.go?s=37056:37106#L1194">SetScorePending</a>
+				<h3 id="CSOUND.SetScorePending">func (CSOUND) <a href="/src/target/csnd.go?s=37743:37793#L1213">SetScorePending</a>
 					<a class="permalink" href="#CSOUND.SetScorePending">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) SetScorePending(pending <a href="http://golang.org/pkg/builtin/#bool">bool</a>)</pre>
@@ -3813,7 +3822,7 @@ to play the Csound instruments live.
 				
 			
 				
-				<h3 id="CSOUND.SetSpinSample">func (CSOUND) <a href="/src/target/csnd.go?s=31506:31574#L1041">SetSpinSample</a>
+				<h3 id="CSOUND.SetSpinSample">func (CSOUND) <a href="/src/target/csnd.go?s=32193:32261#L1060">SetSpinSample</a>
 					<a class="permalink" href="#CSOUND.SetSpinSample">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) SetSpinSample(frame, channel <a href="http://golang.org/pkg/builtin/#int">int</a>, sample <a href="#MYFLT">MYFLT</a>)</pre>
@@ -3828,7 +3837,7 @@ The frame and channel must be in bounds relative to ksmps and nchnls.
 				
 			
 				
-				<h3 id="CSOUND.SetStringChannel">func (CSOUND) <a href="/src/target/csnd.go?s=51066:51121#L1566">SetStringChannel</a>
+				<h3 id="CSOUND.SetStringChannel">func (CSOUND) <a href="/src/target/csnd.go?s=51753:51808#L1585">SetStringChannel</a>
 					<a class="permalink" href="#CSOUND.SetStringChannel">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) SetStringChannel(name, str <a href="http://golang.org/pkg/builtin/#string">string</a>)</pre>
@@ -3841,7 +3850,7 @@ Set the string channel identified by name with str.
 				
 			
 				
-				<h3 id="CSOUND.SetYieldCallback">func (CSOUND) <a href="/src/target/callback.go?s=20891:20944#L672">SetYieldCallback</a>
+				<h3 id="CSOUND.SetYieldCallback">func (CSOUND) <a href="/src/target/callback.go?s=21267:21320#L687">SetYieldCallback</a>
 					<a class="permalink" href="#CSOUND.SetYieldCallback">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) SetYieldCallback(f <a href="#YieldHandler">YieldHandler</a>)</pre>
@@ -3860,7 +3869,7 @@ Returns an &#39;OK to continue&#39; boolean.
 				
 			
 				
-				<h3 id="CSOUND.SizeOfMYFLT">func (CSOUND) <a href="/src/target/csnd.go?s=23804:23842#L806">SizeOfMYFLT</a>
+				<h3 id="CSOUND.SizeOfMYFLT">func (CSOUND) <a href="/src/target/csnd.go?s=24491:24529#L825">SizeOfMYFLT</a>
 					<a class="permalink" href="#CSOUND.SizeOfMYFLT">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) SizeOfMYFLT() <a href="http://golang.org/pkg/builtin/#int">int</a></pre>
@@ -3873,7 +3882,7 @@ Return the size of MYFLT in bytes.
 				
 			
 				
-				<h3 id="CSOUND.Sleep">func (CSOUND) <a href="/src/target/csnd.go?s=65845:65880#L2001">Sleep</a>
+				<h3 id="CSOUND.Sleep">func (CSOUND) <a href="/src/target/csnd.go?s=66636:66671#L2024">Sleep</a>
 					<a class="permalink" href="#CSOUND.Sleep">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) Sleep(ms <a href="http://golang.org/pkg/builtin/#uint">uint</a>)</pre>
@@ -3887,7 +3896,7 @@ yielding the CPU to other threads.
 				
 			
 				
-				<h3 id="CSOUND.Spin">func (CSOUND) <a href="/src/target/csnd.go?s=30421:30456#L1013">Spin</a>
+				<h3 id="CSOUND.Spin">func (CSOUND) <a href="/src/target/csnd.go?s=31108:31143#L1032">Spin</a>
 					<a class="permalink" href="#CSOUND.Spin">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) Spin() []<a href="#MYFLT">MYFLT</a></pre>
@@ -3902,7 +3911,7 @@ PerformKsmps.
 				
 			
 				
-				<h3 id="CSOUND.SpinLock">func (CSOUND) <a href="/src/target/csnd.go?s=66638:66684#L2021">SpinLock</a>
+				<h3 id="CSOUND.SpinLock">func (CSOUND) <a href="/src/target/csnd.go?s=67429:67475#L2044">SpinLock</a>
 					<a class="permalink" href="#CSOUND.SpinLock">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) SpinLock(spinlock *<a href="http://golang.org/pkg/builtin/#int32">int32</a>)</pre>
@@ -3930,7 +3939,7 @@ func write(cs CSOUND, frames, signal) {
 				
 			
 				
-				<h3 id="CSOUND.SpinUnLock">func (CSOUND) <a href="/src/target/csnd.go?s=66778:66826#L2026">SpinUnLock</a>
+				<h3 id="CSOUND.SpinUnLock">func (CSOUND) <a href="/src/target/csnd.go?s=67569:67617#L2049">SpinUnLock</a>
 					<a class="permalink" href="#CSOUND.SpinUnLock">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) SpinUnLock(spinlock *<a href="http://golang.org/pkg/builtin/#int32">int32</a>)</pre>
@@ -3943,7 +3952,7 @@ Unlock the specified spinlock; (see SpinLock()).
 				
 			
 				
-				<h3 id="CSOUND.Spout">func (CSOUND) <a href="/src/target/csnd.go?s=31816:31852#L1048">Spout</a>
+				<h3 id="CSOUND.Spout">func (CSOUND) <a href="/src/target/csnd.go?s=32503:32539#L1067">Spout</a>
 					<a class="permalink" href="#CSOUND.Spout">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) Spout() []<a href="#MYFLT">MYFLT</a></pre>
@@ -3958,7 +3967,7 @@ PerformKsmps.
 				
 			
 				
-				<h3 id="CSOUND.SpoutSample">func (CSOUND) <a href="/src/target/csnd.go?s=32366:32424#L1063">SpoutSample</a>
+				<h3 id="CSOUND.SpoutSample">func (CSOUND) <a href="/src/target/csnd.go?s=33053:33111#L1082">SpoutSample</a>
 					<a class="permalink" href="#CSOUND.SpoutSample">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) SpoutSample(frame, channel <a href="http://golang.org/pkg/builtin/#int">int</a>) <a href="#MYFLT">MYFLT</a></pre>
@@ -3974,7 +3983,7 @@ relative to ksmps and nchnls.
 				
 			
 				
-				<h3 id="CSOUND.Sr">func (CSOUND) <a href="/src/target/csnd.go?s=22558:22589#L763">Sr</a>
+				<h3 id="CSOUND.Sr">func (CSOUND) <a href="/src/target/csnd.go?s=23245:23276#L782">Sr</a>
 					<a class="permalink" href="#CSOUND.Sr">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) Sr() <a href="#MYFLT">MYFLT</a></pre>
@@ -4025,7 +4034,7 @@ function returns.
 				
 			
 				
-				<h3 id="CSOUND.StringChannel">func (CSOUND) <a href="/src/target/csnd.go?s=50678:50732#L1555">StringChannel</a>
+				<h3 id="CSOUND.StringChannel">func (CSOUND) <a href="/src/target/csnd.go?s=51365:51419#L1574">StringChannel</a>
 					<a class="permalink" href="#CSOUND.StringChannel">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) StringChannel(name <a href="http://golang.org/pkg/builtin/#string">string</a>) <a href="http://golang.org/pkg/builtin/#string">string</a></pre>
@@ -4038,7 +4047,7 @@ Return a copy of the string channel identified by name.
 				
 			
 				
-				<h3 id="CSOUND.Table">func (CSOUND) <a href="/src/target/csnd.go?s=57765:57822#L1753">Table</a>
+				<h3 id="CSOUND.Table">func (CSOUND) <a href="/src/target/csnd.go?s=58452:58509#L1772">Table</a>
 					<a class="permalink" href="#CSOUND.Table">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) Table(tableNum <a href="http://golang.org/pkg/builtin/#int">int</a>) ([]<a href="#MYFLT">MYFLT</a>, <a href="http://golang.org/pkg/builtin/#error">error</a>)</pre>
@@ -4053,7 +4062,7 @@ an error is returned.
 				
 			
 				
-				<h3 id="CSOUND.TableArgs">func (CSOUND) <a href="/src/target/csnd.go?s=58566:58627#L1774">TableArgs</a>
+				<h3 id="CSOUND.TableArgs">func (CSOUND) <a href="/src/target/csnd.go?s=59253:59314#L1793">TableArgs</a>
 					<a class="permalink" href="#CSOUND.TableArgs">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) TableArgs(tableNum <a href="http://golang.org/pkg/builtin/#int">int</a>) ([]<a href="#MYFLT">MYFLT</a>, <a href="http://golang.org/pkg/builtin/#error">error</a>)</pre>
@@ -4071,7 +4080,7 @@ its parameters. eg. f 1 0 1024 10 1 0.5  yields the list [10.0, 1.0, 0.5]
 				
 			
 				
-				<h3 id="CSOUND.TableCopyIn">func (CSOUND) <a href="/src/target/csnd.go?s=57283:57339#L1739">TableCopyIn</a>
+				<h3 id="CSOUND.TableCopyIn">func (CSOUND) <a href="/src/target/csnd.go?s=57970:58026#L1758">TableCopyIn</a>
 					<a class="permalink" href="#CSOUND.TableCopyIn">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) TableCopyIn(table <a href="http://golang.org/pkg/builtin/#int">int</a>, src []<a href="#MYFLT">MYFLT</a>)</pre>
@@ -4086,7 +4095,7 @@ have sufficient space to receive all the array contents.
 				
 			
 				
-				<h3 id="CSOUND.TableCopyInAsync">func (CSOUND) <a href="/src/target/csnd.go?s=57465:57526#L1745">TableCopyInAsync</a>
+				<h3 id="CSOUND.TableCopyInAsync">func (CSOUND) <a href="/src/target/csnd.go?s=58152:58213#L1764">TableCopyInAsync</a>
 					<a class="permalink" href="#CSOUND.TableCopyInAsync">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) TableCopyInAsync(table <a href="http://golang.org/pkg/builtin/#int">int</a>, src []<a href="#MYFLT">MYFLT</a>)</pre>
@@ -4099,7 +4108,7 @@ Asynchronous version of TableCopyIn().
 				
 			
 				
-				<h3 id="CSOUND.TableCopyOut">func (CSOUND) <a href="/src/target/csnd.go?s=56745:56803#L1725">TableCopyOut</a>
+				<h3 id="CSOUND.TableCopyOut">func (CSOUND) <a href="/src/target/csnd.go?s=57432:57490#L1744">TableCopyOut</a>
 					<a class="permalink" href="#CSOUND.TableCopyOut">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) TableCopyOut(table <a href="http://golang.org/pkg/builtin/#int">int</a>, dest []<a href="#MYFLT">MYFLT</a>)</pre>
@@ -4114,7 +4123,7 @@ have sufficient space to receive all the function table contents.
 				
 			
 				
-				<h3 id="CSOUND.TableCopyOutAsync">func (CSOUND) <a href="/src/target/csnd.go?s=56934:56997#L1731">TableCopyOutAsync</a>
+				<h3 id="CSOUND.TableCopyOutAsync">func (CSOUND) <a href="/src/target/csnd.go?s=57621:57684#L1750">TableCopyOutAsync</a>
 					<a class="permalink" href="#CSOUND.TableCopyOutAsync">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) TableCopyOutAsync(table <a href="http://golang.org/pkg/builtin/#int">int</a>, dest []<a href="#MYFLT">MYFLT</a>)</pre>
@@ -4127,7 +4136,7 @@ Asynchronous version of TableCopyOut().
 				
 			
 				
-				<h3 id="CSOUND.TableGet">func (CSOUND) <a href="/src/target/csnd.go?s=56163:56216#L1712">TableGet</a>
+				<h3 id="CSOUND.TableGet">func (CSOUND) <a href="/src/target/csnd.go?s=56850:56903#L1731">TableGet</a>
 					<a class="permalink" href="#CSOUND.TableGet">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) TableGet(table, index <a href="http://golang.org/pkg/builtin/#int">int</a>) <a href="#MYFLT">MYFLT</a></pre>
@@ -4141,7 +4150,7 @@ The table number and index are assumed to be valid.
 				
 			
 				
-				<h3 id="CSOUND.TableLength">func (CSOUND) <a href="/src/target/csnd.go?s=55946:55993#L1706">TableLength</a>
+				<h3 id="CSOUND.TableLength">func (CSOUND) <a href="/src/target/csnd.go?s=56633:56680#L1725">TableLength</a>
 					<a class="permalink" href="#CSOUND.TableLength">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) TableLength(table <a href="http://golang.org/pkg/builtin/#int">int</a>) <a href="http://golang.org/pkg/builtin/#int">int</a></pre>
@@ -4155,7 +4164,7 @@ or -1 if the table does not exist.
 				
 			
 				
-				<h3 id="CSOUND.TableSet">func (CSOUND) <a href="/src/target/csnd.go?s=56396:56456#L1718">TableSet</a>
+				<h3 id="CSOUND.TableSet">func (CSOUND) <a href="/src/target/csnd.go?s=57083:57143#L1737">TableSet</a>
 					<a class="permalink" href="#CSOUND.TableSet">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) TableSet(table, index <a href="http://golang.org/pkg/builtin/#int">int</a>, value <a href="#MYFLT">MYFLT</a>)</pre>
@@ -4169,7 +4178,50 @@ The table number and index are assumed to be valid.
 				
 			
 				
-				<h3 id="CSOUND.UnlockMutex">func (CSOUND) <a href="/src/target/csnd.go?s=64905:64959#L1972">UnlockMutex</a>
+				<h3 id="CSOUND.UDPServerClose">func (CSOUND) <a href="/src/target/csnd.go?s=23073:23114#L773">UDPServerClose</a>
+					<a class="permalink" href="#CSOUND.UDPServerClose">&#xb6;</a>
+				</h3>
+				<pre>func (csound <a href="#CSOUND">CSOUND</a>) UDPServerClose() <a href="http://golang.org/pkg/builtin/#int">int</a></pre>
+				<p>
+Closes the UDP server, returning CSOUND_SUCCESS if the
+running server was successfully closed, CSOUND_ERROR otherwise.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="CSOUND.UDPServerStart">func (CSOUND) <a href="/src/target/csnd.go?s=22627:22677#L761">UDPServerStart</a>
+					<a class="permalink" href="#CSOUND.UDPServerStart">&#xb6;</a>
+				</h3>
+				<pre>func (csound <a href="#CSOUND">CSOUND</a>) UDPServerStart(port <a href="http://golang.org/pkg/builtin/#uint">uint</a>) <a href="http://golang.org/pkg/builtin/#int">int</a></pre>
+				<p>
+Starts the UDP server on a supplied port number.
+Returns CSOUND_SUCCESS if server has been started successfully,
+otherwise, CSOUND_ERROR.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="CSOUND.UDPServerStatus">func (CSOUND) <a href="/src/target/csnd.go?s=22852:22894#L767">UDPServerStatus</a>
+					<a class="permalink" href="#CSOUND.UDPServerStatus">&#xb6;</a>
+				</h3>
+				<pre>func (csound <a href="#CSOUND">CSOUND</a>) UDPServerStatus() <a href="http://golang.org/pkg/builtin/#int">int</a></pre>
+				<p>
+Returns the port number on which the server is running, or
+CSOUND_ERROR if the server is not running.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="CSOUND.UnlockMutex">func (CSOUND) <a href="/src/target/csnd.go?s=65592:65646#L1991">UnlockMutex</a>
 					<a class="permalink" href="#CSOUND.UnlockMutex">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) UnlockMutex(mutex <a href="http://golang.org/pkg/unsafe/">unsafe</a>.<a href="http://golang.org/pkg/unsafe/#Pointer">Pointer</a>)</pre>
@@ -4185,7 +4237,7 @@ as it was locked previously.
 				
 			
 				
-				<h3 id="CSOUND.UtilityDescription">func (CSOUND) <a href="/src/target/csnd.go?s=74615:74678#L2277">UtilityDescription</a>
+				<h3 id="CSOUND.UtilityDescription">func (CSOUND) <a href="/src/target/csnd.go?s=75406:75469#L2300">UtilityDescription</a>
 					<a class="permalink" href="#CSOUND.UtilityDescription">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) UtilityDescription(utilName <a href="http://golang.org/pkg/builtin/#string">string</a>) <a href="http://golang.org/pkg/builtin/#string">string</a></pre>
@@ -4213,7 +4265,7 @@ Return the version number
 				
 			
 				
-				<h3 id="CSOUND.WaitBarrier">func (CSOUND) <a href="/src/target/csnd.go?s=65640:65700#L1995">WaitBarrier</a>
+				<h3 id="CSOUND.WaitBarrier">func (CSOUND) <a href="/src/target/csnd.go?s=66327:66387#L2014">WaitBarrier</a>
 					<a class="permalink" href="#CSOUND.WaitBarrier">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) WaitBarrier(barrier <a href="http://golang.org/pkg/unsafe/">unsafe</a>.<a href="http://golang.org/pkg/unsafe/#Pointer">Pointer</a>) <a href="http://golang.org/pkg/builtin/#int">int</a></pre>
@@ -4226,7 +4278,7 @@ Wait on the thread barrier.
 				
 			
 				
-				<h3 id="CSOUND.WaitThreadLock">func (CSOUND) <a href="/src/target/csnd.go?s=62601:62670#L1912">WaitThreadLock</a>
+				<h3 id="CSOUND.WaitThreadLock">func (CSOUND) <a href="/src/target/csnd.go?s=63288:63357#L1931">WaitThreadLock</a>
 					<a class="permalink" href="#CSOUND.WaitThreadLock">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) WaitThreadLock(lock <a href="http://golang.org/pkg/unsafe/">unsafe</a>.<a href="http://golang.org/pkg/unsafe/#Pointer">Pointer</a>, ms <a href="http://golang.org/pkg/builtin/#uint">uint</a>) <a href="http://golang.org/pkg/builtin/#int">int</a></pre>
@@ -4246,7 +4298,7 @@ will return immediately with a non-zero status.
 				
 			
 				
-				<h3 id="CSOUND.WaitThreadLockNoTimeout">func (CSOUND) <a href="/src/target/csnd.go?s=62900:62965#L1919">WaitThreadLockNoTimeout</a>
+				<h3 id="CSOUND.WaitThreadLockNoTimeout">func (CSOUND) <a href="/src/target/csnd.go?s=63587:63652#L1938">WaitThreadLockNoTimeout</a>
 					<a class="permalink" href="#CSOUND.WaitThreadLockNoTimeout">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) WaitThreadLockNoTimeout(lock <a href="http://golang.org/pkg/unsafe/">unsafe</a>.<a href="http://golang.org/pkg/unsafe/#Pointer">Pointer</a>)</pre>
@@ -4261,7 +4313,7 @@ wait time, but may be more efficient.
 				
 			
 				
-				<h3 id="CSOUND.WriteCircularBuffer">func (CSOUND) <a href="/src/target/csnd.go?s=77923:78023#L2362">WriteCircularBuffer</a>
+				<h3 id="CSOUND.WriteCircularBuffer">func (CSOUND) <a href="/src/target/csnd.go?s=78714:78814#L2385">WriteCircularBuffer</a>
 					<a class="permalink" href="#CSOUND.WriteCircularBuffer">&#xb6;</a>
 				</h3>
 				<pre>func (csound <a href="#CSOUND">CSOUND</a>) WriteCircularBuffer(circularBuffer <a href="http://golang.org/pkg/unsafe/">unsafe</a>.<a href="http://golang.org/pkg/unsafe/#Pointer">Pointer</a>, inp []<a href="#MYFLT">MYFLT</a>,
@@ -4285,7 +4337,7 @@ Returns the actual number of samples written (0 &lt;= n &lt;= items)
 		
 			
 			
-			<h2 id="ChannelHandler">type <a href="/src/target/callback.go?s=14142:14241#L451">ChannelHandler</a>
+			<h2 id="ChannelHandler">type <a href="/src/target/callback.go?s=14150:14249#L452">ChannelHandler</a>
 				<a class="permalink" href="#ChannelHandler">&#xb6;</a>
 			</h2>
 			
@@ -4360,7 +4412,7 @@ Returns the actual number of samples written (0 &lt;= n &lt;= items)
 		
 			
 			
-			<h2 id="CsRtAudioParams">type <a href="/src/target/callback.go?s=1271:1699#L30">CsRtAudioParams</a>
+			<h2 id="CsRtAudioParams">type <a href="/src/target/callback.go?s=1279:1707#L31">CsRtAudioParams</a>
 				<a class="permalink" href="#CsRtAudioParams">&#xb6;</a>
 			</h2>
 			
@@ -4382,7 +4434,7 @@ Returns the actual number of samples written (0 &lt;= n &lt;= items)
 		
 			
 			
-			<h2 id="CscoreHandler">type <a href="/src/target/callback.go?s=13377:13415#L417">CscoreHandler</a>
+			<h2 id="CscoreHandler">type <a href="/src/target/callback.go?s=13385:13423#L418">CscoreHandler</a>
 				<a class="permalink" href="#CscoreHandler">&#xb6;</a>
 			</h2>
 			
@@ -4402,7 +4454,7 @@ Returns the actual number of samples written (0 &lt;= n &lt;= items)
 		
 			
 			
-			<h2 id="Cslanguage_t">type <a href="/src/target/csnd.go?s=68440:68461#L2077">Cslanguage_t</a>
+			<h2 id="Cslanguage_t">type <a href="/src/target/csnd.go?s=69231:69252#L2100">Cslanguage_t</a>
 				<a class="permalink" href="#Cslanguage_t">&#xb6;</a>
 			</h2>
 			
@@ -4629,7 +4681,7 @@ List of languages
 		
 			
 			
-			<h2 id="ExitGraphHandler">type <a href="/src/target/callback.go?s=18504:18551#L580">ExitGraphHandler</a>
+			<h2 id="ExitGraphHandler">type <a href="/src/target/callback.go?s=18880:18927#L595">ExitGraphHandler</a>
 				<a class="permalink" href="#ExitGraphHandler">&#xb6;</a>
 			</h2>
 			
@@ -4649,7 +4701,7 @@ List of languages
 		
 			
 			
-			<h2 id="ExternalMidiErrorStringHandler">type <a href="/src/target/callback.go?s=11984:12040#L373">ExternalMidiErrorStringHandler</a>
+			<h2 id="ExternalMidiErrorStringHandler">type <a href="/src/target/callback.go?s=11992:12048#L374">ExternalMidiErrorStringHandler</a>
 				<a class="permalink" href="#ExternalMidiErrorStringHandler">&#xb6;</a>
 			</h2>
 			
@@ -4669,7 +4721,7 @@ List of languages
 		
 			
 			
-			<h2 id="ExternalMidiInCloseHandler">type <a href="/src/target/callback.go?s=9058:9140#L284">ExternalMidiInCloseHandler</a>
+			<h2 id="ExternalMidiInCloseHandler">type <a href="/src/target/callback.go?s=9066:9148#L285">ExternalMidiInCloseHandler</a>
 				<a class="permalink" href="#ExternalMidiInCloseHandler">&#xb6;</a>
 			</h2>
 			
@@ -4689,7 +4741,7 @@ List of languages
 		
 			
 			
-			<h2 id="ExternalMidiInOpenHandler">type <a href="/src/target/callback.go?s=7484:7581#L237">ExternalMidiInOpenHandler</a>
+			<h2 id="ExternalMidiInOpenHandler">type <a href="/src/target/callback.go?s=7492:7589#L238">ExternalMidiInOpenHandler</a>
 				<a class="permalink" href="#ExternalMidiInOpenHandler">&#xb6;</a>
 			</h2>
 			
@@ -4709,7 +4761,7 @@ List of languages
 		
 			
 			
-			<h2 id="ExternalMidiOutCloseHandler">type <a href="/src/target/callback.go?s=11313:11396#L352">ExternalMidiOutCloseHandler</a>
+			<h2 id="ExternalMidiOutCloseHandler">type <a href="/src/target/callback.go?s=11321:11404#L353">ExternalMidiOutCloseHandler</a>
 				<a class="permalink" href="#ExternalMidiOutCloseHandler">&#xb6;</a>
 			</h2>
 			
@@ -4729,7 +4781,7 @@ List of languages
 		
 			
 			
-			<h2 id="ExternalMidiOutOpenHandler">type <a href="/src/target/callback.go?s=9717:9815#L305">ExternalMidiOutOpenHandler</a>
+			<h2 id="ExternalMidiOutOpenHandler">type <a href="/src/target/callback.go?s=9725:9823#L306">ExternalMidiOutOpenHandler</a>
 				<a class="permalink" href="#ExternalMidiOutOpenHandler">&#xb6;</a>
 			</h2>
 			
@@ -4749,7 +4801,7 @@ List of languages
 		
 			
 			
-			<h2 id="ExternalMidiReadHandler">type <a href="/src/target/callback.go?s=8186:8278#L258">ExternalMidiReadHandler</a>
+			<h2 id="ExternalMidiReadHandler">type <a href="/src/target/callback.go?s=8194:8286#L259">ExternalMidiReadHandler</a>
 				<a class="permalink" href="#ExternalMidiReadHandler">&#xb6;</a>
 			</h2>
 			
@@ -4769,7 +4821,7 @@ List of languages
 		
 			
 			
-			<h2 id="ExternalMidiWriteHandler">type <a href="/src/target/callback.go?s=10431:10524#L326">ExternalMidiWriteHandler</a>
+			<h2 id="ExternalMidiWriteHandler">type <a href="/src/target/callback.go?s=10439:10532#L327">ExternalMidiWriteHandler</a>
 				<a class="permalink" href="#ExternalMidiWriteHandler">&#xb6;</a>
 			</h2>
 			
@@ -4789,7 +4841,7 @@ List of languages
 		
 			
 			
-			<h2 id="FileOpenHandler">type <a href="/src/target/callback.go?s=1767:1856#L42">FileOpenHandler</a>
+			<h2 id="FileOpenHandler">type <a href="/src/target/callback.go?s=1775:1864#L43">FileOpenHandler</a>
 				<a class="permalink" href="#FileOpenHandler">&#xb6;</a>
 			</h2>
 			
@@ -4809,7 +4861,7 @@ List of languages
 		
 			
 			
-			<h2 id="GraphHandler">type <a href="/src/target/callback.go?s=18443:18503#L579">GraphHandler</a>
+			<h2 id="GraphHandler">type <a href="/src/target/callback.go?s=18819:18879#L594">GraphHandler</a>
 				<a class="permalink" href="#GraphHandler">&#xb6;</a>
 			</h2>
 			
@@ -4849,7 +4901,7 @@ List of languages
 		
 			
 			
-			<h2 id="MakeGraphHandler">type <a href="/src/target/callback.go?s=18365:18442#L578">MakeGraphHandler</a>
+			<h2 id="MakeGraphHandler">type <a href="/src/target/callback.go?s=18741:18818#L593">MakeGraphHandler</a>
 				<a class="permalink" href="#MakeGraphHandler">&#xb6;</a>
 			</h2>
 			
@@ -4869,7 +4921,7 @@ List of languages
 		
 			
 			
-			<h2 id="MidiDeviceListHandler">type <a href="/src/target/callback.go?s=12613:12702#L394">MidiDeviceListHandler</a>
+			<h2 id="MidiDeviceListHandler">type <a href="/src/target/callback.go?s=12621:12710#L395">MidiDeviceListHandler</a>
 				<a class="permalink" href="#MidiDeviceListHandler">&#xb6;</a>
 			</h2>
 			
@@ -4889,7 +4941,7 @@ List of languages
 		
 			
 			
-			<h2 id="NamedGen">type <a href="/src/target/csnd.go?s=59914:59961#L1818">NamedGen</a>
+			<h2 id="NamedGen">type <a href="/src/target/csnd.go?s=60601:60648#L1837">NamedGen</a>
 				<a class="permalink" href="#NamedGen">&#xb6;</a>
 			</h2>
 			
@@ -4912,7 +4964,7 @@ List of languages
 		
 			
 			
-			<h2 id="OpcodeListEntry">type <a href="/src/target/csnd.go?s=60383:60475#L1841">OpcodeListEntry</a>
+			<h2 id="OpcodeListEntry">type <a href="/src/target/csnd.go?s=61070:61162#L1860">OpcodeListEntry</a>
 				<a class="permalink" href="#OpcodeListEntry">&#xb6;</a>
 			</h2>
 			
@@ -4937,7 +4989,7 @@ List of languages
 		
 			
 			
-			<h2 id="PVSDATEXT">type <a href="/src/target/csnd.go?s=51608:51674#L1582">PVSDATEXT</a>
+			<h2 id="PVSDATEXT">type <a href="/src/target/csnd.go?s=52295:52361#L1601">PVSDATEXT</a>
 				<a class="permalink" href="#PVSDATEXT">&#xb6;</a>
 			</h2>
 			
@@ -4956,7 +5008,7 @@ List of languages
 
 			
 				
-				<h3 id="NewPvsData">func <a href="/src/target/csnd.go?s=51676:51737#L1587">NewPvsData</a>
+				<h3 id="NewPvsData">func <a href="/src/target/csnd.go?s=52363:52424#L1606">NewPvsData</a>
 					<a class="permalink" href="#NewPvsData">&#xb6;</a>
 				</h3>
 				<pre>func NewPvsData(N, format, overlap, winsize <a href="http://golang.org/pkg/builtin/#int32">int32</a>) *<a href="#PVSDATEXT">PVSDATEXT</a></pre>
@@ -4969,7 +5021,7 @@ List of languages
 		
 			
 			
-			<h2 id="PlayOpenHandler">type <a href="/src/target/callback.go?s=2980:3049#L76">PlayOpenHandler</a>
+			<h2 id="PlayOpenHandler">type <a href="/src/target/callback.go?s=2988:3057#L77">PlayOpenHandler</a>
 				<a class="permalink" href="#PlayOpenHandler">&#xb6;</a>
 			</h2>
 			
@@ -4989,7 +5041,7 @@ List of languages
 		
 			
 			
-			<h2 id="RecOpenHandler">type <a href="/src/target/callback.go?s=4579:4647#L134">RecOpenHandler</a>
+			<h2 id="RecOpenHandler">type <a href="/src/target/callback.go?s=4587:4655#L135">RecOpenHandler</a>
 				<a class="permalink" href="#RecOpenHandler">&#xb6;</a>
 			</h2>
 			
@@ -5009,7 +5061,7 @@ List of languages
 		
 			
 			
-			<h2 id="RtCloseHandler">type <a href="/src/target/callback.go?s=6210:6249#L192">RtCloseHandler</a>
+			<h2 id="RtCloseHandler">type <a href="/src/target/callback.go?s=6218:6257#L193">RtCloseHandler</a>
 				<a class="permalink" href="#RtCloseHandler">&#xb6;</a>
 			</h2>
 			
@@ -5029,7 +5081,7 @@ List of languages
 		
 			
 			
-			<h2 id="RtPlayHandler">type <a href="/src/target/callback.go?s=3860:3914#L107">RtPlayHandler</a>
+			<h2 id="RtPlayHandler">type <a href="/src/target/callback.go?s=3868:3922#L108">RtPlayHandler</a>
 				<a class="permalink" href="#RtPlayHandler">&#xb6;</a>
 			</h2>
 			
@@ -5049,7 +5101,7 @@ List of languages
 		
 			
 			
-			<h2 id="RtRecordHandler">type <a href="/src/target/callback.go?s=5449:5510#L165">RtRecordHandler</a>
+			<h2 id="RtRecordHandler">type <a href="/src/target/callback.go?s=5457:5518#L166">RtRecordHandler</a>
 				<a class="permalink" href="#RtRecordHandler">&#xb6;</a>
 			</h2>
 			
@@ -5069,7 +5121,7 @@ List of languages
 		
 			
 			
-			<h2 id="SenseEventHandler">type <a href="/src/target/callback.go?s=16616:16683#L528">SenseEventHandler</a>
+			<h2 id="SenseEventHandler">type <a href="/src/target/callback.go?s=16624:16691#L529">SenseEventHandler</a>
 				<a class="permalink" href="#SenseEventHandler">&#xb6;</a>
 			</h2>
 			
@@ -5111,7 +5163,7 @@ List of languages
 		
 			
 			
-			<h2 id="YieldHandler">type <a href="/src/target/callback.go?s=20180:20222#L648">YieldHandler</a>
+			<h2 id="YieldHandler">type <a href="/src/target/callback.go?s=20556:20598#L663">YieldHandler</a>
 				<a class="permalink" href="#YieldHandler">&#xb6;</a>
 			</h2>
 			
