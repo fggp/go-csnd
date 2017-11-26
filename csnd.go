@@ -784,6 +784,22 @@ func (csound CSOUND) UDPServerClose() int {
 	return int(C.csoundUDPServerClose(csound.Cs))
 }
 
+// Turns on the transmission of console messages to UDP on addr:port.
+// If mirror is one, the messages will continue to be sent to the usual
+// destination (see SetMessaggeCallback()).
+// Returns CSOUND_SUCCESS or CSOUND_ERROR if the UDP transmission
+// could not be set up.
+func (csound CSOUND) UDPConsole(addr string, port int, mirror int) int {
+	var cstr *C.char = C.CString(addr)
+	defer C.free(unsafe.Pointer(cstr))
+	return int(C.csoundUDPConsole(csound.Cs, cstr, C.int(port), C.int(mirror)))
+}
+
+// Stop transmitting console messages via UDP.
+func (csound CSOUND) StopUDPConsole() {
+	C.csoundStopUDPConsole(csound.Cs)
+}
+
 /*
  * Attributes
  */
