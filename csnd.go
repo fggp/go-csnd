@@ -908,6 +908,11 @@ func (csound CSOUND) OutputName() string {
 	return C.GoString(C.csoundGetOutputName(csound.Cs))
 }
 
+// Return the audio input name (-i).
+func (csound CSOUND) InputName() string {
+	return C.GoString(C.csoundGetInputName(csound.Cs))
+}
+
 //  Set output destination, type and format
 //  type can be one of  "wav","aiff", "au","raw", "paf", "svx", "nist", "voc",
 //  "ircam","w64","mat4", "mat5", "pvf","xi", "htk","sds","avr","wavex","sd2",
