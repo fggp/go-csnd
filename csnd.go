@@ -135,26 +135,6 @@ void *getNamedGen(CSOUND *csound, void *currentGen, char **pname, int *num)
   return p->next;
 }
 
-#if defined(CSOUND_SPIN_LOCK)
-void csSpinLock(int32 *spinlock)
-{
-  csoundSpinLock(spinlock);
-}
-void csSpinUnLock(int32 *spinlock)
-{
-  csoundSpinUnLock(spinlock);
-}
-#else
-void csSpinLock(int32 *spinlock)
-{
-  return;
-}
-void csSpinUnLock(int32 *spinlock)
-{
-  return;
-}
-#endif
-
 int utilityListLength(char **list)
 {
   int n;
@@ -765,41 +745,6 @@ func (csound CSOUND) Reset() {
 	C.csoundReset(csound.Cs)
 }
 
-// Starts the UDP server on a supplied port number.
-// Returns CSOUND_SUCCESS if server has been started successfully,
-// otherwise, CSOUND_ERROR.
-func (csound CSOUND) UDPServerStart(port uint) int {
-	return int(C.csoundUDPServerStart(csound.Cs, C.uint(port)))
-}
-
-// Returns the port number on which the server is running, or
-// CSOUND_ERROR if the server is not running.
-func (csound CSOUND) UDPServerStatus() int {
-	return int(C.csoundUDPServerStatus(csound.Cs))
-}
-
-// Closes the UDP server, returning CSOUND_SUCCESS if the
-// running server was successfully closed, CSOUND_ERROR otherwise.
-func (csound CSOUND) UDPServerClose() int {
-	return int(C.csoundUDPServerClose(csound.Cs))
-}
-
-// Turns on the transmission of console messages to UDP on addr:port.
-// If mirror is one, the messages will continue to be sent to the usual
-// destination (see SetMessaggeCallback()).
-// Returns CSOUND_SUCCESS or CSOUND_ERROR if the UDP transmission
-// could not be set up.
-func (csound CSOUND) UDPConsole(addr string, port int, mirror int) int {
-	var cstr *C.char = C.CString(addr)
-	defer C.free(unsafe.Pointer(cstr))
-	return int(C.csoundUDPConsole(csound.Cs, cstr, C.int(port), C.int(mirror)))
-}
-
-// Stop transmitting console messages via UDP.
-func (csound CSOUND) StopUDPConsole() {
-	C.csoundStopUDPConsole(csound.Cs)
-}
-
 /*
  * Attributes
  */
@@ -906,11 +851,6 @@ func (csound CSOUND) SetDebug(debug bool) {
 // Return the audio output name (-o).
 func (csound CSOUND) OutputName() string {
 	return C.GoString(C.csoundGetOutputName(csound.Cs))
-}
-
-// Return the audio input name (-i).
-func (csound CSOUND) InputName() string {
-	return C.GoString(C.csoundGetInputName(csound.Cs))
 }
 
 //  Set output destination, type and format
@@ -2046,17 +1986,13 @@ func (csound CSOUND) WaitBarrier(barrier unsafe.Pointer) int {
 	return int(C.csoundWaitBarrier(barrier))
 }
 
-//func (csound CSOUND) CreateCondVar
-//func (csound CSOUND) CondWait
-//func (csound CSOUND) CondSignal
-
 // Wait for at least the specified number of milliseconds,
 // yielding the CPU to other threads.
 func (csound CSOUND) Sleep(ms uint) {
 	C.csoundSleep(C.size_t(ms))
 }
 
-// Lock the specified spinlock.
+// Inits the spinlock.
 // If the spinlock is not locked, lock it and return;
 // if is is locked, wait until it is unlocked, then lock it and return.
 // Uses atomic compare and swap operations that are safe across processors
@@ -2066,19 +2002,30 @@ func (csound CSOUND) Sleep(ms uint) {
 // that do little more than read or write such data, for example:
 //
 //   var lock int32
+//   cs.SpinLockInit(&lock)
 //   func write(cs CSOUND, frames, signal) {
 //       cs.spinLock(&lock)
 //       for frame := range frames {
 //           global_buffer[frame] = global_buffer[frame] + signal[frame]
 //       }
 //       cs.spinUnlock(&lock)
+func (csound CSOUND) SpinLockInit(spinlock *int32) int {
+	return int(C.csoundSpinLockInit((*C.spin_lock_t)(spinlock)))
+}
+
+// Locks the spinlock.
 func (csound CSOUND) SpinLock(spinlock *int32) {
-	C.csSpinLock((*C.int32)(spinlock))
+	C.csoundSpinLock((*C.spin_lock_t)(spinlock))
+}
+
+// Tries the spinlock.
+func (csound CSOUND) SpinTryLock(spinlock *int32) int {
+	return int(C.csoundSpinTryLock((*C.spin_lock_t)(spinlock)))
 }
 
 // Unlock the specified spinlock; (see SpinLock()).
 func (csound CSOUND) SpinUnLock(spinlock *int32) {
-	C.csSpinUnLock((*C.int32)(spinlock))
+	C.csoundSpinUnLock((*C.spin_lock_t)(spinlock))
 }
 
 /*
