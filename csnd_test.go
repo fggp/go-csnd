@@ -1,4 +1,4 @@
-package csnd6
+package csnd
 
 import (
 	"fmt"

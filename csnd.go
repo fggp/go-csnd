@@ -1,4 +1,4 @@
-package csnd6
+package csnd
 
 /*
 #cgo CFLAGS: -DUSE_DOUBLE=1

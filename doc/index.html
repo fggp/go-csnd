@@ -1,7 +1,7 @@
 
 	<html>
 	<head>
-	<title>csnd6 - Go binding to the Csound6 API</title>
+	<title>csnd - Go binding to the Csound API</title>
 	<link type="text/css" rel="stylesheet" href="style.css">
 	<meta charset='utf-8'>
 	</head>
@@ -27,7 +27,7 @@
 		
 		<div id="short-nav">
 			<dl>
-			<dd><code>import "github.com/fggp/go-csnd6"</code></dd>
+			<dd><code>import "github.com/fggp/go-csnd"</code></dd>
 			</dl>
 			<dl>
 			<dd><a href="#pkg-overview" class="overviewLink">Overview</a></dd>
@@ -42,27 +42,27 @@
 			<div class="expanded">
 				<h2 class="toggleButton" title="Click to hide Overview section">Overview ▾</h2>
 				<p>
-GO Bindings for Csound6
+GO Bindings for Csound
 </p>
 <p>
 This wrapper is still very experimental. It has been tested only on Linux.
-It needs a proper installation of Csound6 with header files in the include path in the csound directory
+It needs a proper installation of Csound with header files in the include path in the csound directory
 (e.g. csound/csound.h). libcsound64 have to be in the PATH.
 </p>
 <p>
 You can install this package with go get:
 </p>
-<pre>go get github.com/fggp/go-csnd6
+<pre>go get github.com/fggp/go-csnd
 </pre>
 <p>
 Or you can download a zip archive of the project using the &#39;Download ZIP&#39; button on the right.
-You&#39;ll get a zip file named &#39;go-csnd6-master.zip&#39;. Decompressing it you&#39;ll get a directory named &#39;go-csnd6-master&#39;.
-Rename this directory to &#39;go-csnd6&#39; and move it to &#39;$GOPATH/src/github/fggp&#39;. Enter into
-the &#39;$GOPATH/src/github/fggp/go-csnd6&#39; directory. You can eventually adapt the #cgo directives
+You&#39;ll get a zip file named &#39;go-csnd-master.zip&#39;. Decompressing it you&#39;ll get a directory named &#39;go-csnd-master&#39;.
+Rename this directory to &#39;go-csnd&#39; and move it to &#39;$GOPATH/src/github/fggp&#39;. Enter into
+the &#39;$GOPATH/src/github/fggp/go-csnd&#39; directory. You can eventually adapt the #cgo directives
 in csnd.go to your system. Finally install the package with `go install`.
 </p>
 <p>
-This wrapper is intended to be used with a double build of csound6.
+This wrapper is intended to be used with a double build of Csound.
 </p>
 <p>
 Use examples can be seen here: <a href="https://github.com/kunstmusik/csoundAPI_examples/tree/master/go">https://github.com/kunstmusik/csoundAPI_examples/tree/master/go</a>

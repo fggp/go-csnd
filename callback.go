@@ -1,4 +1,4 @@
-package csnd6
+package csnd
 
 /*
 #include <csound/csound.h>
