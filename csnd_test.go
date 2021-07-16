@@ -11,7 +11,7 @@ func TestInstantiation(t *testing.T) {
 	if cs.Cs == nil {
 		t.Errorf("Could not create Csound instance")
 	}
-	fmt.Println("\n", cs.Version(), cs.APIVersion(), "\n")
+	fmt.Println("\n", cs.Version(), cs.APIVersion())
 	cs.Destroy()
 	if cs.Cs != nil {
 		t.Errorf("Csound was destroyed and opaque pointer is not cleared!")
@@ -40,7 +40,7 @@ func TestHostData(t *testing.T) {
 	if pi != &i {
 		t.Errorf("Int hostdata read is different of hostdata written")
 	} else {
-		fmt.Println("\n", *pi, "\n")
+		fmt.Println("\n", *pi)
 	}
 
 	s := "Une chaîne de caractères"
@@ -50,7 +50,7 @@ func TestHostData(t *testing.T) {
 	if ps != &s {
 		t.Errorf("String hostdata read is different of hostdata written")
 	} else {
-		fmt.Println("\n", *ps, "\n")
+		fmt.Println("\n", *ps)
 	}
 
 	cs.SetHostData(nil)
@@ -71,7 +71,7 @@ func TestHostData(t *testing.T) {
 	if pt != &s1 {
 		t.Errorf("String hostdata read is different of hostdata written")
 	} else {
-		fmt.Println("\n", *pt, "\n")
+		fmt.Println("\n", *pt)
 	}
 
 	cs.SetHostData(nil)
